@@ -97,6 +97,7 @@ export default function EventsPage() {
 
 
   return (
+    <>
       <main className="px-4 sm:px-6 py-8 sm:py-12 max-w-6xl mx-auto">
         <h1 
           ref={titleRef} 
@@ -114,6 +115,7 @@ export default function EventsPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
+
               <EventCard {...event} onLearnMore={() => handleOpenModal(event)} />
             </motion.div>
           ))}
