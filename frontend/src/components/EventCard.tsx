@@ -21,7 +21,7 @@ export default function EventCard({ title, date, description, image, onLearnMore
         alt={title}
         width={600}
         height={400}
-        className="w-full h-52 object-cover"
+        className="w-full h-82 object-cover p-1 rounded-2xl"
       />
       <div className="p-5 flex flex-col flex-grow">
         <h2 className="text-xl font-semibold text-gray-800 mb-2">{title}</h2>
