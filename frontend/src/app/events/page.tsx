@@ -9,9 +9,9 @@ const events = [
   {
     title: "Avinya",
     date: "5th May 2023",
-    description: "Introduction to cybersecurity principles.",
+    description: "Group of events taken in this",
     image: "/Avinya.png",
-    longDescription: "Avinya 2023 was a comprehensive workshop designed to introduce beginners to the fundamental principles of cybersecurity. Attendees learned about common threats, defensive strategies, and the importance of digital hygiene in today's connected world. The session included live demonstrations of ethical hacking techniques and a Q&A with industry professionals."
+    longDescription: "aIDEAS has actively organized a wide range of events aimed at fostering teamwork, creativity, technical skills, and community involvement. We kicked off with high-energy and intellectually stimulating events like the Escape Room and Murder Mystery, where students solved puzzles and unraveled clues in immersive, time-bound scenarios. For those who enjoy physical challenges, the Tug of War brought a fun and competitive spirit to campus life. On the community front, our visit to the Salvation Army was a meaningful initiative that allowed students to give back, interact with residents, and contribute to a social cause. Culinary talents came to life in MasterChef PVG, where participants showcased their cooking skills in a friendly competition. Tech enthusiasts had plenty to engage with in events like Googler, which tested smart searching abilities, Flip the Code, where debugging and logical thinking were key, and Code Clash, a dual challenge combining DSA and Aptitude to push problem-solving to the next level. These events reflect our commitment to providing a balanced mix of fun, learning, and social impact."
   },
   {
     title: "Murder Mystery",
