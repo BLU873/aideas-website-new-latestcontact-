@@ -32,8 +32,8 @@ const membersData: Member[] = [
     designation: "Joint General Secretary",
     image: "/members/jgs.png",
     info: "Supports the General Secretary and manages documentation.",
-    instagram: "https://instagram.com/tanvideshmukh",
-    linkedin: "https://linkedin.com/in/tanvideshmukh",
+    instagram: "https://www.instagram.com/tanvi_deshmukh87",
+    linkedin: "https://www.linkedin.com/in/tanvi-deshmukh-468406251/",
     email: "tanvi@example.com",
   },
   {
