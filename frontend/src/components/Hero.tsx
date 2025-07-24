@@ -7,6 +7,7 @@ import { Typewriter } from 'react-simple-typewriter';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -100,9 +101,10 @@ const Hero = () => {
             transition={{ duration: 1.3, delay: 0.8 }}
             className="mt-6 text-center lg:text-left"
           >
+            <Link href='/events'>
             <button className="bg-sky-500 hover:bg-sky-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition">
               Explore Now
-            </button>
+            </button></Link>
           </motion.div>
         </div>
 

@@ -37,7 +37,7 @@ export default function Navbar() {
   return (
     <header className="sticky z-20 top-0 w-full bg-black border-b-2 text-white px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* 🟢 Logo */}
+        {/* 🟢 Logo */}   <Link href="/">
         <div className="flex items-center space-x-3">
           <Image
             src={i}
@@ -46,11 +46,11 @@ export default function Navbar() {
             height={40}
             className="bg-white rounded-full border border-white"
           />
-          <div className='className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-sky-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-text bg-[length:300%]"
-'>
+          <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-sky-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-text bg-[length:300%]">
             {logo}
           </div>
         </div>
+        </Link>
 
         {/* 📱 Mobile toggle */}
         <button className="md:hidden focus:outline-none" onClick={toggleMenu}>
