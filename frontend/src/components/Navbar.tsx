@@ -69,14 +69,40 @@ export default function Navbar() {
 
       {/* 📱 Mobile Nav */}
       {isOpen && (
-        <div className="absolute top-16 right-0 w-1/2 z-50 bg-black px-6 py-4 flex flex-col items-center space-y-4 text-sm border-t border-zinc-700">
-          <Link href="/" onClick={() => setIsOpen(false)}>Home</Link>
-          <Link href="/events" onClick={() => setIsOpen(false)}>Events</Link>
-          <Link href="/about" onClick={() => setIsOpen(false)}>About</Link>
-          <Link href="/sessions" onClick={() => setIsOpen(false)}>Sessions</Link>
-          <Link href="/members" onClick={() => setIsOpen(false)}>Members</Link>
-          <Link href="/contact" onClick={() => setIsOpen(false)}>Contact</Link>
-        </div>
+       <div className="absolute top-16 right-0 w-1/2 z-50 bg-black px-6 py-4 flex flex-col items-center space-y-4 text-sm border-t border-zinc-700">
+
+  {/* Single reusable link block */}
+  <div className="w-full flex justify-center hover:bg-zinc-800 hover:border-b-2 hover:border-b-cyan-400   py-2 rounded">
+    <Link href="/" onClick={() => setIsOpen(false)} className="text-white">
+      Home
+    </Link>
+  </div>
+
+  <div className="w-full flex justify-center hover:bg-zinc-800 py-2 hover:border-b-2 hover:border-b-cyan-400 rounded">
+    <Link href="/events" onClick={() => setIsOpen(false)} className="text-white">
+      Events
+    </Link>
+  </div>
+
+  <div className="w-full flex justify-center hover:bg-zinc-800  hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
+    <Link href="/about" onClick={() => setIsOpen(false)} className="text-white">
+      About
+    </Link>
+  </div>
+   <div className="w-full flex justify-center hover:bg-zinc-800 hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
+    <Link href="/members" onClick={() => setIsOpen(false)} className="text-white">
+      Members
+    </Link>
+  </div>
+
+  <div className="w-full flex justify-center hover:bg-zinc-800  hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
+    <Link href="/contact" onClick={() => setIsOpen(false)} className="text-white">
+      Contact
+    </Link>
+  </div>
+
+</div>
+
       )}
     </header>
   );
