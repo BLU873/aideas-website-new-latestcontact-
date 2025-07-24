@@ -32,7 +32,7 @@ export default function EventCard({ title, date, description, image, onLearnMore
           onClick={onLearnMore}
           className="mt-4 w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-300 self-end"
         >
-          Learn More
+          Explore
         </button>
       </div>
     </motion.div>
