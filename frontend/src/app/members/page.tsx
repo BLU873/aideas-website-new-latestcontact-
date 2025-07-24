@@ -62,9 +62,9 @@ const membersData: Member[] = [
     designation: "Technical Team Head",
     image: "/members/pk_th.png",
     info: "Manages the website, apps, and technical events.",
-    instagram: "https://instagram.com/prathameshk",
-    linkedin: "https://linkedin.com/in/prathameshk",
-    email: "prathamesh@example.com",
+    instagram: "https://www.instagram.com/prathmesh_kulkarni18/",
+    linkedin: "https://www.linkedin.com/in/prathmeshkulkarni/",
+    email: "prathmeshkulkarni312@gmail.com",
   },
   {
     id: 6,
