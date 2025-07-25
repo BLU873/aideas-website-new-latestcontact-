@@ -32,13 +32,13 @@ export default function EventModal({ event, onClose }: EventModalProps) {
           onClick={(e) => e.stopPropagation()}
           className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         >
-          <div className="relative h-56 sm:h-72">
+          <div className="relative h-56 sm:h-81">
              <Image
                 src={event.image}
                 alt={`Image for ${event.title}`}
                 layout="fill"
                 objectFit="cover"
-                className="rounded-t-lg"
+                className="rounded-t-lg h-81"
              />
              <button 
                 onClick={onClose} 

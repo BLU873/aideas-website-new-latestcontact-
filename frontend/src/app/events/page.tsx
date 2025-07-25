@@ -94,13 +94,26 @@ export default function EventsPage() {
     setSelectedEvent(null);
   };
 
-
-
   return (
-    <>
-      <main className="px-4 sm:px-6 py-8 sm:py-12 max-w-6xl mx-auto">
-        <h1 
-          ref={titleRef} 
+    <div className="relative min-h-screen bg-gradient-to-b from-black via-purple-900 to-black py-10 overflow-hidden">
+      {/* ✨ Starry background */}
+      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+        <div className="w-full h-full bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:20px_20px] animate-[moveStars_50s_linear_infinite]" />
+        <style jsx>{`
+          @keyframes moveStars {
+            0% {
+              background-position: 0 0;
+            }
+            100% {
+              background-position: 1000px 1000px;
+            }
+          }
+        `}</style>
+      </div>
+
+      <main className="relative z-10 px-4 sm:px-6 py-8 sm:py-12 max-w-6xl mx-auto">
+        <h1
+          ref={titleRef}
           className="page-title text-3xl sm:text-5xl font-bold mb-12 text-center text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-red-400 bg-clip-text text-transparent"
         >
           Our Past Events
@@ -114,17 +127,17 @@ export default function EventsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-black/60 border border-fuchsia-700 rounded-2xl overflow-hidden 
+              md:shadow-none md:hover:scale-105 md:hover:border-cyan-400 md:hover:shadow-[0_0_20px_#0ff] 
+              transition-all duration-300"
             >
-
               <EventCard {...event} onLearnMore={() => handleOpenModal(event)} />
             </motion.div>
           ))}
         </div>
       </main>
-      
-      {selectedEvent && (
-        <EventModal event={selectedEvent} onClose={handleCloseModal} />
-      )}
-    </>
+
+      {selectedEvent && <EventModal event={selectedEvent} onClose={handleCloseModal} />}
+    </div>
   );
 }
