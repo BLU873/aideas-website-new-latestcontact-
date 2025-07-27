@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="flex gap-6 text-sm mb-4 md:mb-0">
           <a href="/about" className="hover:text-white">About</a>
           <a href="/events" className="hover:text-white">Events</a>
-          <a href="/projects" className="hover:text-white">Projects</a>
+          
           <a href="/contact" className="hover:text-white">Contact Us</a>
         </div>
 

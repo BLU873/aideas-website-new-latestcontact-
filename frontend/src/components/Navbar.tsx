@@ -46,7 +46,7 @@ export default function Navbar() {
             height={40}
             className="bg-white rounded-full border border-white"
           />
-          <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-sky-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-text bg-[length:300%]">
+          <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-sky-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-text bg-[length:300%] brightness-100">
             {logo}
           </div>
         </div>
@@ -59,12 +59,23 @@ export default function Navbar() {
 
         {/* 🔗 Desktop Links */}
         <nav className="hidden md:flex space-x-6 text-sm">
-          <Link href="/">Home</Link>
-          <Link href="/events">Events</Link>
-          <Link href="/about">About</Link>
-          <Link href="/members">Members</Link>
-          <Link href="/contact">Contact Us</Link>
-        </nav>
+  {[
+    { name: "Home", path: "/" },
+    { name: "Events", path: "/events" },
+    { name: "About", path: "/about" },
+    { name: "Members", path: "/members" },
+    { name: "Contact Us", path: "/contact" },
+  ].map((item) => (
+    <Link
+      key={item.path}
+      href={item.path}
+      className="relative text-white after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-0 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full"
+    >
+      {item.name}
+    </Link>
+  ))}
+</nav>
+
       </div>
 
       {/* 📱 Mobile Nav */}
