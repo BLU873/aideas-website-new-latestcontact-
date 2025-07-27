@@ -12,11 +12,17 @@ export default function ContactPage() {
         </p>
 
         {/* Contact Form */}
-        <form className="grid grid-cols-1 gap-6 text-left">
+        <form
+          action="mailto:aideas@pvgcoet.ac.in"
+          method="POST"
+          encType="text/plain"
+          className="grid grid-cols-1 gap-6 text-left"
+        >
           <div>
             <label htmlFor="name" className="block mb-2">Name</label>
             <input
               id="name"
+              name="Name"
               type="text"
               required
               className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -27,6 +33,7 @@ export default function ContactPage() {
             <label htmlFor="email" className="block mb-2">Email</label>
             <input
               id="email"
+              name="Email"
               type="email"
               required
               className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -37,6 +44,7 @@ export default function ContactPage() {
             <label htmlFor="message" className="block mb-2">Message</label>
             <textarea
               id="message"
+              name="Message"
               rows={5}
               required
               className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
