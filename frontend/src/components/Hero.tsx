@@ -137,7 +137,9 @@ const Hero = () => {
             About aIDEAS
           </h2>
           <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
-            Learn what drives us — our mission, our passion, and our commitment to the AI & Data Science community.
+            Learn what drives us — our mission, our passion, and our commitment to the 
+            <br />
+            AI & Data Science community.
           </p>
         </div>
 
