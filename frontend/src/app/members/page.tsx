@@ -31,7 +31,7 @@ const membersData: Member[] = [
     name: "Tanvi Deshmukh",
     designation: "Joint General Secretary",
     image: "/members/tanvi.png",
-    info: "Supports the General Secretary and manages documentation.",
+    info: "Leads the association and coordinates major activities.",
     linkedin: "https://www.linkedin.com/in/tanvi-deshmukh-468406251",
     email: "tanvimdeshmukh07@gmail.com",
   },
