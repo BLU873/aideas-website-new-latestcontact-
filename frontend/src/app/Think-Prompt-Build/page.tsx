@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 // --- Data: In a real app, this would come from an API or a separate file ---
 const problemStatements = [
-  { "team_id": "P7S1K", "ps_id": "EDU01", "title": "AI Quiz Generator", "description": "Create an app that takes a block of text (like a chapter from a textbook) and automatically generates multiple-choice questions and flashcards to help students study.", "category": "Education" },
+  { "team_id": "12345", "ps_id": "EDU01", "title": "AI Quiz Generator", "description": "Create an app that takes a block of text (like a chapter from a textbook) and automatically generates multiple-choice questions and flashcards to help students study.", "category": "Education" },
   { "team_id": "A4B9L", "ps_id": "PROD01", "title": "Meeting Summarizer", "description": "Build a tool that takes an audio recording or text transcript of a meeting and generates a concise summary with key decisions and action items.", "category": "Productivity" },
   { "team_id": "C8D2M", "ps_id": "HEALTH01", "title": "Mindful Moment Bot", "description": "Develop a chatbot that can guide users through a short, 2-minute mindfulness or breathing exercise to help reduce stress.", "category": "Health & Wellness" },
   { "team_id": "E5F6N", "ps_id": "LOCAL01", "title": "Pune Traffic Predictor", "description": "Using historical or real-time data (if available), create a simple AI model that predicts traffic conditions for key routes in Pune/PCMC at different times of the day.", "category": "Local Community" },
@@ -92,6 +92,8 @@ const ProblemStatementCard = ({ problem }) => (
         <h2 className="text-sm font-medium text-purple-400 mb-2 uppercase tracking-wider">{problem.category}</h2>
         <h3 className="text-2xl font-bold text-white mb-4">{problem.title}</h3>
         <p className="text-gray-300 leading-relaxed">{problem.description}</p>
+        <br />
+        <p className="text-gray-300 leading-relaxed"><b>Bonus Marks for extra features</b></p>
     </div>
 );
 
