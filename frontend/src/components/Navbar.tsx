@@ -1,120 +1,101 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FaBars, FaTimes } from 'react-icons/fa';
-import gsap from 'gsap';
 import Image from 'next/image';
-import i from "@/components/logo.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const logoRef = useRef<HTMLDivElement>(null);
-
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
-    const letters = logoRef.current?.querySelectorAll('span');
-    if (letters) {
-      gsap.fromTo(
-        letters,
-        { y: -20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.07,
-          ease: 'back.out(1.7)',
-        }
-      );
-    }
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 30);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Split logo text into spans
-  const logo = 'aIDEAS'.split('').map((char, index) => (
-    <span key={index} className="inline-block">{char}</span>
-  ));
+  useEffect(() => {
+    const savedTheme = (localStorage.getItem('aideas-theme') as 'dark' | 'light') || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    localStorage.setItem('aideas-theme', nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+  };
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Events', path: '/events' },
+    { name: 'About', path: '/about' },
+    { name: 'Members', path: '/members' },
+    { name: 'Contact Us', path: '/contact' },
+  ];
 
   return (
-    <header className="sticky z-20 top-0 w-full bg-black border-b-2 text-white px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* 🟢 Logo */}   <Link href="/">
-        <div className="flex items-center space-x-3">
+    <header className={isScrolled ? 'header-floating' : ''}>
+      <nav>
+        <Link href="/" className="brand">
           <Image
-            src={i}
-            alt="aIDEAS Logo"
-            width={40}
-            height={40}
-            className="bg-white rounded-full border border-white"
+            src="/assets/img/logo-icon.png"
+            alt="aiDEAS logo"
+            width={42}
+            height={42}
+            className="rounded-full shadow-md"
           />
-          <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-sky-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-text bg-[length:300%] brightness-100">
-            {logo}
-          </div>
-        </div>
+          <span className="brand-name">
+            <span className="ai">aI</span>
+            <span className="deas">DEAS</span>
+          </span>
         </Link>
 
-        {/* 📱 Mobile toggle */}
-        <button className="md:hidden focus:outline-none" onClick={toggleMenu}>
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </button>
+        <div className={`navlinks ${isOpen ? 'open' : ''}`}>
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              href={link.path}
+              onClick={() => setIsOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
 
-        {/* 🔗 Desktop Links */}
-        <nav className="hidden md:flex space-x-6 text-sm">
-  {[
-    { name: "Home", path: "/" },
-    { name: "Events", path: "/events" },
-    { name: "About", path: "/about" },
-    { name: "Members", path: "/members" },
-    { name: "Contact Us", path: "/contact" },
-  ].map((item) => (
-    <Link
-      key={item.path}
-      href={item.path}
-      className="relative text-white after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-0 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full"
-    >
-      {item.name}
-    </Link>
-  ))}
-</nav>
+        <div className="nav-cta">
+          <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
 
-      </div>
+          <button
+            className="btn btn-ghost"
+            type="button"
+            onClick={() => {}}
+            aria-label="Achievements"
+          >
+            Achievements
+          </button>
 
-      {/* 📱 Mobile Nav */}
-      {isOpen && (
-       <div className="absolute top-16 right-0 w-1/2 z-50 bg-black px-6 py-4 flex flex-col items-center space-y-4 text-sm border-t border-zinc-700">
-
-  {/* Single reusable link block */}
-  <div className="w-full flex justify-center hover:bg-zinc-800 hover:border-b-2 hover:border-b-cyan-400   py-2 rounded">
-    <Link href="/" onClick={() => setIsOpen(false)} className="text-white">
-      Home
-    </Link>
-  </div>
-
-  <div className="w-full flex justify-center hover:bg-zinc-800 py-2 hover:border-b-2 hover:border-b-cyan-400 rounded">
-    <Link href="/events" onClick={() => setIsOpen(false)} className="text-white">
-      Events
-    </Link>
-  </div>
-
-  <div className="w-full flex justify-center hover:bg-zinc-800  hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
-    <Link href="/about" onClick={() => setIsOpen(false)} className="text-white">
-      About
-    </Link>
-  </div>
-   <div className="w-full flex justify-center hover:bg-zinc-800 hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
-    <Link href="/members" onClick={() => setIsOpen(false)} className="text-white">
-      Members
-    </Link>
-  </div>
-
-  <div className="w-full flex justify-center hover:bg-zinc-800  hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
-    <Link href="/contact" onClick={() => setIsOpen(false)} className="text-white">
-      Contact
-    </Link>
-  </div>
-
-</div>
-
-      )}
+          <button
+            className="burger"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </nav>
     </header>
   );
 }
