@@ -22,9 +22,9 @@ export default function ContactPage() {
     const email = (form.elements.namedItem("Email") as HTMLInputElement)?.value || '';
     const message = (form.elements.namedItem("Message") as HTMLTextAreaElement)?.value || '';
 
-    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_enquiry';
-    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_s7wg2wc';
-    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '7kPIrVieTXbxkwLkj';
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '';
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '';
 
     const templateParams = {
       from_name: name,
