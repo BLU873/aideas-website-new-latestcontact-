@@ -30,7 +30,6 @@ interface Signal {
   progress: number;
   speed: number;
   color: string;
-  lineRgb: string;
 }
 
 const COLOR_RGB = {
@@ -70,13 +69,16 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
+    // Check accessibility: prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     let rafId: number | null = null;
     let isVisible = true;
     let width = 0;
     let height = 0;
     let parentRect = parent.getBoundingClientRect();
 
-    // Raw cursor coordinates from window listener (zero calculation in mousemove)
+    // Raw cursor coordinates from window listener (zero React state, zero DOM queries in mousemove)
     let rawMouseX = -9999;
     let rawMouseY = -9999;
     let mouseActive = false;
@@ -109,7 +111,7 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
       const leftCount = Math.round(totalCount * 0.28);
       const rightCount = totalCount - leftCount;
 
-      const createNode = (x: number, y: number, isLeftZone: boolean) => {
+      const createNode = (x: number, y: number, isLeftZone: boolean): Node => {
         const randType = Math.random();
         const colorType: "silver" | "cyan" | "purple" =
           randType < 0.77 ? "silver" : randType < 0.94 ? "cyan" : "purple";
@@ -123,8 +125,8 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         return {
           x,
           y,
-          vx: (Math.random() - 0.5) * 0.26,
-          vy: (Math.random() - 0.5) * 0.26,
+          vx: prefersReducedMotion ? 0 : (Math.random() - 0.5) * 0.26,
+          vy: prefersReducedMotion ? 0 : (Math.random() - 0.5) * 0.26,
           radius,
           depth,
           baseAlpha,
@@ -155,7 +157,9 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
     };
 
     const updateParentRect = () => {
-      parentRect = parent.getBoundingClientRect();
+      if (parent) {
+        parentRect = parent.getBoundingClientRect();
+      }
     };
 
     const resizeCanvas = () => {
@@ -225,8 +229,8 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         mouse.y = -9999;
       }
 
-      // 1. Spontaneous quiet firing (every ~220 frames = ~3.6s)
-      if (frameCount % 220 === 0 && signals.length < MAX_SIGNALS) {
+      // 1. Spontaneous quiet firing (every ~220 frames = ~3.6s, disabled if reduced motion)
+      if (!prefersReducedMotion && frameCount % 220 === 0 && signals.length < MAX_SIGNALS) {
         const eligible: number[] = [];
         for (let i = 0; i < nodes.length; i++) {
           if (!nodes[i].isFiring && nodes[i].fireCooldown <= 0) {
@@ -263,7 +267,7 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         const targetAlpha = inHeadlineZone ? n.baseAlpha * 0.4 : n.baseAlpha;
 
         // Controlled magnetic pull: gentle 6-12px drift, no swarming or chasing
-        if (mouse.isActive) {
+        if (mouse.isActive && !prefersReducedMotion) {
           const dx = mouse.x - n.x;
           const dy = mouse.y - n.y;
           const dist = Math.hypot(dx, dy);
@@ -297,33 +301,35 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
           ? Math.min(1, targetAlpha + n.mouseInfluence * 0.42)
           : targetAlpha;
 
-        n.vx *= 0.94;
-        n.vy *= 0.94;
+        if (!prefersReducedMotion) {
+          n.vx *= 0.94;
+          n.vy *= 0.94;
 
-        const spd = Math.hypot(n.vx, n.vy);
-        if (spd > MAX_SPEED) {
-          n.vx = (n.vx / spd) * MAX_SPEED;
-          n.vy = (n.vy / spd) * MAX_SPEED;
-        }
+          const spd = Math.hypot(n.vx, n.vy);
+          if (spd > MAX_SPEED) {
+            n.vx = (n.vx / spd) * MAX_SPEED;
+            n.vy = (n.vy / spd) * MAX_SPEED;
+          }
 
-        n.x += n.vx;
-        n.y += n.vy;
+          n.x += n.vx;
+          n.y += n.vy;
 
-        // Soft boundaries
-        const pad = 12;
-        if (n.x < pad) {
-          n.x = pad;
-          n.vx = Math.abs(n.vx);
-        } else if (n.x > width - pad) {
-          n.x = width - pad;
-          n.vx = -Math.abs(n.vx);
-        }
-        if (n.y < pad) {
-          n.y = pad;
-          n.vy = Math.abs(n.vy);
-        } else if (n.y > height - pad) {
-          n.y = height - pad;
-          n.vy = -Math.abs(n.vy);
+          // Soft boundaries
+          const pad = 12;
+          if (n.x < pad) {
+            n.x = pad;
+            n.vx = Math.abs(n.vx);
+          } else if (n.x > width - pad) {
+            n.x = width - pad;
+            n.vx = -Math.abs(n.vx);
+          }
+          if (n.y < pad) {
+            n.y = pad;
+            n.vy = Math.abs(n.vy);
+          } else if (n.y > height - pad) {
+            n.y = height - pad;
+            n.vy = -Math.abs(n.vy);
+          }
         }
       }
 
@@ -388,6 +394,7 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
 
         // Launch signal when firing begins
         if (
+          !prefersReducedMotion &&
           n1.isFiring &&
           n1.fireProgress > 0.05 &&
           n1.fireProgress < 0.13 &&
@@ -400,8 +407,6 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
               : n1.colorType === "cyan"
               ? "rgba(56, 209, 255, 0.95)"
               : "rgba(245, 250, 255, 0.95)";
-          const lineRgb =
-            n1.colorType === "purple" ? COLOR_RGB.purple.line : COLOR_RGB.cyan.line;
 
           signals.push({
             fromIdx: i,
@@ -409,12 +414,11 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
             progress: 0,
             speed: 0.025,
             color,
-            lineRgb,
           });
         }
       }
 
-      // 4. Update & Draw Traveling Signals
+      // 4. Update & Draw Traveling Signals (Optimized: avoid shadowBlur GPU stalls)
       for (let s = signals.length - 1; s >= 0; s--) {
         const sig = signals[s];
         sig.progress += sig.speed;
@@ -436,14 +440,17 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         const sx = fromNode.x + (toNode.x - fromNode.x) * sig.progress;
         const sy = fromNode.y + (toNode.y - fromNode.y) * sig.progress;
 
-        // Traveling signal bead with soft crystalline glow
+        // Outer soft glow halo (lightweight two-pass circle instead of shadowBlur)
         ctx.beginPath();
-        ctx.arc(sx, sy, 2.0, 0, Math.PI * 2);
-        ctx.fillStyle = sig.color;
-        ctx.shadowColor = sig.color;
-        ctx.shadowBlur = 5;
+        ctx.arc(sx, sy, 4.0, 0, Math.PI * 2);
+        ctx.fillStyle = sig.color.replace("0.95", "0.22");
         ctx.fill();
-        ctx.shadowBlur = 0;
+
+        // Traveling signal core bead
+        ctx.beginPath();
+        ctx.arc(sx, sy, 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = sig.color;
+        ctx.fill();
       }
 
       // 5. Draw Crystalline Nodes
@@ -492,7 +499,10 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         ctx.fill();
       }
 
-      rafId = requestAnimationFrame(render);
+      // If reduced motion, render single frame and halt
+      if (!prefersReducedMotion) {
+        rafId = requestAnimationFrame(render);
+      }
     };
 
     // IntersectionObserver: halts RAF loop when Hero is scrolled off-screen
@@ -502,7 +512,8 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         isVisible = entry.isIntersecting;
 
         if (isVisible && !wasVisible) {
-          if (!rafId) {
+          updateParentRect();
+          if (!rafId && !prefersReducedMotion) {
             rafId = requestAnimationFrame(render);
           }
         } else if (!isVisible && rafId) {
@@ -518,10 +529,18 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
 
     const resizeObserver = new ResizeObserver(() => {
       resizeCanvas();
+      if (prefersReducedMotion) {
+        render();
+      }
     });
     resizeObserver.observe(parent);
 
-    rafId = requestAnimationFrame(render);
+    // Initial render / loop start
+    if (prefersReducedMotion) {
+      render();
+    } else {
+      rafId = requestAnimationFrame(render);
+    }
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
@@ -555,8 +574,9 @@ export function NeuralBackground({ className = "" }: NeuralBackgroundProps) {
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Breakpoint: 768px. Below 768px (mobile), interactive canvas is NEVER mounted.
-    const mql = window.matchMedia("(min-width: 768px)");
+    // Breakpoint: 768px + fine pointer (mouse/trackpad).
+    // On mobile or touch devices (<768px or coarse pointer), interactive canvas is NEVER mounted.
+    const mql = window.matchMedia("(min-width: 768px) and (pointer: fine)");
     setIsDesktop(mql.matches);
 
     const handleMediaChange = (e: MediaQueryListEvent) => {
@@ -569,7 +589,7 @@ export function NeuralBackground({ className = "" }: NeuralBackgroundProps) {
     };
   }, []);
 
-  // Return null on mobile / SSR: zero canvas in DOM, zero RAF loops, zero listeners
+  // Return null on mobile / touch-only / SSR: zero canvas in DOM, zero RAF loops, zero listeners
   if (!isDesktop) {
     return null;
   }

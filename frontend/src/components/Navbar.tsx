@@ -44,13 +44,13 @@ export default function Navbar() {
   return (
     <header className={isScrolled ? 'header-floating' : ''}>
       <nav>
-        <Link href="/" className="brand">
+        <Link href="/" className="brand" aria-label="aiDEAS Home">
           <Image
             src="/assets/img/logo-icon.png"
             alt="aiDEAS logo"
             width={42}
             height={42}
-            className="rounded-full shadow-md"
+            className="rounded-full shadow-md shrink-0"
           />
           <span className="brand-name">
             <span className="ai">aI</span>
@@ -68,10 +68,21 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          {/* Achievements inside mobile sidebar toggle section */}
+          <div className="nav-mobile-action">
+            <button
+              className="btn btn-ghost nav-mobile-achievements"
+              type="button"
+              onClick={() => setIsOpen(false)}
+              aria-label="Achievements"
+            >
+              Achievements
+            </button>
+          </div>
         </div>
 
         <div className="nav-cta">
-          {/* Theme toggle — renders invisible until mounted to avoid hydration mismatch */}
+          {/* Theme toggle */}
           <button
             className="theme-toggle"
             onClick={toggleTheme}
@@ -100,8 +111,9 @@ export default function Navbar() {
             )}
           </button>
 
+          {/* Desktop Achievements button (hidden on mobile) */}
           <button
-            className="btn btn-ghost"
+            className="btn btn-ghost nav-achievements-desktop"
             type="button"
             onClick={() => {}}
             aria-label="Achievements"
@@ -110,7 +122,7 @@ export default function Navbar() {
           </button>
 
           <button
-            className="burger"
+            className={`burger ${isOpen ? 'open' : ''}`}
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >

@@ -76,45 +76,113 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      {/* Living neural network background canvas (Desktop & Tablet >=768px only, completely unmounted on mobile) */}
+      {/* Living neural network background canvas (Desktop >=768px with fine pointer only, completely unmounted on mobile) */}
       <NeuralBackground />
 
       <div className="wrap hero-inner relative z-[2]">
-        {/* Left copy: z-index 4 */}
-        <div className="hero-copy relative z-[4]">
-          <h1
-            data-reveal="zoom"
-            className="hero-title"
+        {/* Left copy: z-index 4, tightly grouped editorial stack */}
+        <div className="hero-copy relative z-[4] flex flex-col justify-center max-w-[580px]">
+          {/* 1. Compact technical eyebrow */}
+          <div
+            data-reveal
+            className="hero-eyebrow inline-flex items-center gap-2 select-none pointer-events-none mb-1.5 sm:mb-2"
             style={{
-              transitionDelay: '.15s',
-              fontFamily: '"Orbitron", sans-serif',
-              lineHeight: '1.2',
-              fontSize: 'clamp(40px, 6vw, 76px)',
-              fontWeight: 800,
+              transitionDelay: '.06s',
+              width: 'fit-content',
             }}
           >
-            <span className="block" style={{ color: 'rgba(210, 215, 225, 0.96)' }}>
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_rgba(56,189,248,0.85)] shrink-0"
+              aria-hidden="true"
+            />
+            <span
+              className="tracking-[0.22em] sm:tracking-[0.26em] uppercase font-semibold text-[11px] sm:text-[12px]"
+              style={{
+                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                color: 'rgba(180, 195, 215, 0.72)',
+              }}
+            >
+              WELCOME TO
+            </span>
+          </div>
+
+          {/* 2. Large Brand Wordmark: aiDEAS (second largest text element, slightly smaller than main headline) */}
+          <div
+            data-reveal
+            className="hero-brand-mark mb-3.5 sm:mb-4 select-none"
+            style={{
+              transitionDelay: '.14s',
+            }}
+          >
+            <span
+              className="font-bold tracking-tight block"
+              style={{
+                fontFamily: '"Orbitron", var(--font-display), sans-serif',
+                fontSize: 'clamp(24px, 3.4vw, 42px)',
+                lineHeight: '1.1',
+                letterSpacing: '-0.02em',
+                filter: 'drop-shadow(0 0 20px rgba(56, 209, 255, 0.22))',
+              }}
+            >
+              <span style={{ color: '#38d1ff' }}>aI</span>
+              <span
+                style={{
+                  background: 'linear-gradient(90deg, #38d1ff 0%, #a855f7 65%, #b06bff 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                DEAS
+              </span>
+            </span>
+          </div>
+
+          {/* 3. Primary Two-Line Headline (Dominant textual element, largest in left Hero) */}
+          <h1
+            data-reveal="zoom"
+            className="hero-title mb-4 sm:mb-5"
+            style={{
+              transitionDelay: '.24s',
+              fontFamily: '"Orbitron", sans-serif',
+              lineHeight: '1.14',
+              fontSize: 'clamp(28px, 4.2vw, 54px)',
+              fontWeight: 800,
+              letterSpacing: '-0.015em',
+            }}
+          >
+            <span
+              className="block sm:whitespace-nowrap"
+              style={{
+                color: 'rgba(215, 224, 235, 0.96)',
+                letterSpacing: '-0.01em',
+              }}
+            >
               Build Intelligence.
             </span>
             <span
-              className="block"
+              className="block sm:whitespace-nowrap"
               style={{
-                background: 'linear-gradient(90deg, #a855f7 0%, #38bdf8 100%)',
+                background: 'linear-gradient(90deg, #38bdf8 0%, #a855f7 68%, #b06bff 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 0 24px rgba(56, 189, 248, 0.22))',
               }}
             >
               Shape What&apos;s Next.
             </span>
           </h1>
-          <p className="empower-line" data-reveal style={{ transitionDelay: '.25s' }}>
+
+          {/* 4. Subtitle */}
+          <p className="empower-line mb-5 sm:mb-6" data-reveal style={{ transitionDelay: '.34s' }}>
             Empowering&nbsp;
             <span className="type-target">{word}</span>
             <span className="cursor" aria-hidden="true">
               |
             </span>
           </p>
-          <div className="hero-actions" data-reveal style={{ transitionDelay: '.35s' }}>
+
+          {/* 5. Call to Actions */}
+          <div className="hero-actions" data-reveal style={{ transitionDelay: '.44s' }}>
             <Link href="/about" className="btn btn-primary btn-pulse">
               Explore Now &rarr;
             </Link>
@@ -131,7 +199,7 @@ export function Hero() {
             className="hidden md:flex items-center gap-2.5 absolute top-4 left-2 lg:left-4 z-20 pointer-events-none select-none"
             data-reveal
             style={{
-              transitionDelay: '.45s',
+              transitionDelay: '.52s',
               fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
             }}
           >
@@ -170,10 +238,10 @@ export function Hero() {
           </div>
 
           <div
-            className="w-full max-w-[760px] lg:max-w-[820px] h-[500px] sm:h-[540px] md:h-[580px] lg:h-[620px] relative flex items-center justify-center"
+            className="w-full max-w-[780px] lg:max-w-[840px] h-[520px] sm:h-[560px] md:h-[600px] lg:h-[640px] relative flex items-center justify-center"
             style={{
-              WebkitMaskImage: 'radial-gradient(ellipse 96% 92% at 50% 50%, #000000 72%, transparent 98%)',
-              maskImage: 'radial-gradient(ellipse 96% 92% at 50% 50%, #000000 72%, transparent 98%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 98% 95% at 50% 50%, #000000 85%, transparent 100%)',
+              maskImage: 'radial-gradient(ellipse 98% 95% at 50% 50%, #000000 85%, transparent 100%)',
             }}
           >
             {/* Atmospheric graphite/cool-gray illumination with subtle cyan/violet rim accents */}
@@ -187,11 +255,11 @@ export function Hero() {
               aria-hidden="true"
             />
 
-            {/* Spline 3D Scene with proportional breathing room scale */}
+            {/* Spline 3D Scene with proportional breathing room scale to prevent clipping of hands/arms */}
             <div
-              className="w-full h-full relative z-10 flex items-center justify-center"
+              className="w-full h-full relative z-10 flex items-center justify-center pointer-events-auto"
               style={{
-                transform: 'scale(0.88)',
+                transform: 'scale(0.85)',
                 transformOrigin: 'center center',
               }}
             >
@@ -209,7 +277,7 @@ export function Hero() {
               data-reveal
               className="flex items-center justify-center gap-2 text-[10px] sm:text-[11px] tracking-[0.14em] sm:tracking-[0.18em]"
               style={{
-                transitionDelay: '.75s',
+                transitionDelay: '.80s',
                 fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                 textTransform: 'uppercase',
                 color: 'rgba(160, 175, 195, 0.68)',
@@ -225,7 +293,7 @@ export function Hero() {
               data-reveal="easter-egg"
               className="flex items-center justify-center gap-2.5 sm:gap-3 mt-1.5 sm:mt-2"
               style={{
-                transitionDelay: '1.0s',
+                transitionDelay: '1.05s',
               }}
             >
               <div
