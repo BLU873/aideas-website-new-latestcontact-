@@ -59,11 +59,15 @@ function useReveal() {
 export function Hero() {
   const word = useTypewriter(WORDS);
   const sectionRef = useReveal() as React.RefObject<HTMLElement>;
-  const [showR2D2, setShowR2D2] = useState(true);
+  const [r2Phase, setR2Phase] = useState<'hidden' | 'shown'>('hidden');
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowR2D2(false), 5000);
-    return () => clearTimeout(timer);
+    const fadeIn = setTimeout(() => setR2Phase('shown'), 400);
+    const fadeOut = setTimeout(() => setR2Phase('hidden'), 5000);
+    return () => {
+      clearTimeout(fadeIn);
+      clearTimeout(fadeOut);
+    };
   }, []);
 
   const handleScrollDown = (e: React.MouseEvent) => {
@@ -114,11 +118,43 @@ export function Hero() {
 
         {/* Right Spline 3D scene */}
         <div className="hero-visual" data-reveal style={{ transitionDelay: '.2s' }}>
-          <Card className="w-full h-[460px] sm:h-[480px] md:h-[500px] bg-black/[0.96] relative overflow-hidden border-white/10">
-            {/* Aura Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none opacity-60">
-              <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/30 rounded-full blur-[90px]" />
-              <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/30 rounded-full blur-[90px]" />
+          <Card
+            className="w-full h-[460px] sm:h-[480px] md:h-[500px] relative overflow-hidden border-white/10"
+            style={{
+              backgroundColor: 'rgba(12, 14, 17, 0.97)',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              borderColor: 'rgba(180, 185, 195, 0.14)',
+              borderRadius: '0.5rem',
+            }}
+          >
+            {/* Gray aura — diffuse studio-light haze behind the robot */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '100%',
+                height: '100%',
+                opacity: 0.6,
+                pointerEvents: 'none',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '90%',
+                  aspectRatio: '1 / 1',
+                  background:
+                    'radial-gradient(circle at 50% 48%, rgba(190, 195, 205, 0.16) 0%, rgba(150, 155, 165, 0.09) 25%, rgba(80, 85, 95, 0.04) 48%, transparent 72%)',
+                  filter: 'blur(60px)',
+                  pointerEvents: 'none',
+                }}
+              />
             </div>
             <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
             <div className="w-full h-full relative">
@@ -146,26 +182,28 @@ export function Hero() {
                 MAKING MACHINES INTELLIGENT
               </div>
 
-              {/* R2D2 text near legs (fades out) */}
+              {/* R2D2 introduction (fades in, holds, fades out) */}
               <div
                 style={{
                   position: 'absolute',
-                  bottom: '12%',
+                  bottom: '8%',
                   left: '50%',
                   transform: 'translate(-50%, 0)',
                   zIndex: 0,
-                  opacity: showR2D2 ? 0.3 : 0,
-                  transition: 'opacity 1s ease-in-out',
+                  opacity: r2Phase === 'shown' ? 0.9 : 0,
+                  transition: 'opacity 1.4s ease-in-out',
                   fontFamily: '"Orbitron", sans-serif',
-                  fontSize: '5rem',
-                  fontWeight: 800,
-                  color: '#ffffff',
-                  letterSpacing: '0.1em',
+                  fontSize: 'clamp(1.1rem, 2.8vw, 1.8rem)',
+                  fontWeight: 600,
+                  letterSpacing: '0.35em',
+                  textIndent: '0.35em',
+                  whiteSpace: 'nowrap',
                   pointerEvents: 'none',
                   textAlign: 'center',
                 }}
               >
-                R2D2
+                <span style={{ color: '#e8eaed' }}>MEET&nbsp;</span>
+                <span style={{ color: '#7cc4e8' }}>R2D2</span>
               </div>
               <SplineScene
                 scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"

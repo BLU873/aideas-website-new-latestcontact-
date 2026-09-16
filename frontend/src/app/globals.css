@@ -1,4 +1,4 @@
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
 :root {
   --background: #0c0606;
@@ -29,21 +29,23 @@
 }
 
 html[data-theme="light"] {
-  --background: #f6f8fa;
+  --background: #f0f2f5;
   --foreground: #12151c;
-  --bg: #f6f8fa;
-  --bg-soft: #eef1f5;
+  --bg: #f0f2f5;
+  --bg-soft: #e4e7ec;
   --panel: #ffffff;
   --border: rgba(10,14,20,0.10);
   --cyan: #0f8fb8;
-  --cyan-bright: #0d99c9;
+  --cyan-bright: #0a7ea8;
   --purple: #7c4fd6;
-  --purple-bright: #8b5cf6;
+  --purple-bright: #7b4fd6;
   --text: #12151c;
   --text-dim: #4b5563;
   --text-faint: #7a8494;
-  --header-bg: rgba(255,255,255,0.78);
-  --nav-mobile-bg: rgba(255,255,255,0.98);
+  --grad: linear-gradient(90deg, var(--cyan-bright), var(--purple-bright));
+  --panel-grad: linear-gradient(160deg, rgba(10,126,168,0.06), rgba(123,79,214,0.04));
+  --header-bg: rgba(240,242,245,0.82);
+  --nav-mobile-bg: rgba(240,242,245,0.98);
 }
 
 *,
@@ -1033,3 +1035,32 @@ footer.site-footer .wrap {
   }
 }
 
+/* ─── Theme-aware page wrapper ─────────────────────────────────────────── */
+.page-main {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color .3s ease, color .3s ease;
+}
+
+/* ─── Light mode overrides ─────────────────────────────────────────────── */
+html[data-theme="light"] .brand img {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 0 18px -4px rgba(10,126,168,0.35);
+}
+
+html[data-theme="light"] #home {
+  background-color: var(--bg);
+}
+
+html[data-theme="light"] .ambient-panel {
+  background-image:
+    radial-gradient(640px 420px at 12% 15%, rgba(10,126,168,0.08), transparent 62%),
+    radial-gradient(640px 420px at 88% 85%, rgba(123,79,214,0.06), transparent 62%);
+}
+
+html[data-theme="light"] .mockup-frame {
+  box-shadow: 0 30px 70px -35px rgba(0,0,0,0.12);
+}
+
+html[data-theme="light"] .burger span {
+  background: var(--text);
+}

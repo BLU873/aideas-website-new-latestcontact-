@@ -6,7 +6,7 @@ import AboutOverviewSection from "@/components/home/AboutOverviewSection";
 
 export default function Home() {
   return (
-    <main className="relative overflow-hidden bg-[#10131a] text-white">
+    <main className="page-main relative overflow-hidden">
       <Hero />
       <ZigzagSection />
       <StatsSection />
