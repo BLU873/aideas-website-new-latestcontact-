@@ -188,8 +188,8 @@ nav {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 60px;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 36px;
   align-items: center;
   width: 100%;
 }
@@ -361,6 +361,21 @@ nav {
 [data-reveal="zoom"].in {
   opacity: 1;
   transform: scale(1);
+}
+
+[data-reveal="easter-egg"] {
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  letter-spacing: 0.14em;
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+              letter-spacing 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal="easter-egg"].in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  letter-spacing: 0.22em;
 }
 
 /* Loader Spinner */
@@ -560,6 +575,19 @@ nav {
 
 .zigzag-block:first-of-type {
   border-top: none;
+}
+
+.learn-by-building-block {
+  grid-template-columns: minmax(0, 4.1fr) minmax(0, 5.3fr);
+  gap: clamp(32px, 4.5vw, 56px);
+  padding: 24px 0 40px;
+}
+
+@media (max-width: 880px) {
+  .learn-by-building-block {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
 }
 
 .zigzag-block.reverse .zigzag-copy {

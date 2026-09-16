@@ -1,8 +1,34 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
+import { motion, useInView } from 'framer-motion';
+import AiModelWorkspace from './AiModelWorkspace';
+import WorkshopConsole from './WorkshopConsole';
+import CommunityNetwork from './CommunityNetwork';
 
 export default function ZigzagSection() {
+  const learnBlockRef = useRef<HTMLDivElement>(null);
+  const isLearnBlockInView = useInView(learnBlockRef, {
+    once: true,
+    amount: 0.25,
+    margin: '0px 0px -40px 0px',
+  });
+
+  const workshopsBlockRef = useRef<HTMLDivElement>(null);
+  const isWorkshopsInView = useInView(workshopsBlockRef, {
+    once: true,
+    amount: 0.25,
+    margin: '0px 0px -40px 0px',
+  });
+
+  const communityBlockRef = useRef<HTMLDivElement>(null);
+  const isCommunityInView = useInView(communityBlockRef, {
+    once: true,
+    amount: 0.25,
+    margin: '0px 0px -40px 0px',
+  });
+
   return (
     <section className="zigzag-section section-pad ambient-panel">
       <div className="wrap">
@@ -15,8 +41,13 @@ export default function ZigzagSection() {
         </div>
 
         {/* Block 1 */}
-        <div className="zigzag-block">
-          <div className="zigzag-copy">
+        <div className="zigzag-block learn-by-building-block" ref={learnBlockRef}>
+          <motion.div
+            className="zigzag-copy"
+            initial={{ opacity: 0, y: 18 }}
+            animate={isLearnBlockInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          >
             <h3>Learn by building</h3>
             <p>
               Workshops and reading groups are just the start — every track ends with a real project, reviewed by peers and mentors, not a quiz.
@@ -24,26 +55,20 @@ export default function ZigzagSection() {
             <Link href="/about" className="zigzag-link">
               Read our story →
             </Link>
-          </div>
+          </motion.div>
           <div className="zigzag-visual">
-            <div className="mockup-frame">
-              <div className="mockup-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div className="mockup-body mockup-video-single">
-                <video className="mockup-video" autoPlay muted loop playsInline>
-                  <source src="/assets/video/Book_Loader.webm" type="video/webm" />
-                </video>
-              </div>
-            </div>
+            <AiModelWorkspace isTriggered={isLearnBlockInView} />
           </div>
         </div>
 
         {/* Block 2 (Reverse) */}
-        <div className="zigzag-block reverse">
-          <div className="zigzag-copy">
+        <div className="zigzag-block reverse" ref={workshopsBlockRef}>
+          <motion.div
+            className="zigzag-copy"
+            initial={{ opacity: 0, y: 18 }}
+            animate={isWorkshopsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          >
             <h3>Workshops & hackathons</h3>
             <p>
               From weekend build nights to a full 24-hour hack day — hands-on sessions run through the semester, open to every year and branch.
@@ -51,38 +76,20 @@ export default function ZigzagSection() {
             <Link href="/events" className="zigzag-link">
               See events →
             </Link>
-          </div>
+          </motion.div>
           <div className="zigzag-visual">
-            <div className="mockup-frame">
-              <div className="mockup-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div className="mockup-body mockup-events">
-                <div className="mockup-event-card cyan">
-                  <video className="mockup-video" autoPlay muted loop playsInline>
-                    <source src="/assets/video/Successful_target.webm" type="video/webm" />
-                  </video>
-                </div>
-                <div className="mockup-event-card purple">
-                  <video className="mockup-video" autoPlay muted loop playsInline>
-                    <source src="/assets/video/Employee_content.webm" type="video/webm" />
-                  </video>
-                </div>
-                <div className="mockup-event-card cyan">
-                  <video className="mockup-video" autoPlay muted loop playsInline>
-                    <source src="/assets/video/Business_plan.webm" type="video/webm" />
-                  </video>
-                </div>
-              </div>
-            </div>
+            <WorkshopConsole isTriggered={isWorkshopsInView} />
           </div>
         </div>
 
         {/* Block 3 */}
-        <div className="zigzag-block">
-          <div className="zigzag-copy">
+        <div className="zigzag-block" ref={communityBlockRef}>
+          <motion.div
+            className="zigzag-copy"
+            initial={{ opacity: 0, y: 18 }}
+            animate={isCommunityInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          >
             <h3>A growing community</h3>
             <p>
               A cross-year network of students who share resources, opportunities, and momentum — meet the core team running it.
@@ -90,22 +97,9 @@ export default function ZigzagSection() {
             <Link href="/members" className="zigzag-link">
               Meet the team →
             </Link>
-          </div>
+          </motion.div>
           <div className="zigzag-visual">
-            <div className="mockup-frame">
-              <div className="mockup-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div className="mockup-body mockup-avatars">
-                <span className="mockup-avatar" style={{ background: 'linear-gradient(135deg,#38d1ff,#22b8f0)' }}></span>
-                <span className="mockup-avatar" style={{ background: 'linear-gradient(135deg,#b06bff,#9b5cff)' }}></span>
-                <span className="mockup-avatar" style={{ background: 'linear-gradient(135deg,#38d1ff,#b06bff)' }}></span>
-                <span className="mockup-avatar" style={{ background: 'linear-gradient(135deg,#9b5cff,#38d1ff)' }}></span>
-                <span className="mockup-avatar more">+6</span>
-              </div>
-            </div>
+            <CommunityNetwork isTriggered={isCommunityInView} />
           </div>
         </div>
       </div>
