@@ -68,7 +68,7 @@ export function Hero() {
     <section id="home" ref={sectionRef as React.RefObject<HTMLElement>} className="relative overflow-hidden">
       {/* Static deep black/graphite atmosphere (visible on all devices, zero CPU/GPU overhead) */}
       <div
-        className="pointer-events-none absolute inset-0 z-0"
+        className="pointer-events-none absolute inset-0 z-0 hero-ambient-atmosphere"
         style={{
           background:
             'radial-gradient(ellipse 70% 60% at 50% 25%, rgba(18, 24, 35, 0.45) 0%, rgba(6, 8, 12, 0.98) 100%)',
@@ -96,7 +96,7 @@ export function Hero() {
               aria-hidden="true"
             />
             <span
-              className="tracking-[0.22em] sm:tracking-[0.26em] uppercase font-semibold text-[11px] sm:text-[12px]"
+              className="hero-eyebrow-text tracking-[0.22em] sm:tracking-[0.26em] uppercase font-semibold text-[11px] sm:text-[12px]"
               style={{
                 fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                 color: 'rgba(180, 195, 215, 0.72)',
@@ -151,7 +151,7 @@ export function Hero() {
             }}
           >
             <span
-              className="block sm:whitespace-nowrap"
+              className="hero-title-main block sm:whitespace-nowrap"
               style={{
                 color: 'rgba(215, 224, 235, 0.96)',
                 letterSpacing: '-0.01em',
@@ -214,8 +214,8 @@ export function Hero() {
                 fontWeight: 600,
               }}
             >
-              <span style={{ color: 'rgba(180, 190, 205, 0.72)' }}>MAKING MACHINES</span>
-              <span style={{ color: 'rgba(240, 245, 255, 0.92)' }}>INTELLIGENT</span>
+              <span className="hero-annotation-label" style={{ color: 'rgba(180, 190, 205, 0.72)' }}>MAKING MACHINES</span>
+              <span className="hero-annotation-val" style={{ color: 'rgba(240, 245, 255, 0.92)' }}>INTELLIGENT</span>
             </div>
             <div className="hidden lg:flex items-center">
               <div
@@ -246,7 +246,7 @@ export function Hero() {
           >
             {/* Atmospheric graphite/cool-gray illumination with subtle cyan/violet rim accents */}
             <div
-              className="pointer-events-none absolute inset-0 z-0"
+              className="pointer-events-none absolute inset-0 z-0 hero-robot-glow"
               style={{
                 background:
                   'radial-gradient(ellipse 75% 70% at 50% 50%, rgba(20, 26, 38, 0.45) 0%, rgba(56, 209, 255, 0.035) 30%, rgba(176, 107, 255, 0.02) 52%, transparent 72%)',
@@ -275,7 +275,7 @@ export function Hero() {
             {/* Status Line */}
             <div
               data-reveal
-              className="flex items-center justify-center gap-2 text-[10px] sm:text-[11px] tracking-[0.14em] sm:tracking-[0.18em]"
+              className="hero-status-text flex items-center justify-center gap-2 text-[10px] sm:text-[11px] tracking-[0.14em] sm:tracking-[0.18em]"
               style={{
                 transitionDelay: '.80s',
                 fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',

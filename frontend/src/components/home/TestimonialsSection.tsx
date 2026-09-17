@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 interface Testimonial {
   name: string;
@@ -61,15 +62,14 @@ export default function TestimonialsSection() {
       <div className="wrap">
         {/* Section Header */}
         <motion.div
-          className="section-head"
           initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="eyebrow">WHAT MEMBERS SAY</div>
-          <h2>
-            Straight from the <span className="grad-text">community.</span>
-          </h2>
+          <SectionHeading
+            eyebrow="WHAT MEMBERS SAY"
+            wordmarkText="Straight from the community."
+          />
         </motion.div>
 
         {/* Testimonials Grid */}
@@ -89,7 +89,7 @@ export default function TestimonialsSection() {
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 onMouseMove={handleMouseMove}
-                className={`relative rounded-2xl border border-[rgba(255,255,255,0.07)] bg-[#0d121c] p-6 sm:p-7 flex flex-col justify-between overflow-hidden group transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[rgba(255,255,255,0.22)] shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] ${
+                className={`testimonial-card relative rounded-2xl border border-[rgba(255,255,255,0.07)] bg-[#0d121c] p-6 sm:p-7 flex flex-col justify-between overflow-hidden group transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[rgba(255,255,255,0.22)] shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] ${
                   isCyan
                     ? "hover:shadow-[0_22px_45px_-18px_rgba(56,209,255,0.22)]"
                     : isPurple
@@ -122,7 +122,7 @@ export default function TestimonialsSection() {
                 />
 
                 {/* Top Row: aiDEAS Member badge (Number labels completely removed) */}
-                <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] pb-3 mb-4">
+                <div className="testimonial-divider flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] pb-3 mb-4">
                   <span className="inline-flex items-center gap-1.5 text-[10px] font-mono tracking-wider text-[var(--text-faint)] uppercase">
                     <span
                       className={`w-1.5 h-1.5 rounded-full ${
@@ -138,12 +138,12 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Testimonial Quotation */}
-                <p className="text-[14.5px] sm:text-[15px] text-[#ccd3df] leading-[1.72] font-normal my-2 tracking-[0.01em] flex-1">
+                <p className="testimonial-quote text-[14.5px] sm:text-[15px] text-[#ccd3df] leading-[1.72] font-normal my-2 tracking-[0.01em] flex-1">
                   &ldquo;{t.quote}&rdquo;
                 </p>
 
                 {/* Subtle Divider */}
-                <div className="w-full h-[1px] bg-[rgba(255,255,255,0.06)] my-5" />
+                <div className="testimonial-divider w-full h-[1px] bg-[rgba(255,255,255,0.06)] my-5" />
 
                 {/* Author Info Row */}
                 <div className="flex items-center gap-3.5">
@@ -167,7 +167,7 @@ export default function TestimonialsSection() {
                   </motion.div>
 
                   <div className="min-w-0">
-                    <div className="font-display font-bold text-[13.5px] sm:text-[14px] text-white tracking-wide truncate">
+                    <div className="testimonial-author font-display font-bold text-[13.5px] sm:text-[14px] text-white tracking-wide truncate">
                       {t.name}
                     </div>
                     <div className="text-[11.5px] font-mono text-[var(--text-faint)] mt-0.5 truncate">

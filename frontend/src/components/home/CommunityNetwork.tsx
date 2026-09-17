@@ -209,7 +209,7 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
       animate={isTriggered ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 24, scale: 0.97 }}
       transition={{ duration: 0.68, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full rounded-2xl border border-[rgba(255,255,255,0.09)] bg-[#131824] p-3.5 sm:p-4 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] font-sans text-left relative overflow-hidden"
+      className="community-container w-full rounded-2xl border border-[rgba(255,255,255,0.09)] bg-[#131824] p-3.5 sm:p-4 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] font-sans text-left relative overflow-hidden"
     >
       {/* Subtle background ambient sheen */}
       <div
@@ -222,7 +222,7 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
       />
 
       {/* Frame Header Bar */}
-      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-2.5 mb-2.5">
+      <div className="community-header flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-2.5 mb-2.5">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[rgba(255,255,255,0.2)]" />
@@ -231,7 +231,7 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
           </div>
           <span className="text-[11px] font-mono text-[var(--text-faint)] ml-2 tracking-wide flex items-center gap-1.5">
             <span className="text-[var(--cyan-bright)]">aiDEAS</span>
-            <span className="opacity-40">//</span>
+            <span className="opacity-40">{"//"}</span>
             <span>STUDENT NETWORK</span>
           </span>
         </div>
@@ -252,9 +252,9 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
         className="grid grid-cols-3 gap-2 mb-2.5"
       >
         <div
-          className={`rounded-lg border px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px] transition-all duration-400 ${
+          className={`community-card rounded-lg border px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px] transition-all duration-400 ${
             currentSeq.statHighlight === "MEMBERS"
-              ? "border-[rgba(56,209,255,0.3)] bg-[#1a2336] shadow-[0_0_12px_-4px_rgba(56,209,255,0.25)]"
+              ? "community-card-active border-[rgba(56,209,255,0.3)] bg-[#1a2336] shadow-[0_0_12px_-4px_rgba(56,209,255,0.25)]"
               : "border-[rgba(255,255,255,0.05)] bg-[#151b28]/60"
           }`}
         >
@@ -263,9 +263,9 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
         </div>
 
         <div
-          className={`rounded-lg border px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px] transition-all duration-400 ${
+          className={`community-card rounded-lg border px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px] transition-all duration-400 ${
             currentSeq.statHighlight === "DOMAINS"
-              ? "border-[rgba(176,107,255,0.3)] bg-[#211f35] shadow-[0_0_12px_-4px_rgba(176,107,255,0.25)]"
+              ? "community-card-active border-[rgba(176,107,255,0.3)] bg-[#211f35] shadow-[0_0_12px_-4px_rgba(176,107,255,0.25)]"
               : "border-[rgba(255,255,255,0.05)] bg-[#151b28]/60"
           }`}
         >
@@ -274,19 +274,19 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
         </div>
 
         <div
-          className={`rounded-lg border px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px] transition-all duration-400 ${
+          className={`community-card rounded-lg border px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px] transition-all duration-400 ${
             currentSeq.statHighlight === "PROJECTS"
-              ? "border-[rgba(56,209,255,0.3)] bg-[#1a2336] shadow-[0_0_12px_-4px_rgba(56,209,255,0.25)]"
+              ? "community-card-active border-[rgba(56,209,255,0.3)] bg-[#1a2336] shadow-[0_0_12px_-4px_rgba(56,209,255,0.25)]"
               : "border-[rgba(255,255,255,0.05)] bg-[#151b28]/60"
           }`}
         >
           <span className="text-[var(--text-faint)] text-[10px] tracking-wider uppercase">PROJECTS</span>
-          <span className="text-white font-bold">18</span>
+          <span className="text-white community-footer-text font-bold">18</span>
         </div>
       </motion.div>
 
       {/* SVG Network Visualization */}
-      <div className="relative w-full rounded-xl border border-[rgba(255,255,255,0.07)] bg-[#0d121e] p-2 overflow-hidden">
+      <div className="community-svg-wrap relative w-full rounded-xl border border-[rgba(255,255,255,0.07)] bg-[#0d121e] p-2 overflow-hidden">
         {/* Active path label pill inside the network display */}
         <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 pointer-events-none">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan-bright)] opacity-80" />
@@ -453,6 +453,7 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
               stroke="url(#centerCoreGrad)"
               strokeWidth="1.5"
               filter="drop-shadow(0 0 8px rgba(56,209,255,0.25))"
+              className="community-center-disc"
             />
             {/* aiDEAS Branding Label */}
             <text
@@ -502,6 +503,7 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
                   cx={n.x}
                   cy={n.y}
                   r={isActive ? (isHovered ? 17 : 15) : 13}
+                  className={!isActive ? "community-node-halo-inactive" : ""}
                   fill={
                     isActive
                       ? isCyan
@@ -546,6 +548,7 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
                   x={n.labelX}
                   y={n.labelY}
                   textAnchor="middle"
+                  className="community-node-label"
                   fill={
                     isActive
                       ? isCyan
@@ -574,13 +577,13 @@ export default function CommunityNetwork({ isTriggered }: CommunityNetworkProps)
         initial={{ opacity: 0 }}
         animate={isTriggered ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
-        className="mt-2.5 pt-2 border-t border-[rgba(255,255,255,0.07)] flex items-center justify-between text-[10px] font-mono text-[var(--text-faint)]"
+        className="community-footer mt-2.5 pt-2 border-t border-[rgba(255,255,255,0.07)] flex items-center justify-between text-[10px] font-mono text-[var(--text-faint)]"
       >
         <span className="flex items-center gap-1.5 truncate">
           <span className="text-[var(--cyan-bright)]">●</span>
           <span>Cross-year peer mentorship</span>
           <span className="text-[rgba(255,255,255,0.2)]">•</span>
-          <span className="text-white/80">PVGCOET AI & DS Chapter</span>
+          <span className="text-white/80 community-footer-text">PVGCOET AI & DS Chapter</span>
         </span>
         <span className="hidden sm:inline text-[var(--text-faint)] opacity-60 ml-2 shrink-0">
           Weekly Syncs

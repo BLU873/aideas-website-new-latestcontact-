@@ -97,7 +97,7 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
       animate={isTriggered ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 24, scale: 0.97 }}
       transition={{ duration: 0.68, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full rounded-2xl border border-[rgba(255,255,255,0.09)] bg-[#131824] p-3.5 sm:p-4 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] font-sans text-left relative overflow-hidden"
+      className="workshop-container w-full rounded-2xl border border-[rgba(255,255,255,0.09)] bg-[#131824] p-3.5 sm:p-4 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] font-sans text-left relative overflow-hidden"
     >
       {/* Subtle ambient lighting - responsive to active event's accent */}
       <div
@@ -114,7 +114,7 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
       />
 
       {/* Frame Header Bar */}
-      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-2.5 mb-2.5">
+      <div className="workshop-header flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-2.5 mb-2.5">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[rgba(255,255,255,0.2)]" />
@@ -123,7 +123,7 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
           </div>
           <span className="text-[11px] font-mono text-[var(--text-faint)] ml-2 tracking-wide flex items-center gap-1.5">
             <span className="text-[var(--cyan-bright)]">aiDEAS</span>
-            <span className="opacity-40">//</span>
+            <span className="opacity-40">{"//"}</span>
             <span>WORKSHOP LAB</span>
           </span>
         </div>
@@ -137,7 +137,7 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
       </div>
 
       {/* Workflow Category Indicator - Subtle state reflection */}
-      <div className="flex items-center justify-between text-[10px] font-mono tracking-wider uppercase text-[var(--text-faint)] mb-2.5 px-2.5 py-1 bg-[#182030] rounded-lg border border-[rgba(255,255,255,0.05)]">
+      <div className="workshop-cat-bar flex items-center justify-between text-[10px] font-mono tracking-wider uppercase text-[var(--text-faint)] mb-2.5 px-2.5 py-1 bg-[#182030] rounded-lg border border-[rgba(255,255,255,0.05)]">
         <span
           className={`font-semibold flex items-center gap-1.5 transition-colors duration-400 ${
             currentEvent.category === "WORKSHOPS"
@@ -209,11 +209,11 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
               className={`relative rounded-xl p-2.5 sm:p-3 transition-all duration-400 cursor-pointer select-none text-left ${
                 isActive
                   ? isCyan
-                    ? "border border-[rgba(56,209,255,0.38)] bg-[#1c2436] shadow-[0_10px_24px_-8px_rgba(0,0,0,0.65)] -translate-y-0.5"
+                    ? "workshop-card-active-cyan border border-[rgba(56,209,255,0.38)] bg-[#1c2436] shadow-[0_10px_24px_-8px_rgba(0,0,0,0.65)] -translate-y-0.5"
                     : isPurple
-                    ? "border border-[rgba(176,107,255,0.38)] bg-[#211f35] shadow-[0_10px_24px_-8px_rgba(0,0,0,0.65)] -translate-y-0.5"
-                    : "border border-[rgba(56,209,255,0.35)] bg-[#1e2336] shadow-[0_10px_24px_-8px_rgba(0,0,0,0.65)] -translate-y-0.5"
-                  : "border border-[rgba(255,255,255,0.05)] bg-[#151b28]/60 opacity-65 hover:opacity-90 hover:border-[rgba(255,255,255,0.1)]"
+                    ? "workshop-card-active-purple border border-[rgba(176,107,255,0.38)] bg-[#211f35] shadow-[0_10px_24px_-8px_rgba(0,0,0,0.65)] -translate-y-0.5"
+                    : "workshop-card-active-cyan border border-[rgba(56,209,255,0.35)] bg-[#1e2336] shadow-[0_10px_24px_-8px_rgba(0,0,0,0.65)] -translate-y-0.5"
+                  : "workshop-card-inactive border border-[rgba(255,255,255,0.05)] bg-[#151b28]/60 opacity-65 hover:opacity-90 hover:border-[rgba(255,255,255,0.1)]"
               }`}
             >
               {/* Timeline node marker on the vertical line */}
@@ -233,7 +233,7 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span
-                      className={`text-[12px] sm:text-[13px] font-mono font-bold tracking-wide transition-colors duration-300 ${
+                      className={`workshop-event-title text-[12px] sm:text-[13px] font-mono font-bold tracking-wide transition-colors duration-300 ${
                         isActive
                           ? isCyan
                             ? "text-[var(--cyan-bright)] drop-shadow-[0_0_6px_rgba(56,209,255,0.3)]"
@@ -262,7 +262,7 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
 
                   <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-[var(--text-dim)]">
                     <span
-                      className={`flex items-center gap-1 transition-colors duration-300 ${
+                      className={`workshop-event-title flex items-center gap-1 transition-colors duration-300 ${
                         isActive ? "text-white font-medium" : "text-white/70"
                       }`}
                     >
@@ -270,7 +270,7 @@ export default function WorkshopConsole({ isTriggered }: WorkshopConsoleProps) {
                     </span>
                     <span className="text-[rgba(255,255,255,0.15)]">•</span>
                     <span
-                      className={`flex items-center gap-1 transition-colors duration-300 ${
+                      className={`workshop-event-title flex items-center gap-1 transition-colors duration-300 ${
                         isActive ? "text-white/90" : "text-white/60"
                       }`}
                     >

@@ -162,7 +162,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
       initial={{ opacity: 0, y: 22, scale: 0.98 }}
       animate={isTriggered ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 22, scale: 0.98 }}
       transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-      className="w-full rounded-2xl border border-[rgba(255,255,255,0.11)] bg-[#151922] p-3.5 sm:p-4 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] font-sans text-left relative overflow-hidden transition-colors duration-300"
+      className="ai-workspace-container w-full rounded-2xl border border-[rgba(255,255,255,0.11)] bg-[#151922] p-3.5 sm:p-4 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.85)] font-sans text-left relative overflow-hidden transition-colors duration-300"
     >
       {/* Subtle background ambient sheen */}
       <div
@@ -175,7 +175,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
       />
 
       {/* Frame Header Bar */}
-      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-2.5 mb-2.5">
+      <div className="ai-workspace-header flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-2.5 mb-2.5">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[rgba(255,255,255,0.22)]" />
@@ -204,7 +204,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
       </div>
 
       {/* Pipeline Stage Tracker */}
-      <div className="flex items-center justify-between text-[10px] font-mono tracking-wider uppercase text-[var(--text-faint)] mb-2.5 px-2.5 py-1 bg-[#1a202c] rounded-lg border border-[rgba(255,255,255,0.06)]">
+      <div className="ai-workspace-pipeline flex items-center justify-between text-[10px] font-mono tracking-wider uppercase text-[var(--text-faint)] mb-2.5 px-2.5 py-1 bg-[#1a202c] rounded-lg border border-[rgba(255,255,255,0.06)]">
         <span className="text-[var(--cyan-bright)] font-semibold flex items-center gap-1">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan-bright)]" />
           DATASET
@@ -245,13 +245,13 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
       {/* Main Grid: Refined graphite gray panels */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {/* PANEL 1: DATASET */}
-        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#1f2633] p-2.5 sm:p-3 flex flex-col justify-between transition-colors duration-200 hover:border-[rgba(255,255,255,0.14)]">
+        <div className="ai-workspace-card rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#1f2633] p-2.5 sm:p-3 flex flex-col justify-between transition-colors duration-200 hover:border-[rgba(255,255,255,0.14)]">
           <div>
             <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-[rgba(255,255,255,0.07)]">
               <span className="text-[11px] font-mono tracking-wider font-semibold text-[var(--cyan-bright)] uppercase">
                 DATASET
               </span>
-              <span className="text-[9px] font-mono text-[var(--text-faint)] bg-[#283245] px-1.5 py-0.5 rounded border border-[rgba(255,255,255,0.05)]">
+              <span className="ai-workspace-tag text-[9px] font-mono text-[var(--text-faint)] bg-[#283245] px-1.5 py-0.5 rounded border border-[rgba(255,255,255,0.05)]">
                 v1.2.0
               </span>
             </div>
@@ -259,15 +259,15 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
             <div className="space-y-1 text-[11.5px] font-mono">
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Training Samples</span>
-                <span className="text-white font-medium">12,480</span>
+                <span className="text-white ai-workspace-value font-medium">12,480</span>
               </div>
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Validation</span>
-                <span className="text-white font-medium">2,400</span>
+                <span className="text-white ai-workspace-value font-medium">2,400</span>
               </div>
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Features</span>
-                <span className="text-white font-medium">128</span>
+                <span className="text-white ai-workspace-value font-medium">128</span>
               </div>
             </div>
           </div>
@@ -282,7 +282,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
         <div
           onMouseEnter={() => setIsHoveringModel(true)}
           onMouseLeave={() => setIsHoveringModel(false)}
-          className={`rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between transition-all duration-300 ${
+          className={`ai-workspace-card rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between transition-all duration-300 ${
             isHoveringModel
               ? "border-[rgba(176,107,255,0.35)] bg-[#232b3a] shadow-[0_0_18px_-6px_rgba(176,107,255,0.22)]"
               : "border-[rgba(255,255,255,0.08)] bg-[#1f2633]"
@@ -296,7 +296,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--purple-bright)] animate-pulse" />
                 )}
               </span>
-              <span className="text-[9px] font-mono text-[var(--text-faint)] bg-[#283245] px-1.5 py-0.5 rounded border border-[rgba(255,255,255,0.05)]">
+              <span className="ai-workspace-tag text-[9px] font-mono text-[var(--text-faint)] bg-[#283245] px-1.5 py-0.5 rounded border border-[rgba(255,255,255,0.05)]">
                 Transformer / MLP
               </span>
             </div>
@@ -304,15 +304,15 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
             <div className="space-y-1 text-[11.5px] font-mono">
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Architecture</span>
-                <span className="text-white font-medium">Neural Network</span>
+                <span className="text-white ai-workspace-value font-medium">Neural Network</span>
               </div>
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Layers</span>
-                <span className="text-white font-medium">8</span>
+                <span className="text-white ai-workspace-value font-medium">8</span>
               </div>
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Parameters</span>
-                <span className="text-white font-medium">2.4M</span>
+                <span className="text-white ai-workspace-value font-medium">2.4M</span>
               </div>
             </div>
           </div>
@@ -379,7 +379,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
           onMouseEnter={() => setIsHoveringLoss(true)}
           onMouseLeave={handleLossMouseLeave}
           onMouseMove={handleLossMouseMove}
-          className={`rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between transition-all duration-300 cursor-crosshair ${
+          className={`ai-workspace-card rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between transition-all duration-300 cursor-crosshair ${
             isHoveringLoss
               ? "border-[rgba(56,209,255,0.38)] bg-[#232b3a] shadow-[0_0_18px_-6px_rgba(56,209,255,0.25)]"
               : "border-[rgba(255,255,255,0.08)] bg-[#1f2633]"
@@ -403,7 +403,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
             <div className="space-y-1 text-[11.5px] font-mono">
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Epoch</span>
-                <span className="text-white font-medium">{metrics.epoch} / 50</span>
+                <span className="text-white ai-workspace-value font-medium">{metrics.epoch} / 50</span>
               </div>
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Accuracy</span>
@@ -413,7 +413,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
                 <span className="text-[11px] text-[var(--text-faint)]">Loss</span>
                 <span
                   className={`font-medium transition-colors duration-200 ${
-                    isHoveringLoss ? "text-[var(--cyan-bright)] font-bold" : "text-white"
+                    isHoveringLoss ? "text-[var(--cyan-bright)] font-bold" : "text-white ai-workspace-value"
                   }`}
                 >
                   {displayedLoss}
@@ -423,7 +423,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
 
             {/* GPU-Accelerated Framer Motion Progress Bar */}
             <div className="mt-2">
-              <div className="h-1.5 w-full bg-[rgba(255,255,255,0.08)] rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-[rgba(255,255,255,0.08)] ai-workspace-tag rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-gradient-to-r from-[var(--cyan-bright)] to-[var(--purple-bright)]"
                   initial={{ width: "0%" }}
@@ -514,13 +514,13 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
         </div>
 
         {/* PANEL 4: OUTPUT */}
-        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#1f2633] p-2.5 sm:p-3 flex flex-col justify-between transition-colors duration-200 hover:border-[rgba(255,255,255,0.14)]">
+        <div className="ai-workspace-card rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#1f2633] p-2.5 sm:p-3 flex flex-col justify-between transition-colors duration-200 hover:border-[rgba(255,255,255,0.14)]">
           <div>
             <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-[rgba(255,255,255,0.07)]">
-              <span className="text-[11px] font-mono tracking-wider font-semibold text-white uppercase">
+              <span className="text-[11px] font-mono tracking-wider font-semibold text-white ai-workspace-value uppercase">
                 OUTPUT
               </span>
-              <span className="text-[9px] font-mono text-[var(--cyan-bright)] bg-[#283245] px-1.5 py-0.5 rounded border border-[rgba(56,209,255,0.18)]">
+              <span className="ai-workspace-tag text-[9px] font-mono text-[var(--cyan-bright)] bg-[#283245] px-1.5 py-0.5 rounded border border-[rgba(56,209,255,0.18)]">
                 v2.4
               </span>
             </div>
@@ -545,7 +545,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
               </div>
               <div className="flex justify-between items-center text-[var(--text-dim)]">
                 <span className="text-[11px] text-[var(--text-faint)]">Latency</span>
-                <span className="text-white font-medium">1.4 ms</span>
+                <span className="text-white ai-workspace-value font-medium">1.4 ms</span>
               </div>
             </div>
           </div>
@@ -562,7 +562,7 @@ export default function AiModelWorkspace({ isTriggered }: AiModelWorkspaceProps)
         <span className="flex items-center gap-1.5 truncate">
           <span className="text-[var(--cyan-bright)]">●</span>
           <span>Checkpoint saved:</span>
-          <span className="text-white opacity-85">checkpoints/aideas-v2.4.pt</span>
+          <span className="text-white ai-workspace-value opacity-85">checkpoints/aideas-v2.4.pt</span>
         </span>
         <span className="hidden sm:inline text-[var(--text-faint)] opacity-60">
           CUDA 12.2 • FP16

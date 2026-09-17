@@ -1,4 +1,5 @@
 import TextBlockAnimation from "@/components/ui/text-block-animation";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function AboutOverviewSection() {
   const cards = [
@@ -35,12 +36,10 @@ export default function AboutOverviewSection() {
   return (
     <section className="section-pad ambient-panel soft">
       <div className="wrap">
-        <div className="section-head">
-          <div className="eyebrow">A closer look</div>
-          <h2>
-            What is <span className="grad-text">aiDEAS?</span>
-          </h2>
-        </div>
+        <SectionHeading
+          eyebrow="A closer look"
+          wordmarkText="What is aiDEAS?"
+        />
 
         <div className="about-cards">
           {cards.map((card, i) => (

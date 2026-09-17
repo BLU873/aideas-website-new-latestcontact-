@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { cn } from "@/lib/utils";
 
 const Switch = ({
-  checked,
-  onCheckedChange,
+  checked: _checked,
+  onCheckedChange: _onCheckedChange,
   className,
   ...props
 }: {

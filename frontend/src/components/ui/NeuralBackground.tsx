@@ -32,7 +32,7 @@ interface Signal {
   color: string;
 }
 
-const COLOR_RGB = {
+const COLOR_RGB_DARK = {
   silver: {
     core: "rgba(242, 246, 255, ",
     halo: "rgba(215, 230, 255, ",
@@ -47,6 +47,24 @@ const COLOR_RGB = {
     core: "rgba(176, 107, 255, ",
     halo: "rgba(176, 107, 255, ",
     line: "176, 107, 255",
+  },
+};
+
+const COLOR_RGB_LIGHT = {
+  silver: {
+    core: "rgba(95, 108, 125, ",
+    halo: "rgba(145, 158, 175, ",
+    line: "85, 100, 118",
+  },
+  cyan: {
+    core: "rgba(0, 162, 216, ",
+    halo: "rgba(56, 209, 255, ",
+    line: "0, 162, 216",
+  },
+  purple: {
+    core: "rgba(139, 92, 246, ",
+    halo: "rgba(176, 107, 255, ",
+    line: "139, 92, 246",
   },
 };
 
@@ -212,6 +230,9 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
       frameCount++;
       ctx.clearRect(0, 0, width, height);
 
+      const isLightMode = typeof document !== "undefined" && document.documentElement.getAttribute("data-theme") === "light";
+      const COLOR_RGB = isLightMode ? COLOR_RGB_LIGHT : COLOR_RGB_DARK;
+
       // Compute relative mouse position within Hero
       if (
         mouseActive &&
@@ -367,10 +388,12 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
             const isSignalLine = activeSignalMap.has(lineKey);
 
             // Restrained opacity: clearly visible on normal desktop, brighter when cursor is active
-            const baseOpacity = proximity * 0.15 * Math.min(n1.alpha, n2.alpha);
+            const baseOpacity = isLightMode
+              ? proximity * 0.22 * Math.min(n1.alpha, n2.alpha)
+              : proximity * 0.15 * Math.min(n1.alpha, n2.alpha);
             const lineOpacity = isSignalLine
-              ? 0.38
-              : Math.min(0.55, baseOpacity + mouseBoost * 0.14);
+              ? isLightMode ? 0.48 : 0.38
+              : Math.min(isLightMode ? 0.58 : 0.55, baseOpacity + mouseBoost * (isLightMode ? 0.18 : 0.14));
 
             // Default cool silver/white; subtly tinted toward cyan or violet on accents/signals
             const lineRGB = isSignalLine
@@ -387,7 +410,9 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
             ctx.moveTo(n1.x, n1.y);
             ctx.lineTo(n2.x, n2.y);
             ctx.strokeStyle = `rgba(${lineRGB}, ${lineOpacity})`;
-            ctx.lineWidth = isSignalLine ? 0.9 : 0.65;
+            ctx.lineWidth = isSignalLine
+              ? isLightMode ? 1.0 : 0.9
+              : isLightMode ? 0.78 : 0.65;
             ctx.stroke();
           }
         }
@@ -403,9 +428,15 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         ) {
           const color =
             n1.colorType === "purple"
-              ? "rgba(176, 107, 255, 0.95)"
+              ? isLightMode
+                ? "rgba(139, 92, 246, 0.95)"
+                : "rgba(176, 107, 255, 0.95)"
               : n1.colorType === "cyan"
-              ? "rgba(56, 209, 255, 0.95)"
+              ? isLightMode
+                ? "rgba(0, 162, 216, 0.95)"
+                : "rgba(56, 209, 255, 0.95)"
+              : isLightMode
+              ? "rgba(95, 108, 125, 0.95)"
               : "rgba(245, 250, 255, 0.95)";
 
           signals.push({
