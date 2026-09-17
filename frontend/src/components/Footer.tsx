@@ -27,7 +27,7 @@ export default function Footer() {
             <h5>Community</h5>
             <Link href="/members">Members</Link>
             <a role="button" tabIndex={0} className="cursor-pointer" aria-label="Achievements">Achievements</a>
-            <span className="footer-link-disabled" aria-disabled="true" title="Coming soon">Resources</span>
+            <Link href="/alumni">Alumni</Link>
           </div>
           <div className="footer-col">
             <h5>Connect</h5>
