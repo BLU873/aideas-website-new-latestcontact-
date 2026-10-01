@@ -186,7 +186,7 @@ export function Hero() {
             <Link href="/about" className="btn btn-primary btn-pulse">
               Explore Now &rarr;
             </Link>
-            <Link href="/events" className="btn btn-ghost">
+            <Link href="/spotlight" className="btn btn-ghost">
               See Events
             </Link>
           </div>
