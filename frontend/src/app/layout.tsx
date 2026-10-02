@@ -1,8 +1,31 @@
 import type { Metadata } from "next";
+
+if (typeof globalThis !== 'undefined') {
+  try {
+    if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'function') {
+      const storageMap = new Map<string, string>();
+      const mockLocalStorage = {
+        getItem: (key: string) => storageMap.get(String(key)) ?? null,
+        setItem: (key: string, value: string) => { storageMap.set(String(key), String(value)); },
+        removeItem: (key: string) => { storageMap.delete(String(key)); },
+        clear: () => { storageMap.clear(); },
+        key: (index: number) => Array.from(storageMap.keys())[index] ?? null,
+        get length() { return storageMap.size; },
+      };
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: mockLocalStorage,
+        configurable: true,
+        writable: true,
+      });
+    }
+  } catch (e) {}
+}
+
 import { Geist, Geist_Mono, Orbitron, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +66,7 @@ export default function RootLayout({
         <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('aideas-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})();`,
+            __html: `(function(){try{if(typeof localStorage!=='undefined'&&typeof localStorage.getItem==='function'){var t=localStorage.getItem('aideas-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light')}}}catch(e){}})();`,
           }}
         />
       </head>
@@ -51,7 +74,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${inter.variable} antialiased`}
       >
         <Navbar />
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
         <Footer />
       </body>
     </html>

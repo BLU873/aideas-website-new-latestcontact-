@@ -1,7 +1,13 @@
 /* Custom CSS for aIDEAS Team Network Graph - Smooth 60fps Performance & Black Theme */
 
 .react-flow__pane {
-  background: #050505 !important;
+  background: transparent !important;
+}
+
+.react-flow__viewport {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* Dotted Connecting Lines with Continuous Flowing Dash Animation */
@@ -34,13 +40,14 @@
 
 /* Node Styling & Hardware Accelerated Smooth Transitions */
 .network-node-wrapper {
-  transform-gpu: translate3d(0,0,0);
-  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+  will-change: transform, opacity;
+  transform: translate3d(0,0,0);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .network-node-wrapper.dimmed {
-  opacity: 0.18 !important;
-  filter: grayscale(85%) blur(1px);
+  opacity: 0.25 !important;
+  filter: grayscale(60%);
   pointer-events: none;
 }
 

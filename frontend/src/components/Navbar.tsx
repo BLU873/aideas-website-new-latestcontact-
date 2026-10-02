@@ -181,7 +181,12 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const saved = (localStorage.getItem('aideas-theme') as 'dark' | 'light') || 'dark';
+    let saved: 'dark' | 'light' = 'dark';
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function') {
+      try {
+        saved = (localStorage.getItem('aideas-theme') as 'dark' | 'light') || 'dark';
+      } catch {}
+    }
     setTheme(saved);
     document.documentElement.setAttribute('data-theme', saved);
     setMounted(true);
@@ -190,7 +195,11 @@ export default function Navbar() {
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    localStorage.setItem('aideas-theme', next);
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined' && typeof localStorage.setItem === 'function') {
+      try {
+        localStorage.setItem('aideas-theme', next);
+      } catch {}
+    }
     document.documentElement.setAttribute('data-theme', next);
   };
 

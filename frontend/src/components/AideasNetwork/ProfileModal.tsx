@@ -52,13 +52,19 @@ export default function ProfileModal({ member, onClose }: ProfileModalProps) {
 
             {/* Profile Avatar & Header */}
             <div className="flex flex-col items-center text-center">
-              <div className="relative mb-4">
+              <div className="relative mb-4 flex items-center justify-center">
                 <img
                   src={member.image}
                   alt={member.name}
+                  onError={(e) => {
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
                   className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-sky-400 shadow-xl"
                 />
-                <div className="absolute -bottom-2 right-0 px-2.5 py-0.5 rounded-full bg-slate-950 border border-sky-400/50 text-[10px] font-bold text-sky-300 shadow-md">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-blue-600 to-indigo-900 border-4 border-sky-400 shadow-xl flex items-center justify-center text-4xl font-black text-white absolute -z-10">
+                  {member.name ? member.name.charAt(0) : 'A'}
+                </div>
+                <div className="absolute -bottom-2 right-0 px-2.5 py-0.5 rounded-full bg-slate-950 border border-sky-400/50 text-[10px] font-bold text-sky-300 shadow-md z-10">
                   aIDEAS
                 </div>
               </div>

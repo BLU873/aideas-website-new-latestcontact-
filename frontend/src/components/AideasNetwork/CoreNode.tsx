@@ -49,6 +49,14 @@ function CoreNodeComponent({ data }: NodeProps) {
         </div>
       </div>
 
+      {/* Target Handle from Title Node (Top) */}
+      <Handle
+        type="target"
+        position={Position.Top}
+        id="top"
+        className="!bg-blue-500 !w-3 !h-3 opacity-0"
+      />
+
       {/* Connection Handle to HOD Node (Bottom) */}
       <Handle
         type="source"
@@ -60,4 +68,35 @@ function CoreNodeComponent({ data }: NodeProps) {
   );
 }
 
-export default memo(CoreNodeComponent);
+export const CoreNode = memo(CoreNodeComponent);
+export default CoreNode;
+
+export const TeamTitleNodeComponent = memo(function TeamTitleNode() {
+  return (
+    <div className="flex flex-col items-center justify-center select-none pointer-events-none -translate-x-1/2 left-1/2 relative py-4">
+      {/* Small Eyebrow Badge */}
+      <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-blue-950/90 border border-blue-400/60 text-blue-300 text-xs font-mono font-bold uppercase tracking-widest shadow-[0_0_25px_rgba(59,130,246,0.5)] backdrop-blur-xl mb-3">
+        <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
+        <span>Official Association Network</span>
+      </div>
+
+      {/* Grand Title: WE ARE TEAM aIDEAS */}
+      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-100 to-purple-400 tracking-tighter drop-shadow-[0_0_45px_rgba(59,130,246,0.9)] text-center whitespace-nowrap uppercase">
+        WE ARE TEAM aIDEAS
+      </h1>
+
+      {/* Subtitle */}
+      <p className="text-sm sm:text-base font-bold text-zinc-300 mt-2 tracking-[0.2em] uppercase text-center drop-shadow-md">
+        Artificial Intelligence & Data Science Student Association
+      </p>
+
+      {/* Source Handle pointing down to aIDEAS hub */}
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="bottom"
+        className="!bg-blue-500 !w-3 !h-3 opacity-0"
+      />
+    </div>
+  );
+});
