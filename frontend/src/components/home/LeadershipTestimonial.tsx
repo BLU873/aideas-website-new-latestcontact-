@@ -110,7 +110,6 @@ export default function LeadershipTestimonial({
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 640px) 290px, (max-width: 1024px) 350px, 400px"
-                  priority
                 />
                 {/* Subtle bottom vignette */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />

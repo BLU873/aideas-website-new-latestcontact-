@@ -65,7 +65,7 @@ body {
   color: var(--text);
   font-family: 'Inter', 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background .3s ease, color .3s ease;
 }
 
@@ -332,10 +332,10 @@ nav {
 }
 
 .hero-copy h1 {
-  font-family: var(--font-display);
+  font-family: var(--font-inter, Inter, 'Geist', system-ui, sans-serif);
   font-size: clamp(40px, 5.2vw, 64px);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
   margin: 0 0 22px;
 }
 
@@ -415,29 +415,30 @@ nav {
   100% { opacity: 0; transform: scale(1.4); }
 }
 
-/* Typewriter */
+/* Typewriter / empowering subtitle */
 .empower-line {
-  font-family: var(--font-display);
-  color: var(--text);
-  font-weight: 600;
-  font-size: 19px;
-  letter-spacing: 0.01em;
+  font-family: var(--font-inter, Inter, 'Geist', system-ui, sans-serif);
+  color: rgba(165, 178, 196, 0.82);
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: -0.005em;
   margin: 4px 0 34px;
   display: flex;
   align-items: center;
   gap: 2px;
   flex-wrap: wrap;
   min-height: 1.4em;
+  line-height: 1.6;
 }
 
 .empower-line .type-target {
-  color: var(--cyan-bright);
-  font-weight: 700;
+  color: #5ab4d4;
+  font-weight: 500;
 }
 
 .empower-line .cursor {
-  color: var(--purple-bright);
-  font-weight: 400;
+  color: rgba(155, 125, 185, 0.70);
+  font-weight: 300;
   margin-left: 1px;
   animation: cursor-blink 1s steps(1) infinite;
 }

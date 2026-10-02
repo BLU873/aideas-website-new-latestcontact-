@@ -35,6 +35,11 @@ function useTypewriter(words: string[]) {
   return displayed;
 }
 
+function TypewriterText() {
+  const word = useTypewriter(WORDS);
+  return <span className="type-target">{word}</span>;
+}
+
 function useReveal() {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -55,7 +60,6 @@ function useReveal() {
 }
 
 export function Hero() {
-  const word = useTypewriter(WORDS);
   const sectionRef = useReveal() as React.RefObject<HTMLElement>;
 
   const handleScrollDown = (e: React.MouseEvent) => {
@@ -81,108 +85,170 @@ export function Hero() {
 
       <div className="wrap hero-inner relative z-[2]">
         {/* Left copy: z-index 4, tightly grouped editorial stack */}
-        <div className="hero-copy relative z-[4] flex flex-col justify-center max-w-[580px]">
-          {/* 1. Compact technical eyebrow */}
+        <div className="hero-copy relative z-[4] flex flex-col justify-center max-w-[660px]">
+          {/* Scoped style for hero accent refinement, scale & layout */}
+          <style>{`
+            .empower-line .type-target {
+              color: #38bdf8 !important;
+            }
+            @media (min-width: 1024px) {
+              .hero-inner {
+                grid-template-columns: 1.12fr 1fr !important;
+                gap: 28px !important;
+              }
+            }
+            @media (min-width: 1280px) {
+              .hero-inner {
+                grid-template-columns: 1.2fr 1fr !important;
+                gap: 32px !important;
+              }
+            }
+          `}</style>
+
+          {/* 1. Small eyebrow: WELCOME TO */}
           <div
             data-reveal
-            className="hero-eyebrow inline-flex items-center gap-2 select-none pointer-events-none mb-1.5 sm:mb-2"
+            className="hero-eyebrow inline-flex items-center gap-2 select-none pointer-events-none mb-2 sm:mb-2.5"
             style={{
               transitionDelay: '.06s',
               width: 'fit-content',
             }}
           >
             <span
-              className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_rgba(56,189,248,0.85)] shrink-0"
+              className="w-1.5 h-1.5 rounded-full shrink-0"
+              style={{ backgroundColor: '#38bdf8', boxShadow: '0 0 5px rgba(56, 189, 248, 0.4)' }}
               aria-hidden="true"
             />
             <span
-              className="hero-eyebrow-text tracking-[0.22em] sm:tracking-[0.26em] uppercase font-semibold text-[11px] sm:text-[12px]"
+              className="hero-eyebrow-text tracking-[0.26em] sm:tracking-[0.30em] uppercase font-medium text-[11px] sm:text-[12px]"
               style={{
-                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-                color: 'rgba(180, 195, 215, 0.72)',
+                fontFamily: 'var(--font-inter, Inter, system-ui, sans-serif)',
+                color: 'rgba(135, 152, 175, 0.7)',
               }}
             >
               WELCOME TO
             </span>
           </div>
 
-          {/* 2. Large Brand Wordmark: aiDEAS (second largest text element, slightly smaller than main headline) */}
+          {/* 2. MAIN HERO WORDMARK: aIDEAS — brand gradient with soft atmospheric glow */}
           <div
             data-reveal
-            className="hero-brand-mark mb-3.5 sm:mb-4 select-none"
+            className="hero-brand-mark select-none mb-3 sm:mb-4"
             style={{
               transitionDelay: '.14s',
+              position: 'relative',
+              display: 'block',
+              width: 'fit-content',
             }}
           >
+            {/* Layer 1 — Broad diffused outer atmospheric glow: cyan on left to violet on right */}
             <span
-              className="font-bold tracking-tight block"
+              aria-hidden="true"
               style={{
-                fontFamily: '"Orbitron", var(--font-display), sans-serif',
-                fontSize: 'clamp(24px, 3.4vw, 42px)',
-                lineHeight: '1.1',
-                letterSpacing: '-0.02em',
-                filter: 'drop-shadow(0 0 20px rgba(56, 209, 255, 0.22))',
+                position: 'absolute',
+                top: '-35%',
+                left: '-16%',
+                right: '-16%',
+                bottom: '-30%',
+                borderRadius: '45%',
+                background:
+                  'radial-gradient(ellipse 65% 60% at 28% 50%, rgba(56, 209, 255, 0.18) 0%, rgba(79, 143, 247, 0.08) 50%, transparent 80%), radial-gradient(ellipse 65% 60% at 72% 50%, rgba(176, 107, 255, 0.16) 0%, rgba(139, 92, 246, 0.08) 50%, transparent 80%)',
+                filter: 'blur(56px)',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}
+            />
+            {/* Layer 2 — Soft inner light field directly behind letters: stronger near wordmark */}
+            <span
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                top: '-12%',
+                left: '-5%',
+                right: '-5%',
+                bottom: '-12%',
+                borderRadius: '35%',
+                background:
+                  'radial-gradient(ellipse 55% 55% at 30% 50%, rgba(56, 209, 255, 0.25) 0%, rgba(79, 143, 247, 0.12) 40%, transparent 75%), radial-gradient(ellipse 55% 55% at 70% 50%, rgba(176, 107, 255, 0.22) 0%, rgba(139, 92, 246, 0.10) 40%, transparent 75%)',
+                filter: 'blur(28px)',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}
+            />
+            {/* The aIDEAS wordmark — crisp brand cyan -> blue -> violet letters */}
+            <span
+              className="hero-wordmark-text font-extrabold block relative"
+              style={{
+                fontFamily: 'var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
+                fontSize: 'clamp(58px, 9.8vw, 130px)',
+                lineHeight: '0.91',
+                letterSpacing: '-0.03em',
+                background: 'linear-gradient(90deg, #38d1ff 0%, #4f8ff7 32%, #818cf8 68%, #b06bff 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                color: 'transparent',
+                position: 'relative',
+                zIndex: 1,
+                transform: 'scaleX(1.06)',
+                transformOrigin: 'left center',
+                display: 'inline-block',
               }}
             >
-              <span style={{ color: '#38d1ff' }}>aI</span>
-              <span
-                style={{
-                  background: 'linear-gradient(90deg, #38d1ff 0%, #a855f7 65%, #b06bff 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                DEAS
-              </span>
+              aIDEAS
             </span>
           </div>
 
-          {/* 3. Primary Two-Line Headline (Dominant textual element, largest in left Hero) */}
+          {/* 3. Secondary supporting headline — two-tone, clearly smaller than aIDEAS */}
           <h1
             data-reveal="zoom"
             className="hero-title mb-4 sm:mb-5"
             style={{
-              transitionDelay: '.24s',
-              fontFamily: '"Orbitron", sans-serif',
+              transitionDelay: '.26s',
+              fontFamily: 'var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
               lineHeight: '1.14',
-              fontSize: 'clamp(28px, 4.2vw, 54px)',
-              fontWeight: 800,
-              letterSpacing: '-0.015em',
+              fontSize: 'clamp(16px, 2.3vw, 29px)',
+              fontWeight: 600,
+              letterSpacing: '0.04em',
             }}
           >
+            {/* Line 1 — cool blue-grey, slightly lighter */}
             <span
-              className="hero-title-main block sm:whitespace-nowrap"
-              style={{
-                color: 'rgba(215, 224, 235, 0.96)',
-                letterSpacing: '-0.01em',
-              }}
+              className="hero-title-line-1 block"
+              style={{ color: '#92aec8' }}
             >
-              Build Intelligence.
+              BUILD. BREAK.
             </span>
+            {/* Line 2 — muted lavender-grey, subtly warmer */}
             <span
-              className="block sm:whitespace-nowrap"
-              style={{
-                background: 'linear-gradient(90deg, #38bdf8 0%, #a855f7 68%, #b06bff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(0 0 24px rgba(56, 189, 248, 0.22))',
-              }}
+              className="hero-title-line-2 block"
+              style={{ color: '#9a8eb8' }}
             >
-              Shape What&apos;s Next.
+              LEARN. REPEAT.
             </span>
           </h1>
 
-          {/* 4. Subtitle */}
-          <p className="empower-line mb-5 sm:mb-6" data-reveal style={{ transitionDelay: '.34s' }}>
+          {/* 4. Subtitle with typewriter */}
+          <p
+            className="empower-line mb-5 sm:mb-6"
+            data-reveal
+            style={{
+              transitionDelay: '.36s',
+              fontSize: 'clamp(13.5px, 1.1vw, 15.5px)',
+              color: 'rgba(132, 148, 170, 0.82)',
+              lineHeight: '1.65',
+              margin: '0 0 22px',
+            }}
+          >
             Empowering&nbsp;
-            <span className="type-target">{word}</span>
-            <span className="cursor" aria-hidden="true">
+            <TypewriterText />
+            <span className="cursor" aria-hidden="true" style={{ color: 'rgba(138, 98, 205, 0.62)' }}>
               |
             </span>
           </p>
 
           {/* 5. Call to Actions */}
-          <div className="hero-actions" data-reveal style={{ transitionDelay: '.44s' }}>
+          <div className="hero-actions" data-reveal style={{ transitionDelay: '.46s' }}>
             <Link href="/about" className="btn btn-primary btn-pulse">
               Explore Now &rarr;
             </Link>
