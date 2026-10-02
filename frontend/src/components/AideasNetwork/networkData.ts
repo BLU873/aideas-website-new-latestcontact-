@@ -34,7 +34,7 @@ export const NETWORK_DATA: NetworkData = {
   leadership: [
     {
       id: 'hod',
-      name: 'Prof. Dr. S. A. Mahajan',
+      name: 'Prof. Dr. Minakshi Atre ',
       role: 'Head of Department',
       department: 'Computer & AI/DS',
       image: '/faculty/hod_photo.png',
