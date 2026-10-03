@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { useScroll } from 'framer-motion';
 import SectionHeading from '@/components/ui/SectionHeading';
 
-const TOTAL_FRAMES = 300;
+const TOTAL_FRAMES = 180;
 const MAX_CACHE_DESKTOP = 36;
 const MAX_CACHE_MOBILE = 24;
 const MAX_CONCURRENT_REQUESTS = 4;
@@ -481,11 +481,11 @@ export default function ScrollStorySection() {
       if (prefersReducedMotion) {
         // Reduced motion: step between 4 representative keyframe states
         if (latest < 0.25) targetFrame = 1;
-        else if (latest < 0.5) targetFrame = 100;
-        else if (latest < 0.75) targetFrame = 200;
-        else targetFrame = 300;
+        else if (latest < 0.5) targetFrame = Math.round(TOTAL_FRAMES * (1 / 3));
+        else if (latest < 0.75) targetFrame = Math.round(TOTAL_FRAMES * (2 / 3));
+        else targetFrame = TOTAL_FRAMES;
       } else {
-        // Continuous smooth frame interpolation from 1 to 300
+        // Continuous smooth frame interpolation from 1 to TOTAL_FRAMES
         targetFrame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(1 + latest * (TOTAL_FRAMES - 1))));
       }
 
@@ -529,14 +529,14 @@ export default function ScrollStorySection() {
 
   return (
     <>
-      {/* 1. OUR STORY HEADING: normal flow above the cinematic sequence */}
-      <div className="w-full bg-[#000000] text-white">
-        <div className="our-story-heading wrap pt-16 sm:pt-20 pb-6 sm:pb-8 text-center">
+      {/* 1. OUR STORY HEADING: normal flow above the cinematic sequence with seamless dark transition */}
+      <div className="w-full bg-[#03070d] text-white relative z-10">
+        <div className="our-story-heading wrap pt-8 sm:pt-10 pb-0 text-center">
           <SectionHeading
             eyebrow="A closer look"
             wordmarkText="Our Story"
             description="Where curiosity turns into engineering — bridging the gap between theoretical concepts and real implementation."
-            className="mb-0"
+            className="mb-0 sm:mb-0"
           />
         </div>
       </div>
@@ -559,14 +559,27 @@ export default function ScrollStorySection() {
             className="absolute inset-0 w-full h-full pointer-events-none select-none block"
           />
 
+          {/* Subtle cinematic vignette & top edge transition: approximately 80px feathered fade into background */}
+          <div
+            aria-hidden="true"
+            className="cinematic-vignette-overlay absolute inset-0 pointer-events-none z-[1]"
+            style={{
+              background: `
+                radial-gradient(ellipse 88% 82% at 50% 50%, transparent 50%, rgba(3, 7, 13, 0.25) 70%, rgba(3, 7, 13, 0.75) 88%, #03070d 100%),
+                linear-gradient(to bottom, #03070d 0%, rgba(3, 7, 13, 0.5) 30px, transparent 80px, transparent calc(100% - 70px), rgba(3, 7, 13, 0.7) calc(100% - 25px), #03070d 100%),
+                linear-gradient(to right, #03070d 0%, rgba(3, 7, 13, 0.5) 2%, transparent 8%, transparent 92%, rgba(3, 7, 13, 0.5) 98%, #03070d 100%)
+              `,
+            }}
+          />
+
           {/* Gentle atmospheric gradient behind text for flawless readability (no opaque cards) */}
           <div
             aria-hidden="true"
-            className="hidden md:block absolute inset-y-0 left-0 w-[42%] bg-gradient-to-r from-[#03070d]/80 via-[#03070d]/30 to-transparent pointer-events-none"
+            className="hidden md:block absolute inset-y-0 left-0 w-[42%] bg-gradient-to-r from-[#03070d]/80 via-[#03070d]/30 to-transparent pointer-events-none z-[2]"
           />
           <div
             aria-hidden="true"
-            className="md:hidden absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#03070d]/90 via-[#03070d]/40 to-transparent pointer-events-none"
+            className="md:hidden absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#03070d]/90 via-[#03070d]/40 to-transparent pointer-events-none z-[3]"
           />
 
           {/* Floating Editorial Typography */}
