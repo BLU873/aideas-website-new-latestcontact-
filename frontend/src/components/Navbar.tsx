@@ -24,11 +24,27 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    try {
-      localStorage.removeItem('aideas-theme');
-    } catch {}
-    document.documentElement.setAttribute('data-theme', 'dark');
+    let saved: 'dark' | 'light' = 'dark';
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function') {
+      try {
+        saved = (localStorage.getItem('aideas-theme') as 'dark' | 'light') || 'dark';
+      } catch {}
+    }
+    setTheme(saved);
+    document.documentElement.setAttribute('data-theme', saved);
+    setMounted(true);
   }, []);
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined' && typeof localStorage.setItem === 'function') {
+      try {
+        localStorage.setItem('aideas-theme', next);
+      } catch {}
+    }
+    document.documentElement.setAttribute('data-theme', next);
+  };
 
   const navLinks = [
     { name: 'Home', path: '/' },

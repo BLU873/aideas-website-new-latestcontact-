@@ -18,9 +18,13 @@ const ThemeSwitch = ({ onToggle }: { onToggle: () => void }) => {
 
   if (!mounted) return null;
 
-  // Read current theme from localStorage on each render
-  // This mirrors the existing Navbar logic: localStorage.getItem('aideas-theme')
-  const stored = localStorage.getItem("aideas-theme") as "dark" | "light" | null;
+  // Read current theme safely from localStorage after mounting
+  let stored: "dark" | "light" | null = null;
+  if (typeof window !== "undefined" && typeof localStorage !== "undefined" && typeof localStorage.getItem === "function") {
+    try {
+      stored = localStorage.getItem("aideas-theme") as "dark" | "light" | null;
+    } catch {}
+  }
   const isDark = stored === "dark";
   const isLight = stored === "light";
 

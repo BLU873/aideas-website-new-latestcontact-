@@ -5,8 +5,9 @@ export default function AboutPage() {
 
         <div className="mb-16 text-center">
           <h2 className="text-3xl font-bold text-blue-500 mb-10">Faculty Guidance</h2>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-16">
+          <div className="flex flex-col items-center gap-12">
 
+            {/* HOD */}
             <div className="flex flex-col items-center">
               <img
                 src="/faculty/hod_photo.png"
@@ -21,18 +22,35 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="flex flex-col items-center">
-              <img
-                src="/faculty/faculty_coordinator_photo.png"
-                alt="Faculty Coordinator"
-                className="w-40 h-40 rounded-full object-cover mb-4 border-4 border-purple-400 shadow-lg"
-              />
-              <h3 className="text-xl font-semibold text-white mt-2">
-                Prof. Pallavi Bangale
-              </h3>
-              <p className="text-md text-gray-400">
-                Faculty Coordinator
-              </p>
+            {/* Parallel Faculty Coordinators */}
+            <div className="flex flex-col md:flex-row justify-center items-center gap-12 sm:gap-16 w-full">
+              <div className="flex flex-col items-center">
+                <img
+                  src="/faculty/faculty_coordinator_photo.png"
+                  alt="Faculty Coordinator"
+                  className="w-36 h-36 rounded-full object-cover mb-4 border-4 border-blue-400 shadow-lg"
+                />
+                <h3 className="text-xl font-semibold text-white mt-2">
+                  Prof. Mrunal U. Buchade
+                </h3>
+                <p className="text-md text-gray-400">
+                  Faculty Coordinator
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <img
+                  src="/faculty/kritika_goswami.png"
+                  alt="Faculty Coordinator"
+                  className="w-36 h-36 rounded-full object-cover mb-4 border-4 border-blue-400 shadow-lg"
+                />
+                <h3 className="text-xl font-semibold text-white mt-2">
+                  Prof. Krittika Goswami
+                </h3>
+                <p className="text-md text-gray-400">
+                  Faculty Coordinator
+                </p>
+              </div>
             </div>
 
           </div>

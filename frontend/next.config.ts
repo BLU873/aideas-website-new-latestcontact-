@@ -1,5 +1,27 @@
 import type { NextConfig } from "next";
 
+// Polyfill Node 22 experimental broken localStorage global object
+if (typeof globalThis !== 'undefined') {
+  try {
+    if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'function') {
+      const storageMap = new Map<string, string>();
+      const mockLocalStorage = {
+        getItem: (key: string) => storageMap.get(String(key)) ?? null,
+        setItem: (key: string, value: string) => { storageMap.set(String(key), String(value)); },
+        removeItem: (key: string) => { storageMap.delete(String(key)); },
+        clear: () => { storageMap.clear(); },
+        key: (index: number) => Array.from(storageMap.keys())[index] ?? null,
+        get length() { return storageMap.size; },
+      };
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: mockLocalStorage,
+        configurable: true,
+        writable: true,
+      });
+    }
+  } catch {}
+}
+
 const nextConfig: NextConfig = {
   webpack: (config, { isServer, webpack }) => {
     if (isServer) {

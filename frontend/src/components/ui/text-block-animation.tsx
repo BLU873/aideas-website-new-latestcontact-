@@ -165,7 +165,6 @@ export default function TextBlockAnimation({
       if (deferUntilSectionInView) container.style.visibility = "hidden";
     };
   }, [
-    deferUntilSectionInView,
     animateOnScroll,
     delay,
     blockColor,
