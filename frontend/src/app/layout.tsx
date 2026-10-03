@@ -38,12 +38,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${inter.variable} antialiased`}
+        suppressHydrationWarning
       >
         <Navbar />
         {children}
