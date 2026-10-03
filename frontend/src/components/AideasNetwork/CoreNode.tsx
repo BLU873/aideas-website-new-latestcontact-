@@ -18,6 +18,7 @@ function CoreNodeComponent({ data }: NodeProps) {
 
   return (
     <div
+      style={{ willChange: 'transform' }}
       className={`network-node-wrapper relative group select-none ${
         nodeData.isDimmed ? 'dimmed' : ''
       } ${nodeData.isHovered ? 'highlighted' : ''}`}
@@ -68,7 +69,15 @@ function CoreNodeComponent({ data }: NodeProps) {
   );
 }
 
-export const CoreNode = memo(CoreNodeComponent);
+export const CoreNode = memo(CoreNodeComponent, (prevProps, nextProps) => {
+  const prevData = prevProps.data as unknown as CoreNodeData;
+  const nextData = nextProps.data as unknown as CoreNodeData;
+  return (
+    prevData.isHovered === nextData.isHovered &&
+    prevData.isDimmed === nextData.isDimmed &&
+    prevData.name === nextData.name
+  );
+});
 export default CoreNode;
 
 export const TeamTitleNodeComponent = memo(function TeamTitleNode() {

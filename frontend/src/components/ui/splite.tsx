@@ -62,6 +62,20 @@ class SplineErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySta
 export function SplineScene({ scene, className }: SplineSceneProps) {
   const [hasError, setHasError] = useState(false)
   const [isReady, setIsReady] = useState(false)
+  const [isInView, setIsInView] = useState(true)
+  const containerRef = React.useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!containerRef.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0.05 }
+    )
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     let isMounted = true
@@ -127,12 +141,18 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   }
 
   return (
-    <SplineErrorBoundary>
-      <Spline
-        scene={scene}
-        className={className}
-        onError={() => setHasError(true)}
-      />
-    </SplineErrorBoundary>
+    <div ref={containerRef} className="w-full h-full">
+      {isInView ? (
+        <SplineErrorBoundary>
+          <Spline
+            scene={scene}
+            className={className}
+            onError={() => setHasError(true)}
+          />
+        </SplineErrorBoundary>
+      ) : (
+        <div className="w-full h-full" />
+      )}
+    </div>
   )
 }

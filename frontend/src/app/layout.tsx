@@ -18,7 +18,7 @@ if (typeof globalThis !== 'undefined') {
         writable: true,
       });
     }
-  } catch (e) {}
+  } catch {}
 }
 
 import { Geist, Geist_Mono, Orbitron, Inter } from "next/font/google";
@@ -26,6 +26,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
+import CacheCleanEngine from "@/components/CacheCleanEngine";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,6 +75,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${inter.variable} antialiased`}
         suppressHydrationWarning
       >
+        <CacheCleanEngine />
         <Navbar />
         <SmoothScroll>
           {children}

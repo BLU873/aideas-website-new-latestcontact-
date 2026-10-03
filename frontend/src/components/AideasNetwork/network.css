@@ -24,30 +24,27 @@
   stroke: rgba(59, 130, 246, 0.75) !important;
   stroke-width: 2.5px !important;
   stroke-dasharray: 6 6 !important;
-  animation: edgeDash 20s linear infinite;
-  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+  transition: stroke 0.2s ease, opacity 0.2s ease;
 }
 
 .react-flow__edge.highlighted .react-flow__edge-path {
   stroke: rgba(96, 165, 250, 0.95) !important;
-  stroke-width: 3.5px !important;
-  stroke-dasharray: 8 8 !important;
+  stroke-width: 3px !important;
 }
 
 .react-flow__edge.dimmed {
-  opacity: 0.12 !important;
+  opacity: 0.2 !important;
 }
 
 /* Node Styling & Hardware Accelerated Smooth Transitions */
 .network-node-wrapper {
   will-change: transform, opacity;
-  transform: translate3d(0,0,0);
-  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .network-node-wrapper.dimmed {
-  opacity: 0.25 !important;
-  filter: grayscale(60%);
+  opacity: 0.35 !important;
   pointer-events: none;
 }
 
