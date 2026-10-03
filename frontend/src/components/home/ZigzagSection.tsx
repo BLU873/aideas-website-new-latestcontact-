@@ -62,8 +62,8 @@ export default function ZigzagSection() {
               <li>Build a community that grows stronger every batch</li>
               <li>Become the go-to space for AI &amp; DS at PVGCOET</li>
             </ul>
-            <Link href="/about" className="zigzag-link">
-              Read our story →
+            <Link href="/#our-story" className="zigzag-link">
+              Read our story &rarr;
             </Link>
           </motion.div>
           <div className="zigzag-visual">
@@ -90,8 +90,8 @@ export default function ZigzagSection() {
               <li>Learn from peers, not just professors</li>
               <li>Lead events, not just attend them</li>
             </ul>
-            <Link href="/events" className="zigzag-link">
-              See events →
+            <Link href="/spotlight" className="zigzag-link">
+              See events &rarr;
             </Link>
           </motion.div>
           <div className="zigzag-visual">
@@ -153,8 +153,8 @@ export default function ZigzagSection() {
                 semester
               </li>
             </ul>
-            <Link href="/about" className="zigzag-link">
-              Our values →
+            <Link href="/#our-story" className="zigzag-link">
+              Our values &rarr;
             </Link>
           </motion.div>
           <div className="zigzag-visual">

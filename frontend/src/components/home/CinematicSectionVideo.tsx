@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 
 interface CinematicSectionVideoProps {
   src: string;
+  poster?: string;
   /** Whether the parent block is in view (from ZigzagSection's useInView) */
   isBlockInView: boolean;
   className?: string;
@@ -30,6 +30,7 @@ interface CinematicSectionVideoProps {
  */
 export default function CinematicSectionVideo({
   src,
+  poster,
   isBlockInView,
   className = '',
   objectFit = 'cover',
@@ -106,17 +107,21 @@ export default function CinematicSectionVideo({
   }, [playing, srcLoaded, reducedMotion]);
 
   return (
-    <motion.div
+    <div
       ref={wrapRef}
       className={`cinematic-video-wrap ${className}`}
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={isBlockInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
+      style={{
+        opacity: isBlockInView ? 1 : 0,
+        transform: isBlockInView ? 'scale(1)' : 'scale(0.98)',
+        transition:
+          'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.06s, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.06s',
+      }}
     >
       {srcLoaded ? (
         <video
           ref={videoRef}
           src={src}
+          poster={poster}
           preload="metadata"
           autoPlay={false} // controlled manually via play()/pause()
           loop
@@ -137,6 +142,6 @@ export default function CinematicSectionVideo({
 
       {/* Edge-fade vignette — blends video into the dark background */}
       <div className="cinematic-video-vignette" aria-hidden="true" />
-    </motion.div>
+    </div>
   );
 }

@@ -11,10 +11,9 @@ const MAX_CONCURRENT_REQUESTS = 4;
 
 interface StoryBeat {
   id: string;
-  step: string;
   eyebrow: string;
-  headline: string;
-  supporting: string;
+  statement: string;
+  position: 'left' | 'right' | 'center';
   accent: string;
   startProgress: number;
   peakStart: number;
@@ -24,55 +23,58 @@ interface StoryBeat {
 
 const STORY_BEATS: StoryBeat[] = [
   {
-    id: 'intro',
-    step: '01',
-    eyebrow: 'A CLOSER LOOK',
-    headline: 'Ideas start somewhere.',
-    supporting:
-      'aiDEAS is a student-led community where curiosity turns into engineering — bridging the gap between theoretical concepts and real implementation.',
+    id: 'beginning',
+    eyebrow: 'THE BEGINNING',
+    statement: 'A student idea became a community.',
+    position: 'left',
     accent: '#38bdf8',
     startProgress: 0.0,
-    peakStart: 0.03,
-    peakEnd: 0.18,
-    endProgress: 0.24,
+    peakStart: 0.04,
+    peakEnd: 0.16,
+    endProgress: 0.21,
   },
   {
-    id: 'build',
-    step: '02',
-    eyebrow: 'PROJECT-FIRST CULTURE',
-    headline: 'Learn by building.',
-    supporting:
-      'Turn classroom concepts into working projects, technical workshops, and hackathon prototypes through hands-on problem solving.',
+    id: 'purpose',
+    eyebrow: 'THE PURPOSE',
+    statement: 'Learn it. Build it. Make it real.',
+    position: 'right',
     accent: '#60a5fa',
-    startProgress: 0.26,
-    peakStart: 0.30,
-    peakEnd: 0.44,
-    endProgress: 0.49,
+    startProgress: 0.21,
+    peakStart: 0.25,
+    peakEnd: 0.37,
+    endProgress: 0.42,
   },
   {
-    id: 'collaborate',
-    step: '03',
-    eyebrow: 'OPEN COLLABORATION',
-    headline: 'Build together.',
-    supporting:
-      'Learn alongside peers, review code, and exchange architectures in an open ecosystem spanning all branches and academic years.',
+    id: 'method',
+    eyebrow: 'THE METHOD',
+    statement: 'Theory is only the beginning.',
+    position: 'left',
     accent: '#818cf8',
-    startProgress: 0.51,
-    peakStart: 0.55,
-    peakEnd: 0.69,
-    endProgress: 0.74,
+    startProgress: 0.42,
+    peakStart: 0.46,
+    peakEnd: 0.58,
+    endProgress: 0.63,
   },
   {
-    id: 'impact',
-    step: '04',
-    eyebrow: 'REAL-WORLD IMPACT',
-    headline: 'Make something real.',
-    supporting:
-      'Build solutions that extend far beyond the semester — empowering every student to become AI-capable, AI-empowered, and future-ready.',
-    accent: '#b06bff',
-    startProgress: 0.76,
-    peakStart: 0.80,
-    peakEnd: 1.0, // Stays visible until the sticky viewport releases naturally into Footer
+    id: 'community',
+    eyebrow: 'THE COMMUNITY',
+    statement: 'Different people. One community.',
+    position: 'right',
+    accent: '#a78bfa',
+    startProgress: 0.63,
+    peakStart: 0.67,
+    peakEnd: 0.79,
+    endProgress: 0.84,
+  },
+  {
+    id: 'future',
+    eyebrow: 'THE FUTURE',
+    statement: 'And this is only the beginning.',
+    position: 'center',
+    accent: '#c084fc',
+    startProgress: 0.84,
+    peakStart: 0.88,
+    peakEnd: 1.0,
     endProgress: 1.0,
   },
 ];
@@ -103,6 +105,11 @@ export default function ScrollStorySection() {
   const isDestroyedRef = useRef(false);
   const isSectionNearRef = useRef(false);
   const brandLogoRef = useRef<HTMLImageElement | null>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const canvasDimensionsRef = useRef<{ canvasW: number; canvasH: number }>({
+    canvasW: 1920,
+    canvasH: 1080,
+  });
 
   // Check prefers-reduced-motion
   useEffect(() => {
@@ -122,27 +129,62 @@ export default function ScrollStorySection() {
     offset: ['start start', 'end end'],
   });
 
+  // Update canvas dimensions and backing buffer store (only on resize/init, not on every frame draw)
+  const updateCanvasDimensions = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Viewport display dimensions: measure outside active scroll draw path
+    const stickyViewport = stickyViewportRef.current;
+    const rect = stickyViewport ? stickyViewport.getBoundingClientRect() : canvas.getBoundingClientRect();
+    const cssWidth = rect.width > 0 ? rect.width : (typeof window !== 'undefined' ? window.innerWidth : 1920);
+    const cssHeight = rect.height > 0 ? rect.height : (typeof window !== 'undefined' ? window.innerHeight : 1080);
+
+    // Device Pixel Ratio with safe cap (desktop up to 2.0, mobile up to 2.0)
+    const dpr = Math.min((typeof window !== 'undefined' ? window.devicePixelRatio : 1) || 1, 2);
+    const canvasW = Math.max(1, Math.round(cssWidth * dpr));
+    const canvasH = Math.max(1, Math.round(cssHeight * dpr));
+
+    canvasDimensionsRef.current = { canvasW, canvasH };
+
+    // Update backing store dimensions ONLY on resize
+    if (canvas.width !== canvasW || canvas.height !== canvasH) {
+      canvas.width = canvasW;
+      canvas.height = canvasH;
+    }
+
+    // Cache and configure 2D context
+    let ctx = ctxRef.current;
+    if (!ctx) {
+      ctx = canvas.getContext('2d', { alpha: false });
+      ctxRef.current = ctx;
+    }
+    if (ctx) {
+      ctx.imageSmoothingEnabled = true;
+      if ('imageSmoothingQuality' in ctx) {
+        ctx.imageSmoothingQuality = 'high';
+      }
+    }
+  }, []);
+
   // Canvas draw logic: high-quality direct buffer drawing preserving full source resolution
   const drawFrameToCanvas = useCallback((img: HTMLImageElement, frameNum: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
-    if (!ctx) return;
 
-    // Viewport display dimensions
-    const rect = canvas.getBoundingClientRect();
-    const cssWidth = rect.width > 0 ? rect.width : window.innerWidth;
-    const cssHeight = rect.height > 0 ? rect.height : window.innerHeight;
+    let ctx = ctxRef.current;
+    if (!ctx) {
+      ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return;
+      ctxRef.current = ctx;
+    }
 
-    // Device Pixel Ratio with safe cap (desktop up to 2.0, mobile up to 2.0)
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const canvasW = Math.max(1, Math.round(cssWidth * dpr));
-    const canvasH = Math.max(1, Math.round(cssHeight * dpr));
-
-    // Ensure backing store matches physical display pixels
-    if (canvas.width !== canvasW || canvas.height !== canvasH) {
-      canvas.width = canvasW;
-      canvas.height = canvasH;
+    // Read cached dimensions - zero layout reads during scrolling
+    let { canvasW, canvasH } = canvasDimensionsRef.current;
+    if (canvasW <= 0 || canvasH <= 0 || canvas.width === 0 || canvas.height === 0) {
+      updateCanvasDimensions();
+      canvasW = canvasDimensionsRef.current.canvasW;
+      canvasH = canvasDimensionsRef.current.canvasH;
     }
 
     // Source frame natural dimensions
@@ -227,7 +269,7 @@ export default function ScrollStorySection() {
     ctx.restore();
 
     lastDrawnFrameRef.current = frameNum;
-  }, []);
+  }, [updateCanvasDimensions]);
 
   // Request & process frames with bounded memory cache
   const processQueue = useCallback(() => {
@@ -275,7 +317,13 @@ export default function ScrollStorySection() {
       const img = new Image();
       img.src = getFrameUrl(nextIndex);
 
-      const onLoad = () => {
+      let handled = false;
+      const handleSuccess = () => {
+        if (handled) return;
+        handled = true;
+        img.onload = null;
+        img.onerror = null;
+
         inFlightRef.current.delete(nextIndex);
         activeRequestsRef.current--;
         if (isDestroyedRef.current) return;
@@ -296,19 +344,25 @@ export default function ScrollStorySection() {
         processQueue();
       };
 
-      const onError = () => {
+      const handleError = () => {
+        if (handled) return;
+        handled = true;
+        img.onload = null;
+        img.onerror = null;
+
         inFlightRef.current.delete(nextIndex);
         activeRequestsRef.current--;
         processQueue();
       };
 
-      img.onload = onLoad;
-      img.onerror = onError;
-      if (typeof img.decode === 'function') {
-        img.decode().then(onLoad).catch(() => {
-          // onload handler will catch it if decode rejects
-        });
-      }
+      img.onload = () => {
+        if (typeof img.decode === 'function') {
+          img.decode().then(handleSuccess).catch(handleSuccess);
+        } else {
+          handleSuccess();
+        }
+      };
+      img.onerror = handleError;
     }
   }, [drawFrameToCanvas]);
 
@@ -450,20 +504,35 @@ export default function ScrollStorySection() {
 
   // ResizeObserver to ensure canvas always redraws cleanly when layout settles
   useEffect(() => {
-    const stickyViewport = stickyViewportRef.current;
-    if (!stickyViewport || typeof ResizeObserver === 'undefined') return;
+    const target = stickyViewportRef.current || canvasRef.current;
+    if (!target) return;
 
-    const ro = new ResizeObserver(() => {
+    const handleResize = () => {
+      updateCanvasDimensions();
       const currentDrawn = lastDrawnFrameRef.current;
       const img = cacheRef.current.get(currentDrawn) || cacheRef.current.get(1);
       if (img) {
         drawFrameToCanvas(img, currentDrawn);
       }
-    });
+    };
 
-    ro.observe(stickyViewport);
-    return () => ro.disconnect();
-  }, [drawFrameToCanvas]);
+    handleResize();
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => {
+        handleResize();
+      });
+      ro.observe(target);
+    }
+
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    return () => {
+      if (ro) ro.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [updateCanvasDimensions, drawFrameToCanvas]);
 
   // Listen to scroll progress and request frames
   useEffect(() => {
@@ -479,10 +548,11 @@ export default function ScrollStorySection() {
 
       let targetFrame: number;
       if (prefersReducedMotion) {
-        // Reduced motion: step between 4 representative keyframe states
-        if (latest < 0.25) targetFrame = 1;
-        else if (latest < 0.5) targetFrame = Math.round(TOTAL_FRAMES * (1 / 3));
-        else if (latest < 0.75) targetFrame = Math.round(TOTAL_FRAMES * (2 / 3));
+        // Reduced motion: step between 5 representative keyframe states
+        if (latest < 0.2) targetFrame = 1;
+        else if (latest < 0.4) targetFrame = Math.round(TOTAL_FRAMES * 0.25);
+        else if (latest < 0.6) targetFrame = Math.round(TOTAL_FRAMES * 0.5);
+        else if (latest < 0.8) targetFrame = Math.round(TOTAL_FRAMES * 0.75);
         else targetFrame = TOTAL_FRAMES;
       } else {
         // Continuous smooth frame interpolation from 1 to TOTAL_FRAMES
@@ -500,28 +570,26 @@ export default function ScrollStorySection() {
     return STORY_BEATS.map((beat) => {
       const { startProgress, peakStart, peakEnd, endProgress } = beat;
       if (scrollProgress < startProgress || scrollProgress > endProgress) {
-        return { ...beat, opacity: 0, translateY: 14, blur: 4, isVisible: false };
+        return { ...beat, opacity: 0, translateY: 24, isVisible: false };
       }
       if (scrollProgress < peakStart) {
         const t = (scrollProgress - startProgress) / (peakStart - startProgress);
         return {
           ...beat,
           opacity: t,
-          translateY: (1 - t) * 14,
-          blur: (1 - t) * 4,
+          translateY: (1 - t) * 24,
           isVisible: true,
         };
       }
       if (scrollProgress <= peakEnd) {
-        return { ...beat, opacity: 1, translateY: 0, blur: 0, isVisible: true };
+        return { ...beat, opacity: 1, translateY: 0, isVisible: true };
       }
       // Fading out
       const t = (scrollProgress - peakEnd) / (endProgress - peakEnd);
       return {
         ...beat,
         opacity: Math.max(0, 1 - t),
-        translateY: -t * 14,
-        blur: t * 4,
+        translateY: -t * 18,
         isVisible: true,
       };
     });
@@ -541,11 +609,12 @@ export default function ScrollStorySection() {
         </div>
       </div>
 
-      {/* 2. SCROLL-STORY: parent is ONLY responsible for providing scroll distance (280vh mobile, 320vh desktop) */}
+      {/* 2. SCROLL-STORY: parent provides deliberate scroll distance (430vh mobile, 560vh desktop) */}
       <section
+        id="our-story"
         ref={scrollContainerRef}
         aria-label="aiDEAS Story cinematic sequence"
-        className="scroll-story relative w-full h-[280vh] md:h-[320vh] bg-[#03070d]"
+        className="scroll-story relative w-full h-[430vh] md:h-[560vh] bg-[#03070d]"
       >
         {/* 3. SCROLL-STORY-STICKY: the ENTIRE visual experience pinned to the viewport */}
         <div
@@ -572,85 +641,147 @@ export default function ScrollStorySection() {
             }}
           />
 
-          {/* Gentle atmospheric gradient behind text for flawless readability (no opaque cards) */}
+          {/* Subtle mobile backdrop gradient for bottom text readability, without obscuring the canvas artwork */}
           <div
             aria-hidden="true"
-            className="hidden md:block absolute inset-y-0 left-0 w-[42%] bg-gradient-to-r from-[#03070d]/80 via-[#03070d]/30 to-transparent pointer-events-none z-[2]"
-          />
-          <div
-            aria-hidden="true"
-            className="md:hidden absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#03070d]/90 via-[#03070d]/40 to-transparent pointer-events-none z-[3]"
+            className="md:hidden absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-[#03070d]/85 via-[#03070d]/30 to-transparent pointer-events-none z-[3]"
           />
 
-          {/* Floating Editorial Typography */}
-          <div className="story-text-overlay relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 h-full flex flex-col justify-end md:justify-center pb-12 sm:pb-16 md:pb-0 pointer-events-none select-none">
-            <div className="relative max-w-lg lg:max-w-xl">
-              {/* Overlapping Text Story Beats: smoothly cross-faded by scroll */}
-              <div className="relative min-h-[155px] sm:min-h-[170px]">
-                {beatStates.map((beat) => {
-                  if (!beat.isVisible && beat.opacity === 0) return null;
+          {/* Floating Editorial Typography across 5 alternating positions */}
+          <div className="story-text-overlay absolute inset-0 z-10 w-full h-full pointer-events-none select-none">
+            <div className="relative w-full h-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+              {beatStates.map((beat) => {
+                if (!beat.isVisible && beat.opacity === 0) return null;
 
-                  return (
-                    <article
-                      key={beat.id}
-                      aria-hidden={!beat.isVisible}
-                      className="absolute inset-0 flex flex-col justify-start transition-none"
-                      style={{
-                        opacity: beat.opacity,
-                        transform: prefersReducedMotion ? 'none' : `translateY(${beat.translateY}px)`,
-                        filter: prefersReducedMotion ? 'none' : `blur(${beat.blur}px)`,
-                      }}
-                    >
-                      {/* Eyebrow badge */}
-                      <div className="inline-flex items-center gap-2 mb-2">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full shrink-0"
+                const isLeft = beat.position === 'left';
+                const isRight = beat.position === 'right';
+                const isCenter = beat.position === 'center';
+
+                // Responsive positioning for each beat type
+                let positionClasses = '';
+                if (isLeft) {
+                  // Beats 1 & 3: Left-aligned, clear of human arm and central ring
+                  positionClasses =
+                    'top-[60%] sm:top-[58%] md:top-1/2 -translate-y-1/2 left-6 sm:left-10 lg:left-16 text-left items-start max-w-[310px] sm:max-w-md lg:max-w-lg';
+                } else if (isRight) {
+                  // Beats 2 & 4: Right-aligned, clear of robotic arm and central ring
+                  positionClasses =
+                    'top-[60%] sm:top-[58%] md:top-1/2 -translate-y-1/2 right-6 sm:right-10 lg:right-16 text-right items-end ml-auto max-w-[310px] sm:max-w-md lg:max-w-lg';
+                } else {
+                  // Beat 5 (Climax): Horizontally centered in the open negative space directly below the finger touch
+                  positionClasses =
+                    'bottom-12 sm:bottom-14 md:bottom-16 lg:bottom-20 inset-x-6 sm:inset-x-10 lg:inset-x-16 mx-auto text-center items-center max-w-[360px] sm:max-w-xl lg:max-w-2xl';
+                }
+
+                return (
+                  <article
+                    key={beat.id}
+                    aria-hidden={!beat.isVisible}
+                    className={`absolute flex flex-col transition-none ${positionClasses}`}
+                    style={{
+                      opacity: beat.opacity,
+                      transform: prefersReducedMotion ? 'none' : `translateY(${beat.translateY}px)`,
+                    }}
+                  >
+                    {isCenter ? (
+                      // Climax Beat 5 (The Future) — Visually elevated, framing the finger-touch moment
+                      <>
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute -inset-10 -z-10 rounded-full"
                           style={{
-                            backgroundColor: beat.accent,
-                            boxShadow: `0 0 6px ${beat.accent}`,
+                            background:
+                              'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(56, 189, 248, 0.08) 0%, rgba(168, 85, 247, 0.05) 50%, transparent 80%)',
+                            filter: 'blur(32px)',
                           }}
                         />
-                        <span
-                          className="tracking-[0.24em] sm:tracking-[0.28em] uppercase font-medium text-[11px] sm:text-[12px]"
+                        <div className="inline-flex items-center justify-center gap-2.5 mb-2.5 sm:mb-3">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full shrink-0"
+                            style={{
+                              backgroundColor: '#38bdf8',
+                              boxShadow: '0 0 8px #38bdf8',
+                            }}
+                          />
+                          <span
+                            className="tracking-[0.28em] sm:tracking-[0.32em] uppercase font-bold text-[12px] sm:text-[13px] md:text-[14px]"
+                            style={{
+                              fontFamily: 'var(--font-inter, Inter, system-ui, sans-serif)',
+                              background: 'linear-gradient(90deg, #93c5fd 0%, #ffffff 50%, #c4b5fd 100%)',
+                              WebkitBackgroundClip: 'text',
+                              backgroundClip: 'text',
+                              WebkitTextFillColor: 'transparent',
+                              color: 'transparent',
+                              filter: 'drop-shadow(0 1px 8px rgba(0, 0, 0, 0.9))',
+                            }}
+                          >
+                            {beat.eyebrow}
+                          </span>
+                          <span
+                            className="w-1.5 h-1.5 rounded-full shrink-0"
+                            style={{
+                              backgroundColor: '#c084fc',
+                              boxShadow: '0 0 8px #c084fc',
+                            }}
+                          />
+                        </div>
+                        <h3
+                          className="font-extrabold tracking-tight text-white"
                           style={{
-                            fontFamily: 'var(--font-inter, Inter, system-ui, sans-serif)',
-                            color: 'rgba(145, 165, 190, 0.88)',
+                            fontFamily: 'var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
+                            fontSize: 'clamp(30px, 4.2vw, 50px)',
+                            lineHeight: '1.15',
+                            color: '#ffffff',
+                            textShadow:
+                              '0 2px 20px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 0, 0, 0.85), 0 0 24px rgba(147, 197, 253, 0.22)',
                           }}
                         >
-                          {beat.eyebrow}
-                        </span>
-                      </div>
-
-                      {/* Headline */}
-                      <h3
-                        className="font-extrabold tracking-tight text-white mb-2 sm:mb-2.5"
-                        style={{
-                          fontFamily: 'var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
-                          fontSize: 'clamp(28px, 4vw, 44px)',
-                          lineHeight: '1.14',
-                          textShadow: '0 2px 16px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 0, 0, 0.6)',
-                        }}
-                      >
-                        {beat.headline}
-                      </h3>
-
-                      {/* Supporting line */}
-                      <p
-                        className="font-normal"
-                        style={{
-                          fontFamily: 'var(--font-inter, Inter, system-ui, sans-serif)',
-                          fontSize: 'clamp(14px, 1.25vw, 16px)',
-                          lineHeight: '1.65',
-                          color: 'rgba(180, 198, 220, 0.95)',
-                          textShadow: '0 1px 10px rgba(0, 0, 0, 0.9)',
-                        }}
-                      >
-                        {beat.supporting}
-                      </p>
-                    </article>
-                  );
-                })}
-              </div>
+                          {beat.statement}
+                        </h3>
+                      </>
+                    ) : (
+                      // Beats 1 to 4 — Cinematic chapter labels floating over the scene
+                      <>
+                        <div
+                          className={`inline-flex items-center gap-2 mb-2 sm:mb-2.5 ${
+                            isRight ? 'flex-row-reverse' : ''
+                          }`}
+                        >
+                          <span
+                            className="w-1.5 h-1.5 rounded-full shrink-0"
+                            style={{
+                              backgroundColor: beat.accent,
+                              boxShadow: `0 0 8px ${beat.accent}`,
+                            }}
+                          />
+                          <span
+                            className="tracking-[0.24em] sm:tracking-[0.28em] uppercase font-semibold text-[11px] sm:text-[12px] md:text-[12.5px]"
+                            style={{
+                              fontFamily: 'var(--font-inter, Inter, system-ui, sans-serif)',
+                              color: 'rgba(195, 210, 230, 0.92)',
+                              textShadow: '0 1px 8px rgba(0, 0, 0, 0.9)',
+                            }}
+                          >
+                            {beat.eyebrow}
+                          </span>
+                        </div>
+                        <h3
+                          className="font-bold tracking-tight text-white"
+                          style={{
+                            fontFamily: 'var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
+                            fontSize: 'clamp(26px, 3.4vw, 42px)',
+                            lineHeight: '1.18',
+                            color: '#f8fafc',
+                            textShadow: '0 2px 18px rgba(0, 0, 0, 0.95), 0 0 32px rgba(0, 0, 0, 0.8)',
+                          }}
+                        >
+                          {beat.statement}
+                        </h3>
+                      </>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           </div>
 

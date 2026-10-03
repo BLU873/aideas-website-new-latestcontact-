@@ -116,6 +116,18 @@ export function Hero() {
             .empower-line .type-target {
               color: #38bdf8 !important;
             }
+            .hero-actions {
+              gap: 12px !important;
+            }
+            @media (min-width: 640px) {
+              .hero-actions {
+                gap: 13px !important;
+              }
+              .hero-actions .btn {
+                padding: 13px 21px !important;
+                font-size: 14.5px !important;
+              }
+            }
             @media (min-width: 1024px) {
               .hero-inner {
                 grid-template-columns: minmax(0, 47%) minmax(0, 53%) !important;
@@ -130,10 +142,27 @@ export function Hero() {
                 align-items: center !important;
               }
             }
+            @media (max-width: 960px) {
+              .hero-wordmark-lockup {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+              }
+              .hero-wordmark-lockup .hero-brand-mark {
+                margin-left: auto !important;
+                margin-right: auto !important;
+              }
+              .hero-wordmark-lockup .hero-institutional-identity {
+                text-align: center !important;
+              }
+            }
           `}</style>
 
           {/* 1 + 2. Shared fit-content block — BUILD eyebrow centers over aiDEAS wordmark */}
-          <div style={{ display: 'block', width: 'fit-content' }}>
+          <div className="hero-wordmark-lockup" style={{ width: 'fit-content' }}>
 
             {/* BUILD · BREAK · LEARN · REPEAT — no decorative dot, text-align:center within wordmark width */}
             <div
@@ -163,7 +192,7 @@ export function Hero() {
             {/* MAIN HERO WORDMARK: aIDEAS — predominantly metallic silver/white with subtle brand-color reflections */}
             <div
               data-reveal
-              className="hero-brand-mark select-none mb-3 sm:mb-3.5"
+              className="hero-brand-mark select-none mb-1.5 sm:mb-2"
               style={{
                 transitionDelay: '.14s',
                 position: 'relative',
@@ -229,6 +258,26 @@ export function Hero() {
               </span>
             </div>
 
+            {/* Institutional Identity Line: clearly identifies the organization directly below aiDEAS */}
+            <div
+              data-reveal
+              className="hero-institutional-identity select-none mb-3 sm:mb-3.5"
+              style={{
+                transitionDelay: '.18s',
+                width: '100%',
+              }}
+            >
+              <span
+                className="tracking-[0.16em] sm:tracking-[0.20em] uppercase font-semibold text-[10.5px] sm:text-[11.5px] md:text-[12px] block"
+                style={{
+                  fontFamily: 'var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
+                  color: 'rgba(156, 175, 198, 0.82)',
+                }}
+              >
+                AI &amp; DATA SCIENCE STUDENT ASSOCIATION
+              </span>
+            </div>
+
           </div>
 
           {/* 3. Subtitle with typewriter */}
@@ -252,11 +301,11 @@ export function Hero() {
 
           {/* 4. Call to Actions */}
           <div className="hero-actions" data-reveal style={{ transitionDelay: '.34s' }}>
-            <Link href="/about" className="btn btn-primary btn-pulse">
+            <Link href="/spotlight" className="btn btn-primary btn-pulse">
               Explore Now &rarr;
             </Link>
-            <Link href="/spotlight" className="btn btn-ghost">
-              See Events
+            <Link href="/contact" className="btn btn-outline-violet">
+              Partner With Us &rarr;
             </Link>
           </div>
 
