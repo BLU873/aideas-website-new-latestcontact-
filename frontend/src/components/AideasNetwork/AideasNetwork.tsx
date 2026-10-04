@@ -90,7 +90,6 @@ function NetworkFlowContent() {
   useEffect(() => {
     const imagesToPreload = [
       NETWORK_DATA.core.logo,
-      '/network_bg.jpeg',
       ...NETWORK_DATA.leadership.map((m) => m.image),
       ...NETWORK_DATA.heads.map((m) => m.image),
     ].filter(Boolean);
@@ -281,7 +280,7 @@ function NetworkFlowContent() {
     if (!containerRef.current) return;
     const containerTop = containerRef.current.getBoundingClientRect().top + window.scrollY;
     const totalHeight = containerRef.current.offsetHeight - window.innerHeight;
-    const targetY = containerTop + totalHeight * progressFraction;
+    const targetY = containerTop + totalHeight * Math.max(0, Math.min(1, progressFraction));
     window.scrollTo({ top: targetY, behavior: 'smooth' });
   }, []);
 
@@ -306,7 +305,7 @@ function NetworkFlowContent() {
         : viewportWidth / 2;
 
       const targetScreenY = isMobile
-        ? (!isFinalPhaseRef.current ? viewportHeight * 0.36 : viewportHeight * 0.5)
+        ? (!isFinalPhaseRef.current ? viewportHeight * 0.30 : viewportHeight * 0.45)
         : viewportHeight / 2;
 
       // Exact React Flow canvas top-left offset formula:
@@ -331,9 +330,10 @@ function NetworkFlowContent() {
       scrub: 0.12,
       onUpdate: (self) => {
         const p = self.progress;
+
         const isMobile = window.innerWidth < 640;
-        const closeZoom = isMobile ? 0.45 : 0.82;
-        const fullZoom = isMobile ? 0.11 : 0.38;
+        const closeZoom = isMobile ? 0.82 : 0.82;
+        const fullZoom = isMobile ? 0.22 : 0.38;
 
         // Phase 1: Guided Close-Up Storytelling Tour (0.00 to 0.85 progress)
         if (p < 0.85) {
@@ -395,6 +395,38 @@ function NetworkFlowContent() {
     };
   }, [updateFocusId, TOUR_NODES]);
 
+  // Dedicated Mobile Touch Swipe Gesture Handler for Fluid 1:1 Mobile Card Scrolling
+  useEffect(() => {
+    const el = stickyRef.current;
+    if (!el || window.innerWidth >= 640) return;
+
+    let startY = 0;
+    let startScrollY = 0;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        startY = e.touches[0].clientY;
+        startScrollY = window.scrollY;
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const currentY = e.touches[0].clientY;
+        const deltaY = startY - currentY;
+        window.scrollTo({ top: startScrollY + deltaY * 1.5, behavior: 'auto' });
+      }
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: true });
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+    };
+  }, []);
+
   // Handle Hover state on node for dimming unrelated nodes
   const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
     setHoveredNodeId(node.id);
@@ -425,27 +457,23 @@ function NetworkFlowContent() {
 
   return (
     <ActiveNodeContext.Provider value={activeNodeContextValue}>
-      <div ref={containerRef} className="relative w-full h-[400vh] bg-[#050505]">
+      <div ref={containerRef} className="relative w-full h-[400vh] bg-[#020f1c]">
         {/* Sticky Fullscreen Viewport */}
-        <div ref={stickyRef} className="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between z-10 bg-black">
+        <div ref={stickyRef} className="sticky top-0 w-full h-[100dvh] overflow-hidden flex flex-col justify-between z-10 bg-[#020f1c]">
           
-          {/* Background Image Layer (Abstract Flowing Light Ombre Gradient - Full Brightness) */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-            <img
-              src="/network_bg.jpeg"
-              alt="Network Background"
-              className="w-full h-full object-cover object-center opacity-100 scale-100"
-            />
-            <div className="absolute inset-0 bg-black/15" />
+          {/* Pure #020f1c Background Layer */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden bg-[#020f1c]">
+            {/* Subtle Ambient Radial Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-cyan-600/10 blur-3xl rounded-full pointer-events-none" />
           </div>
 
           {/* Header Bar Overlay with Stage Navigation Shortcuts */}
-          <div className="absolute top-14 left-0 right-0 z-30 flex flex-wrap items-center justify-between gap-2 px-4 sm:px-12 pointer-events-none">
+          <div className="absolute top-[84px] sm:top-20 lg:top-24 left-0 right-0 z-30 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-12 pointer-events-none">
             {/* Left / Center Stage Shortcut Buttons */}
-            <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto bg-black/80 backdrop-blur-md p-1.5 rounded-2xl border border-zinc-800/90 shadow-xl overflow-x-auto max-w-full">
+            <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto bg-[#020f1c]/90 backdrop-blur-md p-1.5 rounded-2xl border border-blue-500/30 shadow-xl overflow-x-auto whitespace-nowrap max-w-full [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <button
                 onClick={() => jumpToStage(0.0)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId === 'hod'
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
@@ -456,7 +484,7 @@ function NetworkFlowContent() {
 
               <button
                 onClick={() => jumpToStage(0.08)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId.includes('coord')
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
@@ -467,7 +495,7 @@ function NetworkFlowContent() {
 
               <button
                 onClick={() => jumpToStage(0.18)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId === 'gs' || activeFocusNodeId === 'jgs'
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
@@ -478,7 +506,7 @@ function NetworkFlowContent() {
 
               <button
                 onClick={() => jumpToStage(0.35)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId.includes('nishi') || activeFocusNodeId.includes('arnav') || activeFocusNodeId.includes('atharva')
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
@@ -489,7 +517,7 @@ function NetworkFlowContent() {
 
               <button
                 onClick={() => jumpToStage(0.65)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId.includes('pranshu') || activeFocusNodeId.includes('anvi') || activeFocusNodeId.includes('kush')
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
@@ -500,7 +528,7 @@ function NetworkFlowContent() {
 
               <button
                 onClick={() => jumpToStage(0.95)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   isFinalPhase
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
@@ -532,6 +560,7 @@ function NetworkFlowContent() {
                 elementsSelectable={false}
                 zoomOnScroll={false}
                 panOnScroll={false}
+                panOnDrag={false}
                 zoomOnDoubleClick={false}
                 preventScrolling={false}
                 minZoom={0.1}
@@ -544,7 +573,7 @@ function NetworkFlowContent() {
             </div>
 
             {/* Floating Left/Bottom Data Panel: Active Focused Member Story & Experience Data */}
-            <div className={`absolute bottom-14 sm:bottom-auto sm:top-28 left-3 right-3 sm:left-8 sm:right-auto lg:left-10 z-40 transition-all duration-500 ${isFinalPhase ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'}`}>
+            <div className={`absolute bottom-3 sm:bottom-auto sm:top-28 left-2 right-2 sm:left-8 sm:right-auto lg:left-10 z-40 transition-all duration-500 ${isFinalPhase ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'}`}>
               <LeftDataPanel
                 stageName={activeFocusMember.role}
                 stageStep={stageStep}
@@ -556,18 +585,18 @@ function NetworkFlowContent() {
 
             {/* Grand Standalone Header Banner: WE ARE TEAM aIDEAS (Only appears when scroll reaches 90%+) */}
             <div
-              className={`absolute top-24 sm:top-24 left-0 right-0 z-30 flex flex-col items-center justify-center transition-all duration-700 ease-out pointer-events-none ${
+              className={`absolute top-[160px] sm:top-[165px] lg:top-[170px] left-0 right-0 z-30 flex flex-col items-center justify-center transition-all duration-700 ease-out pointer-events-none ${
                 isTitleVisible
                   ? 'opacity-100 scale-100 translate-y-0'
                   : 'opacity-0 scale-90 -translate-y-6'
               }`}
             >
-              <h1 className="text-xl sm:text-5xl lg:text-6xl font-black font-[family-name:var(--font-orbitron)] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-200 to-purple-400 tracking-wider drop-shadow-[0_0_45px_rgba(59,130,246,0.95)] text-center uppercase px-4 leading-none">
-                WE ARE TEAM aIDEAS
+              <h1 className="text-xl sm:text-4xl lg:text-5xl font-black font-[family-name:var(--font-orbitron)] tracking-wider text-center px-4 leading-none text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-200 to-purple-400 drop-shadow-[0_0_35px_rgba(59,130,246,0.95)]">
+                WE ARE TEAM <span className="lowercase text-cyan-400">a</span>IDEAS
               </h1>
 
-              <p className="text-[8px] sm:text-xs font-semibold font-[family-name:var(--font-orbitron)] text-zinc-300 mt-1.5 sm:mt-2 tracking-[0.25em] uppercase text-center drop-shadow-lg opacity-90">
-                Artificial Intelligence & Data Science Student Association
+              <p className="text-[8px] sm:text-xs font-semibold font-[family-name:var(--font-orbitron)] text-zinc-300 mt-2 tracking-[0.25em] uppercase text-center drop-shadow-lg opacity-90">
+                Artificial Intelligence &amp; Data Science Student Association
               </p>
             </div>
 

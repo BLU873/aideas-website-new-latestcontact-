@@ -4,6 +4,12 @@
   background: transparent !important;
 }
 
+@media (max-width: 640px) {
+  .react-flow__pane {
+    pointer-events: none !important;
+  }
+}
+
 .react-flow__viewport {
   will-change: transform;
   transform: translate3d(0, 0, 0);
@@ -46,6 +52,17 @@
 .network-node-wrapper.dimmed {
   opacity: 0.35 !important;
   pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .network-node-wrapper.dimmed {
+    opacity: 0 !important;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  .react-flow__edge.dimmed {
+    opacity: 0 !important;
+  }
 }
 
 .network-node-wrapper.highlighted {

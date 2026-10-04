@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "clean": "node -e \"const fs=require('fs'); ['.next', 'node_modules/.cache'].forEach(p => fs.rmSync(p, { recursive: true, force: true }))\"",
-    "dev:clean": "npm run clean && next dev",
+    "dev:clean": "npm run clean && next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

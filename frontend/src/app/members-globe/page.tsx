@@ -23,7 +23,7 @@ export default function MembersGlobePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white p-6 sm:p-12 relative overflow-hidden">
+    <main className="min-h-screen bg-[#050505] text-white p-4 sm:p-12 relative overflow-hidden">
       {/* Background radial glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-blue-600/15 via-purple-600/10 to-transparent blur-3xl pointer-events-none" />
 
