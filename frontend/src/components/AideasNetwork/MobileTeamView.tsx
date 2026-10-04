@@ -3,9 +3,9 @@
 import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { NETWORK_DATA, Member } from './networkData';
+import { FaLinkedinIn } from 'react-icons/fa';
 import { 
   Mail, 
-  Linkedin, 
   Sparkles, 
   Code, 
   Palette, 
@@ -231,7 +231,7 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
                             className="w-10 h-10 rounded-full bg-[#180e3b] border border-purple-500/30 flex items-center justify-center text-purple-300 hover:bg-purple-600 hover:text-white transition-colors shadow-md"
                             title="LinkedIn"
                           >
-                            <Linkedin className="w-4 h-4" />
+                            <FaLinkedinIn className="w-4 h-4" />
                           </a>
                         )}
 
