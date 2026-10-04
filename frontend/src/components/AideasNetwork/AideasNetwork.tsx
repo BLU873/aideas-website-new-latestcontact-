@@ -474,74 +474,96 @@ function NetworkFlowContent() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-cyan-600/10 blur-3xl rounded-full pointer-events-none" />
           </div>
 
-          {/* Header Bar Overlay with Stage Navigation Shortcuts */}
-          <div className="absolute top-[84px] sm:top-20 lg:top-24 left-0 right-0 z-30 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-12 pointer-events-none">
-            {/* Left / Center Stage Shortcut Buttons */}
+          {/* Header Bar Overlay with Category Section Stage Shortcuts */}
+          <div className="absolute top-20 lg:top-24 left-0 right-0 z-30 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-12 pointer-events-none">
+            {/* Category Section Shortcut Buttons */}
             <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto bg-[#020f1c]/90 backdrop-blur-md p-1.5 rounded-2xl border border-blue-500/30 shadow-xl overflow-x-auto whitespace-nowrap max-w-full [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <button
-                onClick={() => jumpToStage(0.0)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
-                  activeFocusNodeId === 'hod'
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
-                }`}
-              >
-                01. HOD
-              </button>
-
-              <button
-                onClick={() => jumpToStage(0.08)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
-                  activeFocusNodeId.includes('coord')
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
-                }`}
-              >
-                02. Coordinators
-              </button>
-
-              <button
-                onClick={() => jumpToStage(0.18)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                onClick={() => jumpToStage(0.15)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId === 'gs' || activeFocusNodeId === 'jgs'
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                 }`}
               >
-                03. Executive Board
+                Leadership
               </button>
 
               <button
-                onClick={() => jumpToStage(0.35)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
-                  activeFocusNodeId.includes('nishi') || activeFocusNodeId.includes('arnav') || activeFocusNodeId.includes('atharva')
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                onClick={() => jumpToStage(0.0)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId === 'hod' || activeFocusNodeId.includes('coord')
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                 }`}
               >
-                04. Media Wing
+                Faculty
               </button>
 
               <button
-                onClick={() => jumpToStage(0.65)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
-                  activeFocusNodeId.includes('pranshu') || activeFocusNodeId.includes('anvi') || activeFocusNodeId.includes('kush')
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                onClick={() => jumpToStage(0.25)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId === 'nishi_treasurer' || activeFocusNodeId.includes('pranshu') || activeFocusNodeId.includes('anvi')
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                 }`}
               >
-                05. Events Wing
+                Events &amp; Finance
+              </button>
+
+              <button
+                onClick={() => jumpToStage(0.75)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId.includes('th')
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                }`}
+              >
+                Web &amp; Tech
+              </button>
+
+              <button
+                onClick={() => jumpToStage(0.40)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId.includes('marketing')
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                }`}
+              >
+                Marketing
+              </button>
+
+              <button
+                onClick={() => jumpToStage(0.45)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId.includes('desig')
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                }`}
+              >
+                Design
+              </button>
+
+              <button
+                onClick={() => jumpToStage(0.30)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId.includes('media') || activeFocusNodeId.includes('edito')
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                }`}
+              >
+                Media &amp; Editorial
               </button>
 
               <button
                 onClick={() => jumpToStage(0.95)}
-                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   isFinalPhase
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                 }`}
               >
-                06. Full Overview
+                Full Overview
               </button>
             </div>
 
@@ -580,7 +602,7 @@ function NetworkFlowContent() {
             </div>
 
             {/* Floating Left/Bottom Data Panel: Active Focused Member Story & Experience Data */}
-            <div className={`absolute bottom-3 sm:bottom-auto sm:top-28 left-2 right-2 sm:left-8 sm:right-auto lg:left-10 z-40 transition-all duration-500 ${isFinalPhase ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'}`}>
+            <div className={`absolute bottom-3 sm:bottom-auto sm:top-[150px] lg:top-[160px] left-2 right-2 sm:left-8 sm:right-auto lg:left-10 z-40 transition-all duration-500 ${isFinalPhase ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'}`}>
               <LeftDataPanel
                 stageName={activeFocusMember.role}
                 stageStep={stageStep}

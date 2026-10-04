@@ -2,8 +2,9 @@
 
 import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { NETWORK_DATA, Member } from './networkData';
-import { FaLinkedinIn } from 'react-icons/fa';
+import { FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import { 
   Mail, 
   Sparkles, 
@@ -16,7 +17,8 @@ import {
   BookOpen, 
   UserCheck, 
   Crown,
-  Share2
+  ChevronRight,
+  User
 } from 'lucide-react';
 
 interface MobileTeamViewProps {
@@ -24,32 +26,50 @@ interface MobileTeamViewProps {
 }
 
 const CATEGORIES = [
-  { id: 'all', label: 'All Teams', icon: Sparkles },
-  { id: 'leadership', label: 'Leadership', icon: Crown },
-  { id: 'technical', label: 'Web & Tech', icon: Code },
-  { id: 'marketing', label: 'Marketing', icon: Megaphone },
-  { id: 'design', label: 'Design', icon: Palette },
-  { id: 'events', label: 'Events', icon: Calendar },
-  { id: 'media', label: 'Media', icon: Video },
-  { id: 'finance', label: 'Finance', icon: DollarSign },
-  { id: 'editorial', label: 'Editorial', icon: BookOpen },
+  { id: 'all', label: 'All Teams' },
+  { id: 'leadership', label: 'Leadership' },
+  { id: 'faculty', label: 'Faculty' },
+  { id: 'events-finance', label: 'Events & Finance' },
+  { id: 'technical', label: 'Web & Tech' },
+  { id: 'marketing', label: 'Marketing' },
+  { id: 'design', label: 'Design' },
+  { id: 'media', label: 'Media & Editorial' },
 ];
 
 export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [activeExpandedCardId, setActiveExpandedCardId] = useState<string | null>(null);
+
+  // Interactive Cursor Spotlight Mouse Position Handler
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
 
   // Group members into structured sections
   const teamSections = useMemo(() => {
     const allMembers: { category: string; sectionTitle: string; members: Member[] }[] = [
       {
         category: 'leadership',
-        sectionTitle: 'Faculty Leadership',
+        sectionTitle: 'Executive Board',
+        members: NETWORK_DATA.leadership.filter((m) => m.role.includes('Secretary')),
+      },
+      {
+        category: 'faculty',
+        sectionTitle: 'HOD & Faculty Coordinators',
         members: NETWORK_DATA.leadership.filter((m) => m.role.includes('Head') || m.role.includes('Faculty')),
       },
       {
-        category: 'leadership',
-        sectionTitle: 'Executive Board',
-        members: NETWORK_DATA.leadership.filter((m) => m.role.includes('Secretary')),
+        category: 'events-finance',
+        sectionTitle: 'Events & Finance Team',
+        members: NETWORK_DATA.heads.filter((m) => 
+          m.department.toLowerCase().includes('events') || 
+          m.department.toLowerCase().includes('finance') ||
+          m.role.toLowerCase().includes('treasurer')
+        ),
       },
       {
         category: 'technical',
@@ -67,29 +87,18 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
         members: NETWORK_DATA.heads.filter((m) => m.department.toLowerCase().includes('design')),
       },
       {
-        category: 'events',
-        sectionTitle: 'Event Management Team',
-        members: NETWORK_DATA.heads.filter((m) => m.department.toLowerCase().includes('events')),
-      },
-      {
         category: 'media',
-        sectionTitle: 'Media & Production Team',
-        members: NETWORK_DATA.heads.filter((m) => m.department.toLowerCase().includes('media')),
-      },
-      {
-        category: 'finance',
-        sectionTitle: 'Finance & Treasury Team',
-        members: NETWORK_DATA.heads.filter((m) => m.department.toLowerCase().includes('finance')),
-      },
-      {
-        category: 'editorial',
-        sectionTitle: 'Editorial & Content Team',
-        members: NETWORK_DATA.heads.filter((m) => m.department.toLowerCase().includes('editorial')),
+        sectionTitle: 'Media & Editorial Team',
+        members: NETWORK_DATA.heads.filter((m) => 
+          m.department.toLowerCase().includes('media') || 
+          m.department.toLowerCase().includes('editorial')
+        ),
       },
     ];
 
     if (selectedCategory === 'all') {
-      return allMembers.filter((section) => section.members.length > 0);
+      // Exclude 'faculty' section from "All Teams" tab per user request
+      return allMembers.filter((section) => section.category !== 'faculty' && section.members.length > 0);
     }
 
     return allMembers.filter(
@@ -98,159 +107,229 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
   }, [selectedCategory]);
 
   return (
-    <div className="w-full bg-[#030614] text-white min-h-screen pb-24 relative overflow-hidden">
-      {/* Background Ambient Radial Blue & Purple Glows */}
+    <div className="w-full bg-[#020712] text-white min-h-screen pb-28 relative overflow-hidden font-sans">
+      {/* Brand Theme Ambient Glows (Cyan + Purple + Obsidian) */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600/15 rounded-full blur-[120px]" />
-        <div className="absolute top-1/3 -right-40 w-96 h-96 bg-blue-600/15 rounded-full blur-[120px]" />
-        <div className="absolute bottom-20 left-10 w-80 h-80 bg-indigo-600/15 rounded-full blur-[100px]" />
+        <motion.div
+          animate={{
+            scale: [1, 1.25, 1],
+            opacity: [0.2, 0.35, 0.2],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -top-20 -left-20 w-96 h-96 bg-[#00d8ff]/20 rounded-full blur-[130px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.35, 0.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          className="absolute top-1/3 -right-20 w-96 h-96 bg-[#a855f7]/20 rounded-full blur-[130px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.15, 0.3, 0.15],
+          }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+          className="absolute bottom-10 left-1/4 w-80 h-80 bg-blue-600/20 rounded-full blur-[110px]"
+        />
       </div>
 
       <div className="relative z-10 px-4 pt-6">
-        {/* Mobile Title Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold mb-3 backdrop-blur-md shadow-lg">
-            <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
-            <span>OUR TEAMS &amp; LEADERSHIP</span>
-          </div>
-          <h1 className="text-2xl font-black font-[family-name:var(--font-orbitron)] tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-200 to-purple-400 drop-shadow-[0_0_20px_rgba(139,92,246,0.5)]">
-            TEAM <span className="lowercase text-cyan-400">a</span>IDEAS
+        {/* Mobile Header Banner */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-6"
+        >
+          <h1 className="text-3xl font-black font-[family-name:var(--font-orbitron)] tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#38bdf8] via-[#a855f7] to-[#e879f9] drop-shadow-[0_0_25px_rgba(56,189,248,0.5)]">
+            TEAM <span className="lowercase text-[#38bdf8]">a</span>IDEAS
           </h1>
-          <p className="text-xs text-zinc-400 mt-1 max-w-xs mx-auto">
-            Meet the innovators, leaders, and creators driving AI &amp; Data Science excellence
+          <p className="text-[11px] font-mono tracking-widest text-zinc-300 uppercase mt-1.5 max-w-xs mx-auto">
+            AI &amp; Data Science Student Association
           </p>
-        </div>
+        </motion.div>
 
-        {/* Category Pill Buttons Horizontal Carousel */}
+        {/* Theme Pill Filter Carousel - Pure Text */}
         <div className="mb-8 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4">
-          <div className="flex items-center gap-2 w-max pb-2">
+          <div className="flex items-center gap-2.5 w-max pb-2">
             {CATEGORIES.map((cat) => {
-              const Icon = cat.icon;
               const isActive = selectedCategory === cat.id;
 
               return (
-                <button
+                <motion.button
                   key={cat.id}
+                  whileTap={{ scale: 0.93 }}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold transition-all duration-300 shrink-0 border ${
+                  className={`relative flex items-center px-4 py-2.5 rounded-full text-xs font-bold transition-all duration-300 shrink-0 border ${
                     isActive
-                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white border-purple-400/50 shadow-[0_0_15px_rgba(147,51,234,0.5)] scale-105'
-                      : 'bg-[#0a071f]/80 text-zinc-400 border-purple-900/40 hover:text-white hover:bg-purple-950/50'
+                      ? 'bg-[#38bdf8] text-black border-[#38bdf8] shadow-[0_0_20px_rgba(56,189,248,0.6)] scale-105'
+                      : 'bg-[#0b0821]/80 text-purple-200/90 border border-purple-500/40 hover:text-white hover:border-[#38bdf8]'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-purple-400'}`} />
                   <span>{cat.label}</span>
-                </button>
+                </motion.button>
               );
             })}
           </div>
         </div>
 
-        {/* Team Sections & Member Cards */}
-        <div className="space-y-10">
-          {teamSections.map((section, idx) => (
-            <div key={`${section.category}-${idx}`} className="space-y-4">
-              {/* Section Header */}
-              <div className="flex items-center gap-3 border-b border-purple-900/30 pb-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
-                <h2 className="text-lg font-bold font-[family-name:var(--font-orbitron)] text-zinc-100 tracking-wider">
-                  {section.sectionTitle}
-                </h2>
-              </div>
+        {/* Team Section Blocks */}
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={selectedCategory}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35 }}
+            className="space-y-10"
+          >
+            {teamSections.map((section, idx) => (
+              <div key={`${section.category}-${idx}`} className="space-y-4">
+                {/* Section Header - Pure Text */}
+                <motion.div 
+                  initial={{ opacity: 0, x: -15 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4 }}
+                  className="flex items-center justify-between border-b border-[#38bdf8]/20 pb-2.5"
+                >
+                  <h2 className="text-lg font-bold font-[family-name:var(--font-orbitron)] text-zinc-100 tracking-wider">
+                    {section.sectionTitle}
+                  </h2>
+                </motion.div>
 
-              {/* Grid of Member Cards matching screenshot layout */}
-              <div className="grid grid-cols-1 gap-6">
-                {section.members.map((member) => (
-                  <div
-                    key={member.id}
-                    onClick={() => onSelectMember(member)}
-                    className="group relative bg-[#0c081f] border border-purple-900/40 hover:border-purple-500/50 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 active:scale-[0.98] cursor-pointer"
-                  >
-                    {/* Top Portrait Image Container */}
-                    <div className="relative w-full aspect-[4/5] bg-gradient-to-b from-purple-950/20 to-[#0c081f] overflow-hidden">
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        fill
-                        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, 400px"
-                        priority={false}
-                      />
-                      
-                      {/* Gradient overlay for text contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c081f] via-transparent to-black/20" />
+                {/* Grid of CodePen Aspect-Ratio Shift & Text Reveal Animated Cards */}
+                <div className="grid grid-cols-1 gap-6">
+                  {section.members.map((member, mIdx) => {
+                    const isExpanded = activeExpandedCardId === member.id;
 
-                      {/* Floating Badge / Action Button Overlay on image (matching screenshot 2 overlay icon) */}
-                      <div className="absolute bottom-3 right-3 z-10">
-                        <div className="w-10 h-10 rounded-full bg-[#160e33]/90 border border-purple-500/40 flex items-center justify-center text-purple-300 shadow-xl backdrop-blur-md">
-                          {member.email ? (
-                            <Mail className="w-4 h-4 text-purple-300" />
-                          ) : (
-                            <Megaphone className="w-4 h-4 text-purple-300" />
-                          )}
+                    return (
+                      <motion.div
+                        key={member.id}
+                        initial={{ opacity: 0, y: 80, scale: 0.92 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        transition={{ 
+                          duration: 0.55, 
+                          delay: (mIdx % 3) * 0.12, 
+                          ease: [0.215, 0.61, 0.355, 1.0] 
+                        }}
+                        onMouseMove={handleMouseMove}
+                        onClick={() => {
+                          setActiveExpandedCardId(isExpanded ? null : member.id);
+                          onSelectMember(member);
+                        }}
+                        className={`group relative bg-gradient-to-b from-[#0b132b] via-[#070e21] to-[#030712] border border-[#38bdf8]/30 hover:border-[#38bdf8] rounded-[2rem] p-2 overflow-hidden shadow-[0_10px_30px_rgba(2,7,18,0.9)] hover:shadow-[0_0_35px_rgba(56,189,248,0.5)] transition-all duration-500 ease-out cursor-pointer ${
+                          isExpanded ? 'border-[#38bdf8] shadow-[0_0_35px_rgba(56,189,248,0.5)]' : ''
+                        }`}
+                      >
+                        {/* Dynamic Cursor Spotlight Radial Light Overlay */}
+                        <div 
+                          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+                          style={{
+                            background: 'radial-gradient(350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.2), transparent 75%)',
+                          }}
+                        />
+
+                        {/* Crisp Dynamic Aspect-Ratio Shrinking Image Container */}
+                        <div className={`w-full overflow-hidden rounded-[1.5rem] relative transition-all duration-500 ease-out ${
+                          isExpanded ? 'aspect-[1/1]' : 'aspect-[2/3] group-hover:aspect-[1/1]'
+                        }`}>
+                          <Image
+                            src={member.image}
+                            alt={member.name}
+                            fill
+                            className="object-cover object-[50%_5%] group-hover:object-[50%_15%] transition-all duration-500 ease-out"
+                            sizes="(max-width: 640px) 100vw, 400px"
+                            priority={false}
+                          />
                         </div>
-                      </div>
-                    </div>
 
-                    {/* Below Image Card Content */}
-                    <div className="px-5 pt-4 pb-6 text-center flex flex-col items-center">
-                      {/* Name */}
-                      <h3 className="text-xl font-extrabold text-white tracking-wide font-[family-name:var(--font-orbitron)]">
-                        {member.name}
-                      </h3>
+                        {/* CodePen Animated Reveal Text Section */}
+                        <div className="p-4 flex flex-col justify-between relative z-20">
+                          {/* Member Name (CodePen h2) */}
+                          <h2 className="text-2xl font-black text-white font-[family-name:var(--font-orbitron)] tracking-wide group-hover:text-[#38bdf8] transition-colors duration-300 m-0">
+                            {member.name}
+                          </h2>
 
-                      {/* Role Pill Badge */}
-                      <div className="mt-1.5 inline-block">
-                        <span className="text-[11px] font-bold text-purple-400 tracking-[0.2em] uppercase">
-                          {member.role}
-                        </span>
-                      </div>
+                          {/* Member Role Subtitle */}
+                          <div className="mt-1">
+                            <span className="text-xs font-bold text-[#38bdf8] font-mono tracking-[0.2em] uppercase">
+                              {member.role}
+                            </span>
+                          </div>
 
-                      {/* Horizontal Divider Line */}
-                      <div className="w-4/5 h-[1px] bg-purple-950/80 my-4" />
+                          {/* Member Bio Paragraph */}
+                          <p className="text-xs text-zinc-300 leading-relaxed mt-2 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                            {member.bio || `${member.name} is a key leader in the ${member.department} department driving aIDEAS initiatives.`}
+                          </p>
 
-                      {/* Bottom Circular Action Buttons */}
-                      <div className="flex items-center gap-3">
-                        {member.email && (
-                          <a
-                            href={`mailto:${member.email}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="w-10 h-10 rounded-full bg-[#180e3b] border border-purple-500/30 flex items-center justify-center text-purple-300 hover:bg-purple-600 hover:text-white transition-colors shadow-md"
-                            title="Email"
-                          >
-                            <Mail className="w-4 h-4" />
-                          </a>
-                        )}
+                          {/* Card Action Row (Department Tag + Contact Buttons) */}
+                          <div className="pt-3 mt-3 flex items-center justify-between border-t border-[#38bdf8]/20 w-full">
+                            {/* Left Tag / Department */}
+                            <div className="text-[11px] font-mono text-purple-300 flex items-center gap-1.5 font-bold">
+                              <User className="w-3.5 h-3.5 text-[#38bdf8]" />
+                              <span>{member.department}</span>
+                            </div>
 
-                        {member.linkedin && (
-                          <a
-                            href={member.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="w-10 h-10 rounded-full bg-[#180e3b] border border-purple-500/30 flex items-center justify-center text-purple-300 hover:bg-purple-600 hover:text-white transition-colors shadow-md"
-                            title="LinkedIn"
-                          >
-                            <FaLinkedinIn className="w-4 h-4" />
-                          </a>
-                        )}
+                            {/* Right Action Contact Buttons */}
+                            <div className="flex items-center gap-2">
+                              {member.instagram && (
+                                <motion.a
+                                  href={member.instagram}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  whileHover={{ scale: 1.15 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  className="w-9 h-9 rounded-xl bg-[#180d38] border border-[#a855f7]/50 flex items-center justify-center text-[#a855f7] hover:bg-[#a855f7] hover:text-white transition-all shadow-[0_0_12px_rgba(168,85,247,0.3)]"
+                                  title="Instagram"
+                                >
+                                  <FaInstagram className="w-4 h-4" />
+                                </motion.a>
+                              )}
 
-                        {!member.email && !member.linkedin && (
-                          <button
-                            type="button"
-                            className="w-10 h-10 rounded-full bg-[#180e3b] border border-purple-500/30 flex items-center justify-center text-purple-300"
-                          >
-                            <UserCheck className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                              {member.email && (
+                                <motion.a
+                                  href={`mailto:${member.email}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  whileHover={{ scale: 1.15 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  className="w-9 h-9 rounded-xl bg-[#38bdf8] text-black flex items-center justify-center font-bold hover:bg-cyan-300 transition-all shadow-[0_0_12px_rgba(56,189,248,0.4)]"
+                                  title="Email"
+                                >
+                                  <Mail className="w-4 h-4" />
+                                </motion.a>
+                              )}
+
+                              {member.linkedin && (
+                                <motion.a
+                                  href={member.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  whileHover={{ scale: 1.15 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  className="w-9 h-9 rounded-xl bg-[#180d38] border border-[#a855f7]/50 flex items-center justify-center text-[#a855f7] hover:bg-[#a855f7] hover:text-white transition-all shadow-[0_0_12px_rgba(168,85,247,0.3)]"
+                                  title="LinkedIn"
+                                >
+                                  <FaLinkedinIn className="w-4 h-4" />
+                                </motion.a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
