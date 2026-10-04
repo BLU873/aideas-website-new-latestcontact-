@@ -1,119 +1,189 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { FaBars, FaTimes } from 'react-icons/fa';
-import gsap from 'gsap';
 import Image from 'next/image';
-import i from "@/components/logo.png";
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const logoRef = useRef<HTMLDivElement>(null);
-
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [mounted, setMounted] = useState(false);
+  const isScrolledRef = useRef(false);
 
   useEffect(() => {
-    const letters = logoRef.current?.querySelectorAll('span');
-    if (letters) {
-      gsap.fromTo(
-        letters,
-        { y: -20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.07,
-          ease: 'back.out(1.7)',
-        }
-      );
-    }
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 30;
+      if (scrolled !== isScrolledRef.current) {
+        isScrolledRef.current = scrolled;
+        setIsScrolled(scrolled);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Split logo text into spans
-  const logo = 'aIDEAS'.split('').map((char, index) => (
-    <span key={index} className="inline-block">{char}</span>
-  ));
+  useEffect(() => {
+    let saved: 'dark' | 'light' = 'dark';
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function') {
+      try {
+        saved = (localStorage.getItem('aideas-theme') as 'dark' | 'light') || 'dark';
+      } catch {}
+    }
+    setTheme(saved);
+    document.documentElement.setAttribute('data-theme', saved);
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined' && typeof localStorage.setItem === 'function') {
+      try {
+        localStorage.setItem('aideas-theme', next);
+      } catch {}
+    }
+    document.documentElement.setAttribute('data-theme', next);
+  };
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Spotlight', path: '/spotlight' },
+    { name: 'Team', path: '/members' },
+    { name: 'Contact Us', path: '/contact' },
+  ];
 
   return (
-    <header className="sticky z-20 top-0 w-full bg-black border-b-2 text-white px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* 🟢 Logo */}   <Link href="/">
-        <div className="flex items-center space-x-3">
+    <header className={isScrolled ? 'header-floating' : ''}>
+      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+        {/* Brand Logo & Name */}
+        <Link
+          href="/"
+          className="brand group relative flex items-center gap-3 focus:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400/50 rounded-lg"
+          aria-label="aiDEAS Home"
+        >
           <Image
-            src={i}
-            alt="aIDEAS Logo"
-            width={40}
-            height={40}
-            className="bg-white rounded-full border border-white"
+            src="/assets/img/logo-icon.png"
+            alt="aiDEAS logo"
+            width={42}
+            height={42}
+            className="rounded-full shadow-md shrink-0"
+            priority
           />
-          <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-sky-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-text bg-[length:300%] brightness-100">
-            {logo}
-          </div>
-        </div>
+          <span className="brand-name font-extrabold text-xl tracking-tight">
+            <span className="ai text-cyan-400">aI</span>
+            <span className="deas bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">DEAS</span>
+          </span>
+
+          {/* Identity hover/focus tooltip */}
+          <span
+            role="tooltip"
+            className="pointer-events-none absolute left-0 top-[calc(100%+6px)] z-50 whitespace-nowrap rounded-md border border-white/10 bg-[#0c1017]/95 px-2.5 py-1 text-[10px] font-medium tracking-[0.14em] uppercase text-gray-300 opacity-0 shadow-lg backdrop-blur-md transition-all duration-200 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0 -translate-y-1"
+            style={{
+              fontFamily: 'var(--font-inter, Inter, system-ui, sans-serif)',
+              boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+            }}
+          >
+            PVG AI &amp; DS DEPARTMENT CLUB
+          </span>
         </Link>
 
-        {/* 📱 Mobile toggle */}
-        <button className="md:hidden focus:outline-none" onClick={toggleMenu}>
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </button>
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
+          {navLinks.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`relative transition-all duration-300 ${
+                  isActive
+                    ? 'text-cyan-400 font-semibold'
+                    : 'text-gray-300 hover:text-cyan-300'
+                }`}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
+        </div>
 
-        {/* 🔗 Desktop Links */}
-        <nav className="hidden md:flex space-x-6 text-sm">
-  {[
-    { name: "Home", path: "/" },
-    { name: "Events", path: "/events" },
-    { name: "About", path: "/about" },
-    { name: "Members", path: "/members" },
-    { name: "Contact Us", path: "/contact" },
-  ].map((item) => (
-    <Link
-      key={item.path}
-      href={item.path}
-      className="relative text-white after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-0 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full"
-    >
-      {item.name}
-    </Link>
-  ))}
-</nav>
+        {/* Controls: Theme Switcher & Mobile Menu Burger */}
+        <div className="flex items-center gap-4">
+          <button
+            className="theme-toggle p-2 rounded-full border border-gray-800 hover:border-cyan-500/50 transition-colors"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            style={{ opacity: mounted ? 1 : 0 }}
+          >
+            {theme === 'dark' ? (
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            ) : (
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            )}
+          </button>
 
-      </div>
+          <button
+            className={`burger md:hidden ${isOpen ? 'open' : ''}`}
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+      </nav>
 
-      {/* 📱 Mobile Nav */}
+      {/* Mobile Drawer */}
       {isOpen && (
-       <div className="absolute top-16 right-0 w-1/2 z-50 bg-black px-6 py-4 flex flex-col items-center space-y-4 text-sm border-t border-zinc-700">
-
-  {/* Single reusable link block */}
-  <div className="w-full flex justify-center hover:bg-zinc-800 hover:border-b-2 hover:border-b-cyan-400   py-2 rounded">
-    <Link href="/" onClick={() => setIsOpen(false)} className="text-white">
-      Home
-    </Link>
-  </div>
-
-  <div className="w-full flex justify-center hover:bg-zinc-800 py-2 hover:border-b-2 hover:border-b-cyan-400 rounded">
-    <Link href="/events" onClick={() => setIsOpen(false)} className="text-white">
-      Events
-    </Link>
-  </div>
-
-  <div className="w-full flex justify-center hover:bg-zinc-800  hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
-    <Link href="/about" onClick={() => setIsOpen(false)} className="text-white">
-      About
-    </Link>
-  </div>
-   <div className="w-full flex justify-center hover:bg-zinc-800 hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
-    <Link href="/members" onClick={() => setIsOpen(false)} className="text-white">
-      Members
-    </Link>
-  </div>
-
-  <div className="w-full flex justify-center hover:bg-zinc-800  hover:border-b-2 hover:border-b-cyan-400 py-2 rounded">
-    <Link href="/contact" onClick={() => setIsOpen(false)} className="text-white">
-      Contact
-    </Link>
-  </div>
-
-</div>
-
+        <div className="md:hidden bg-[#0A0B16] border-b border-gray-800 px-6 py-4 space-y-3">
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              href={link.path}
+              onClick={() => setIsOpen(false)}
+              className={`block text-base font-medium ${
+                pathname === link.path ? 'text-cyan-400 font-semibold' : 'text-gray-300'
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
       )}
     </header>
   );
