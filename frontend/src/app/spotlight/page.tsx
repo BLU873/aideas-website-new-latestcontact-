@@ -395,7 +395,6 @@ export default function SpotlightPage() {
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import NeuralBackground from '@/components/ui/NeuralBackground';
 
 // Achievements Data Structure
 const achievementsData = [

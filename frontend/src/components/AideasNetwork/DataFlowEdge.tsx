@@ -36,11 +36,11 @@ function DataFlowEdgeComponent({
         style={style}
       />
 
-      {/* Streaming Glowing Data Particle 1 */}
+      {/* Streaming Data Particle 1 */}
       <g className="pointer-events-none">
-        <circle r="4" fill="#60a5fa" className="drop-shadow-[0_0_10px_rgba(96,165,250,0.95)]">
+        <circle r="3.5" fill="#60a5fa" opacity="0.9">
           <animateMotion
-            dur="2.2s"
+            dur="2.5s"
             repeatCount="indefinite"
             rotate="auto"
           >
@@ -49,12 +49,12 @@ function DataFlowEdgeComponent({
         </circle>
       </g>
 
-      {/* Streaming Glowing Data Particle 2 (Staggered Offset) */}
+      {/* Streaming Data Particle 2 (Staggered Offset) */}
       <g className="pointer-events-none">
-        <circle r="3" fill="#bfdbfe" className="drop-shadow-[0_0_8px_rgba(191,219,254,0.9)]">
+        <circle r="2.5" fill="#93c5fd" opacity="0.7">
           <animateMotion
-            dur="2.2s"
-            begin="1.1s"
+            dur="2.5s"
+            begin="1.25s"
             repeatCount="indefinite"
             rotate="auto"
           >

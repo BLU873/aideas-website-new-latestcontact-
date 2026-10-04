@@ -3,26 +3,61 @@
 import React, { memo, useState, useEffect } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { Member } from './networkData';
+import { useActiveNode } from './ActiveNodeContext';
 
 export interface MemberNodeData {
   member: Member;
   isLeadership?: boolean;
-  isActiveFocus?: boolean;
-  isHovered?: boolean;
-  isDimmed?: boolean;
   idleDelayIndex?: number;
   onSelectMember?: (member: Member) => void;
 }
 
+const CONNECTIVITY_MAP: Record<string, Set<string>> = {
+  aideas: new Set(['hod']),
+  hod: new Set(['aideas', 'coordinator', 'coordinator2']),
+  coordinator: new Set(['hod', 'gs']),
+  coordinator2: new Set(['hod', 'jgs']),
+  gs: new Set(['coordinator', 'nishi_treasurer', 'arnav_media', 'atharva_media', 'manish_marketing', 'sanket_desig', 'kinjal_desig']),
+  jgs: new Set(['coordinator2', 'pranshu_em', 'anvi_event', 'kush_marketing', 'priti_edito', 'aa_th', 'divesh_th', 'pk_th']),
+  nishi_treasurer: new Set(['gs']),
+  arnav_media: new Set(['gs']),
+  atharva_media: new Set(['gs']),
+  manish_marketing: new Set(['gs']),
+  sanket_desig: new Set(['gs']),
+  kinjal_desig: new Set(['gs']),
+  pranshu_em: new Set(['jgs']),
+  anvi_event: new Set(['jgs']),
+  kush_marketing: new Set(['jgs']),
+  priti_edito: new Set(['jgs']),
+  aa_th: new Set(['jgs']),
+  divesh_th: new Set(['jgs']),
+  pk_th: new Set(['jgs']),
+};
+
 function MemberNodeComponent({ data }: NodeProps) {
   const nodeData = data as unknown as MemberNodeData;
-  const { member, isActiveFocus, isHovered, isDimmed, onSelectMember } = nodeData;
+  const { member, onSelectMember } = nodeData;
+
+  const { activeFocusNodeId, hoveredNodeId, isFinalPhase } = useActiveNode();
 
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     setImgError(false);
   }, [member.image]);
+
+  const targetFocusId = hoveredNodeId || (activeFocusNodeId && !isFinalPhase ? activeFocusNodeId : null);
+
+  const isActiveFocus = member.id === activeFocusNodeId && !isFinalPhase;
+  const isHovered = member.id === hoveredNodeId;
+
+  let isDimmed = false;
+  if (targetFocusId) {
+    const isConnected =
+      member.id === targetFocusId ||
+      Boolean(CONNECTIVITY_MAP[targetFocusId]?.has(member.id));
+    isDimmed = !isConnected;
+  }
 
   const isMainLeader =
     member.id === 'gs' ||
@@ -37,20 +72,28 @@ function MemberNodeComponent({ data }: NodeProps) {
   return (
     <div
       onClick={() => onSelectMember?.(member)}
+      style={{ willChange: 'transform' }}
       className={`network-node-wrapper relative group cursor-pointer select-none ${
         isDimmed ? 'dimmed' : ''
       } ${isHovered || isActiveFocus ? 'highlighted z-50' : ''}`}
     >
+      {/* GPU Accelerated Glow Layer for Active Focus */}
+      <div
+        className={`absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-500 blur-md pointer-events-none transition-opacity duration-200 ${
+          isActiveFocus ? 'opacity-90' : 'opacity-0'
+        }`}
+      />
+
       {/* Main Node Container */}
       <div
-        className={`relative flex flex-col items-center p-3.5 sm:p-4.5 rounded-2xl bg-[#09090b] border transition-all duration-300 ease-out ${
+        className={`relative flex flex-col items-center p-3.5 sm:p-4.5 rounded-2xl bg-[#09090b] border transition-transform duration-200 ease-out ${
           isActiveFocus
-            ? 'scale-108 border-blue-400 shadow-[0_0_40px_rgba(59,130,246,0.85)] ring-2 ring-blue-400 z-50'
-            : 'group-hover:scale-103 group-hover:border-blue-400/80 group-hover:shadow-xl'
+            ? 'scale-105 border-blue-400 ring-2 ring-blue-400 z-50'
+            : 'group-hover:scale-102 group-hover:border-blue-400/80'
         } ${
           isMainLeader
-            ? 'w-[205px] sm:w-[225px] border-blue-500/80 shadow-[0_4px_30px_rgba(59,130,246,0.35)]'
-            : 'w-[165px] sm:w-[180px] border-zinc-800 shadow-lg'
+            ? 'w-[205px] sm:w-[225px] border-blue-500/80'
+            : 'w-[165px] sm:w-[180px] border-zinc-800'
         }`}
       >
         {/* Circular Profile Image or Fallback Avatar */}
@@ -59,16 +102,18 @@ function MemberNodeComponent({ data }: NodeProps) {
             <img
               src={member.image}
               alt={member.name}
+              loading="lazy"
+              decoding="async"
               onError={() => setImgError(true)}
-              className={`rounded-full object-cover object-center transition-all duration-300 ${
+              className={`rounded-full object-cover object-center transition-colors duration-200 ${
                 isMainLeader
-                  ? 'w-16 h-16 sm:w-18 sm:h-18 border-2 border-blue-400 group-hover:border-white shadow-md'
-                  : 'w-13 h-13 sm:w-15 sm:h-15 border-2 border-zinc-700 group-hover:border-blue-400 shadow-sm'
+                  ? 'w-16 h-16 sm:w-18 sm:h-18 border-2 border-blue-400 group-hover:border-white'
+                  : 'w-13 h-13 sm:w-15 sm:h-15 border-2 border-zinc-700 group-hover:border-blue-400'
               }`}
             />
           ) : (
             <div
-              className={`rounded-full bg-gradient-to-br from-blue-600 to-indigo-900 flex items-center justify-center font-black text-white shadow-md border-2 border-blue-400 ${
+              className={`rounded-full bg-gradient-to-br from-blue-600 to-indigo-900 flex items-center justify-center font-black text-white border-2 border-blue-400 ${
                 isMainLeader
                   ? 'w-16 h-16 sm:w-18 sm:h-18 text-2xl'
                   : 'w-13 h-13 sm:w-15 sm:h-15 text-xl'
