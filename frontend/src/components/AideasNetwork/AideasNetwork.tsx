@@ -17,6 +17,7 @@ import MemberNodeComponent from './MemberNode';
 import DataFlowEdgeComponent from './DataFlowEdge';
 import ProfileModal from './ProfileModal';
 import LeftDataPanel from './LeftDataPanel';
+import MobileTeamView from './MobileTeamView';
 import { NETWORK_DATA, Member } from './networkData';
 import { ActiveNodeContext } from './ActiveNodeContext';
 import './network.css';
@@ -457,7 +458,13 @@ function NetworkFlowContent() {
 
   return (
     <ActiveNodeContext.Provider value={activeNodeContextValue}>
-      <div ref={containerRef} className="relative w-full h-[400vh] bg-[#020f1c]">
+      {/* Mobile View: Dedicated Team Directory Card Layout */}
+      <div className="block sm:hidden pt-20">
+        <MobileTeamView onSelectMember={(m) => setSelectedMember(m)} />
+      </div>
+
+      {/* Desktop View: Full 2D ReactFlow Story Graph */}
+      <div ref={containerRef} className="hidden sm:block relative w-full h-[400vh] bg-[#020f1c]">
         {/* Sticky Fullscreen Viewport */}
         <div ref={stickyRef} className="sticky top-0 w-full h-[100dvh] overflow-hidden flex flex-col justify-between z-10 bg-[#020f1c]">
           
@@ -602,13 +609,13 @@ function NetworkFlowContent() {
 
           </div>
         </div>
-
-        {/* Member Profile Modal on Node Click */}
-        <ProfileModal
-          member={selectedMember}
-          onClose={() => setSelectedMember(null)}
-        />
       </div>
+
+      {/* Member Profile Modal on Node/Card Click */}
+      <ProfileModal
+        member={selectedMember}
+        onClose={() => setSelectedMember(null)}
+      />
     </ActiveNodeContext.Provider>
   );
 }
