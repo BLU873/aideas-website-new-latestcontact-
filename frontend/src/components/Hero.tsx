@@ -212,7 +212,6 @@ export function Hero() {
                   borderRadius: '45%',
                   background:
                     'radial-gradient(ellipse 65% 60% at 28% 50%, rgba(56, 209, 255, 0.18) 0%, rgba(79, 143, 247, 0.08) 50%, transparent 80%), radial-gradient(ellipse 65% 60% at 72% 50%, rgba(176, 107, 255, 0.16) 0%, rgba(139, 92, 246, 0.08) 50%, transparent 80%)',
-                  filter: 'blur(56px)',
                   pointerEvents: 'none',
                   zIndex: 0,
                 }}
@@ -229,7 +228,6 @@ export function Hero() {
                   borderRadius: '35%',
                   background:
                     'radial-gradient(ellipse 55% 55% at 30% 50%, rgba(56, 209, 255, 0.25) 0%, rgba(79, 143, 247, 0.12) 40%, transparent 75%), radial-gradient(ellipse 55% 55% at 70% 50%, rgba(176, 107, 255, 0.22) 0%, rgba(139, 92, 246, 0.10) 40%, transparent 75%)',
-                  filter: 'blur(28px)',
                   pointerEvents: 'none',
                   zIndex: 0,
                 }}
@@ -419,7 +417,6 @@ export function Hero() {
                 style={{
                   background:
                     'radial-gradient(ellipse 75% 70% at 50% 50%, rgba(20, 26, 38, 0.45) 0%, rgba(56, 209, 255, 0.035) 30%, rgba(176, 107, 255, 0.02) 52%, transparent 72%)',
-                  filter: 'blur(32px)',
                 }}
                 aria-hidden="true"
               />
