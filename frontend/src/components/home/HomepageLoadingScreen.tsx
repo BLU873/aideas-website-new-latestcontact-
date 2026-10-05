@@ -236,12 +236,19 @@ export default function HomepageLoadingScreen() {
     hasPlayedInThisContext = true;
     setState("showing");
     let isExiting = false;
+    const mountTime = Date.now();
 
     function handleSplineLoaded() {
       if (!isExiting) {
         isExiting = true;
-        // Wait 400ms for WebGL to fully paint its first frame before dropping the curtain
-        setTimeout(startExit, 400);
+        
+        // Ensure the beautiful animation is seen for at least 2.5 seconds
+        const elapsed = Date.now() - mountTime;
+        const MIN_TIME = 2500;
+        const remainingTime = Math.max(0, MIN_TIME - elapsed);
+
+        // Add 400ms to allow WebGL to paint its first frame
+        setTimeout(startExit, remainingTime + 400);
       }
     }
 
