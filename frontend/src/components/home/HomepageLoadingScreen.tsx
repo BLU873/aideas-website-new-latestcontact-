@@ -233,10 +233,15 @@ export default function HomepageLoadingScreen() {
       return;
     }
 
-    hasPlayedInThisContext = true;
     setState("showing");
     let isExiting = false;
     const mountTime = Date.now();
+
+    // Fix for React 18 StrictMode double-mount bug in dev server:
+    // Delay setting the flag so the phantom unmount can cancel it.
+    const strictModeTimer = setTimeout(() => {
+      hasPlayedInThisContext = true;
+    }, 100);
 
     function handleSplineLoaded() {
       if (!isExiting) {
@@ -264,6 +269,7 @@ export default function HomepageLoadingScreen() {
     }, 8000);
 
     return () => {
+      clearTimeout(strictModeTimer);
       window.removeEventListener("spline-loaded", handleSplineLoaded);
       clearTimeout(safetyTimer);
       if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
