@@ -247,13 +247,8 @@ export default function HomepageLoadingScreen() {
       if (!isExiting) {
         isExiting = true;
         
-        // Ensure the beautiful animation is seen for at least 2.5 seconds
-        const elapsed = Date.now() - mountTime;
-        const MIN_TIME = 2500;
-        const remainingTime = Math.max(0, MIN_TIME - elapsed);
-
-        // Add 400ms to allow WebGL to paint its first frame
-        setTimeout(startExit, remainingTime + 400);
+        // Drop the curtain almost instantly so the user can see the Spline camera intro animation
+        setTimeout(startExit, 50);
       }
     }
 
