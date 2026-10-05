@@ -227,12 +227,28 @@ export default function HomepageLoadingScreen() {
   useEffect(() => {
     /* Always show on visit */
     setState("showing");
+    let isExiting = false;
 
-    const minTimer = setTimeout(startExit, MIN_DISPLAY_MS);
-    const safetyTimer = setTimeout(startExit, SAFETY_TIMEOUT_MS);
+    function handleSplineLoaded() {
+      if (!isExiting) {
+        isExiting = true;
+        startExit();
+      }
+    }
+
+    // Listen for the custom event from splite.tsx
+    window.addEventListener("spline-loaded", handleSplineLoaded);
+
+    // Fallback safety timer just in case Spline fails or takes > 8s
+    const safetyTimer = setTimeout(() => {
+      if (!isExiting) {
+        isExiting = true;
+        startExit();
+      }
+    }, 8000);
 
     return () => {
-      clearTimeout(minTimer);
+      window.removeEventListener("spline-loaded", handleSplineLoaded);
       clearTimeout(safetyTimer);
       if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
     };

@@ -151,6 +151,11 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
             scene={scene}
             className={className}
             onError={() => setHasError(true)}
+            onLoad={() => {
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new Event('spline-loaded'));
+              }
+            }}
           />
         </SplineErrorBoundary>
       </div>
