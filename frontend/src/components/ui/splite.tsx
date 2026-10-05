@@ -63,7 +63,14 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   const [hasError, setHasError] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const [isInView, setIsInView] = useState(true)
+  const [shouldMount, setShouldMount] = useState(false)
   const containerRef = React.useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Delay mounting the Spline scene so it doesn't fight the loading screen for GPU
+    const timer = setTimeout(() => setShouldMount(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -141,17 +148,26 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   }
 
   return (
-    <div ref={containerRef} className="w-full h-full">
-      {isInView ? (
-        <SplineErrorBoundary>
-          <Spline
-            scene={scene}
-            className={className}
-            onError={() => setHasError(true)}
-          />
-        </SplineErrorBoundary>
-      ) : (
-        <div className="w-full h-full" />
+    <div ref={containerRef} className="w-full h-full relative">
+      {!shouldMount && (
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <div className="w-8 h-8 border-2 border-blue-500/20 border-t-blue-500/80 rounded-full animate-spin" />
+        </div>
+      )}
+
+      {shouldMount && (
+        <div 
+          className={`w-full h-full transition-opacity duration-500 ${isInView ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+          aria-hidden={!isInView}
+        >
+          <SplineErrorBoundary>
+            <Spline
+              scene={scene}
+              className={className}
+              onError={() => setHasError(true)}
+            />
+          </SplineErrorBoundary>
+        </div>
       )}
     </div>
   )

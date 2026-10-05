@@ -23,6 +23,8 @@ if (typeof globalThis !== 'undefined') {
 }
 
 const nextConfig: NextConfig = {
+  // Allow external device (phone) connections to dev resources
+  allowedDevOrigins: ['10.42.60.91'],
   // Turbopack configuration for Next.js 16
   turbopack: {},
   // Prevent worker memory crash during static export/page generation

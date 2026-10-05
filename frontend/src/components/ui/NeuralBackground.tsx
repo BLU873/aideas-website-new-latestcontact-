@@ -112,11 +112,11 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
     let signals: Signal[] = [];
 
     // Initialize crystalline nodes:
-    // Desktop (>= 1024px): 120 nodes
-    // Tablet (768px - 1023px): 65 nodes
+    // Desktop (>= 1024px): 75 nodes
+    // Tablet (768px - 1023px): 40 nodes
     const initNodes = () => {
       const isTablet = width < 1024;
-      const totalCount = isTablet ? 65 : 120;
+      const totalCount = isTablet ? 40 : 75;
 
       nodes = [];
       signals = [];
@@ -187,8 +187,8 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
 
       if (width <= 0 || height <= 0) return;
 
-      // Cap DPR at 1.35 to preserve crisp crystalline visuals while keeping fillrate ultra-fast
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.35);
+      // Cap DPR at 1.0 to preserve crisp crystalline visuals while keeping fillrate ultra-fast
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       canvas.style.width = `${width}px`;
@@ -370,9 +370,9 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
         for (let j = i + 1; j < nodes.length; j++) {
           const n2 = nodes[j];
           const dx = n1.x - n2.x;
-          if (Math.abs(dx) > MAX_DISTANCE) continue;
+          if (Math.abs(dx) > MAX_DISTANCE) continue; // Fast fail X
           const dy = n1.y - n2.y;
-          if (Math.abs(dy) > MAX_DISTANCE) continue;
+          if (Math.abs(dy) > MAX_DISTANCE) continue; // Fast fail Y
 
           const distSq = dx * dx + dy * dy;
           if (distSq < MAX_DISTANCE_SQ) {
@@ -605,18 +605,27 @@ export function NeuralBackground({ className = "" }: NeuralBackgroundProps) {
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
+    // Strictly disable on mobile devices
     // Breakpoint: 768px + fine pointer (mouse/trackpad).
-    // On mobile or touch devices (<768px or coarse pointer), interactive canvas is NEVER mounted.
-    const mql = window.matchMedia("(min-width: 768px) and (pointer: fine)");
-    setIsDesktop(mql.matches);
+    const mql = window.matchMedia("(min-width: 768px) and (any-pointer: fine)");
+    
+    // Explicitly check width as well as a safety measure for hydration
+    const checkIsDesktop = () => {
+      return window.innerWidth >= 768 && mql.matches;
+    };
 
-    const handleMediaChange = (e: MediaQueryListEvent) => {
-      setIsDesktop(e.matches);
+    setIsDesktop(checkIsDesktop());
+
+    const handleMediaChange = () => {
+      setIsDesktop(checkIsDesktop());
     };
 
     mql.addEventListener("change", handleMediaChange);
+    window.addEventListener("resize", handleMediaChange);
+    
     return () => {
       mql.removeEventListener("change", handleMediaChange);
+      window.removeEventListener("resize", handleMediaChange);
     };
   }, []);
 

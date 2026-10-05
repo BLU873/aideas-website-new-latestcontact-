@@ -116,7 +116,8 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
             opacity: [0.2, 0.35, 0.2],
           }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-20 -left-20 w-96 h-96 bg-[#00d8ff]/20 rounded-full blur-[130px]"
+          className="absolute -top-20 -left-20 w-96 h-96 rounded-full will-change-[transform,opacity]"
+          style={{ background: 'radial-gradient(circle, rgba(0,216,255,0.4) 0%, transparent 70%)' }}
         />
         <motion.div
           animate={{
@@ -124,7 +125,8 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
             opacity: [0.2, 0.35, 0.2],
           }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute top-1/3 -right-20 w-96 h-96 bg-[#a855f7]/20 rounded-full blur-[130px]"
+          className="absolute top-1/3 -right-20 w-96 h-96 rounded-full will-change-[transform,opacity]"
+          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.4) 0%, transparent 70%)' }}
         />
         <motion.div
           animate={{
@@ -132,7 +134,8 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
             opacity: [0.15, 0.3, 0.15],
           }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-          className="absolute bottom-10 left-1/4 w-80 h-80 bg-blue-600/20 rounded-full blur-[110px]"
+          className="absolute bottom-10 left-1/4 w-80 h-80 rounded-full will-change-[transform,opacity]"
+          style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.4) 0%, transparent 70%)' }}
         />
       </div>
 
@@ -209,9 +212,9 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
                     return (
                       <motion.div
                         key={member.id}
-                        initial={{ opacity: 0, y: 80, scale: 0.92 }}
+                        initial={{ opacity: 0, y: 30, scale: 0.95 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        viewport={{ once: false, amount: 0.2 }}
+                        viewport={{ once: true, margin: "100px" }}
                         transition={{ 
                           duration: 0.55, 
                           delay: (mIdx % 3) * 0.12, 
