@@ -111,8 +111,8 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Drawer (uses globals.css .navlinks for smooth max-height animation) */}
-      <div className={`navlinks md:hidden ${isOpen ? 'open' : ''}`}>
+      {/* Mobile Drawer (uses globals.css .mobile-drawer for smooth max-height animation) */}
+      <div className={`mobile-drawer md:hidden ${isOpen ? 'open' : ''}`}>
         {navLinks.map((link) => (
           <Link
             key={link.path}

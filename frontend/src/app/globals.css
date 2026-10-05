@@ -273,7 +273,7 @@ nav {
   }
 
   /* Mobile menu drawer */
-  .navlinks {
+  .mobile-drawer {
     position: fixed;
     top: 68px;
     left: 0;
@@ -281,6 +281,7 @@ nav {
     background: var(--nav-mobile-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
@@ -290,17 +291,17 @@ nav {
     transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   }
-  .navlinks.open {
+  .mobile-drawer.open {
     max-height: 520px;
     overflow-y: auto;
   }
-  .navlinks a {
+  .mobile-drawer a {
     width: 100%;
     padding: 14px 24px;
     border-bottom: 1px solid var(--border);
     font-size: 15px;
   }
-  .navlinks a::after {
+  .mobile-drawer a::after {
     display: none;
   }
 }
