@@ -220,12 +220,20 @@ function LightShaftCanvas() {
 
 type LoaderState = "pending" | "showing" | "exiting" | "hidden";
 
+let hasPlayedInThisContext = false;
+
 export default function HomepageLoadingScreen() {
   const [state, setState] = useState<LoaderState>("pending");
   const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    /* Always show on visit */
+    if (hasPlayedInThisContext) {
+      // If navigating internally (e.g. clicking "Home"), skip the loading screen
+      setState("hidden");
+      return;
+    }
+
+    hasPlayedInThisContext = true;
     setState("showing");
     let isExiting = false;
 
