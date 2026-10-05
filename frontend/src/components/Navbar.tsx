@@ -22,6 +22,18 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Spotlight', path: '/spotlight' },
@@ -30,7 +42,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className={isScrolled ? 'header-floating' : ''} suppressHydrationWarning>
+    <header className={isScrolled && !isOpen ? 'header-floating' : ''} suppressHydrationWarning>
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         {/* Brand Logo & Name */}
         <Link
@@ -99,23 +111,19 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
-      {isOpen && (
-        <div className="md:hidden bg-[#0A0B16] border-b border-gray-800 px-6 py-4 space-y-3">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              onClick={() => setIsOpen(false)}
-              className={`block text-base font-medium ${
-                pathname === link.path ? 'text-cyan-400 font-semibold' : 'text-gray-300'
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* Mobile Drawer (uses globals.css .navlinks for smooth max-height animation) */}
+      <div className={`navlinks md:hidden ${isOpen ? 'open' : ''}`}>
+        {navLinks.map((link) => (
+          <Link
+            key={link.path}
+            href={link.path}
+            onClick={() => setIsOpen(false)}
+            className={pathname === link.path ? 'active' : ''}
+          >
+            {link.name}
+          </Link>
+        ))}
+      </div>
     </header>
   );
 }
