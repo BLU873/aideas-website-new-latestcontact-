@@ -63,7 +63,19 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   const [hasError, setHasError] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const [isInView, setIsInView] = useState(true)
+  const [isHidden, setIsHidden] = useState(false)
   const containerRef = React.useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (isInView) {
+      setIsHidden(false)
+    } else {
+      const timer = setTimeout(() => {
+        setIsHidden(true)
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [isInView])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -144,6 +156,7 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
     <div ref={containerRef} className="w-full h-full relative">
       <div 
         className={`w-full h-full transition-opacity duration-500 ${isInView ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        style={{ visibility: isHidden ? 'hidden' : 'visible' }}
         aria-hidden={!isInView}
       >
         <SplineErrorBoundary>
