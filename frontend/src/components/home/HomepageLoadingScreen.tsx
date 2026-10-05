@@ -232,7 +232,8 @@ export default function HomepageLoadingScreen() {
     function handleSplineLoaded() {
       if (!isExiting) {
         isExiting = true;
-        startExit();
+        // Wait 400ms for WebGL to fully paint its first frame before dropping the curtain
+        setTimeout(startExit, 400);
       }
     }
 
