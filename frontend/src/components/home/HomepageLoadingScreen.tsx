@@ -11,14 +11,7 @@ const SAFETY_TIMEOUT_MS = 6500;
 const SHAFT_CYAN = "rgba(48, 160, 200, 1)";   // muted steel-cyan
 const SHAFT_MIST = "rgba(140, 120, 200, 1)";  // very faint violet-mist
 
-/* ─── sessionStorage helpers ─────────────────────────────────────────────── */
-function hasSeenLoader(): boolean {
-  if (typeof window === "undefined") return true;
-  try { return !!sessionStorage.getItem(SESSION_KEY); } catch { return true; }
-}
-function markLoaderSeen(): void {
-  try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* noop */ }
-}
+/* ─── helpers ─────────────────────────────────────────────── */
 
 /* ─── Canvas: editorial light-shaft wordmark ─────────────────────────────── */
 function LightShaftCanvas() {
@@ -232,14 +225,7 @@ export default function HomepageLoadingScreen() {
   const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (hasSeenLoader()) {
-      /* Return visit: remove immediately — no canvas, no animation */
-      setState("hidden");
-      return;
-    }
-
-    /* First visit */
-    markLoaderSeen();
+    /* Always show on visit */
     setState("showing");
 
     const minTimer = setTimeout(startExit, MIN_DISPLAY_MS);
