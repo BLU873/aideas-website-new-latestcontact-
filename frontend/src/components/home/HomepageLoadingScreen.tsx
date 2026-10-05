@@ -247,8 +247,8 @@ export default function HomepageLoadingScreen() {
       if (!isExiting) {
         isExiting = true;
         
-        // Drop the curtain almost instantly so the user can see the Spline camera intro animation
-        setTimeout(startExit, 50);
+        // Wait exactly enough time (350ms) for WebGL to paint the first frame to the screen
+        setTimeout(startExit, 350);
       }
     }
 
