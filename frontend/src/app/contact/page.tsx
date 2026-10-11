@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import TypewriterHeadline from '@/components/ui/RotatingHeadline';
+import BorderGlow from '@/components/ui/BorderGlow';
+import BlockTextReveal from '@/components/ui/BlockTextReveal';
 import {
   FaLinkedin,
   FaInstagram,
@@ -257,10 +260,17 @@ export default function ContactPage() {
               </span>
             </h1>
 
-            {/* Introductory Description (approx 17-18px on desktop) */}
-            <p className="text-[#9aa3b0] text-sm sm:text-base lg:text-[17.5px] leading-relaxed mb-5 sm:mb-6 max-w-xl">
-              Have a question, suggestion, or want to collaborate? We&apos;d love to hear from you. Reach out through the form below or via our social channels.
-            </p>
+            {/* Introductory Description — BlockTextReveal line-by-line wiper */}
+            <BlockTextReveal
+              text="Have an idea, a question, or a project in mind? Let's explore what's possible together. Reach out and let's turn your vision into impact."
+              textColor="#9aa3b0"
+              blockColor="#0c111d"
+              fontSize="17.5px"
+              lineHeight="1.7"
+              fontWeight={400}
+              speed={50}
+              className="mb-5 sm:mb-6 max-w-xl"
+            />
 
             {/* Status Notifications */}
             {status.type === 'success' && (
@@ -277,86 +287,207 @@ export default function ContactPage() {
               </div>
             )}
 
-            {/* Polished Translucent Dark Navy Contact Form with comfortable internal padding */}
-            <div className="bg-[#0c111d]/75 backdrop-blur-md border border-cyan-500/20 hover:border-cyan-400/35 rounded-2xl p-5 sm:p-6 lg:p-7 shadow-[0_8px_32px_rgba(0,0,0,0.45),0_0_20px_rgba(56,209,255,0.03)] transition-colors duration-300">
-              <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 sm:space-y-4.5">
-                {/* Name & Email side-by-side on desktop (52-54px tall) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Contact Form — BorderGlow glow on desktop, plain card on mobile */}
+            {isDesktop ? (
+              <BorderGlow
+                edgeSensitivity={30}
+                glowColor="190 90 70"
+                backgroundColor="#0c111d"
+                borderRadius={16}
+                glowRadius={35}
+                glowIntensity={1.0}
+                coneSpread={25}
+                colors={['#38d1ff', '#b06bff', '#818cf8']}
+                innerClassName="p-5 sm:p-6 lg:p-7"
+                className="backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.45),0_0_20px_rgba(56,209,255,0.03)] rounded-2xl"
+                style={{
+                  border: '1px solid rgba(56,209,255,0.2)',
+                  transition: 'border-color 0.3s ease',
+                }}
+              >
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 sm:space-y-4.5">
+                  {/* Name & Email side-by-side on desktop (52-54px tall) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="name" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
+                        Your Name
+                      </label>
+                      <input
+                        id="name"
+                        name="Name"
+                        type="text"
+                        required
+                        placeholder="Jane Doe"
+                        className="w-full h-[52px] lg:h-[54px] px-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
+                        Your Email
+                      </label>
+                      <input
+                        id="email"
+                        name="Email"
+                        type="email"
+                        required
+                        placeholder="jane@example.com"
+                        className="w-full h-[52px] lg:h-[54px] px-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Message field spanning full width (approx 125-135px tall) */}
                   <div>
-                    <label htmlFor="name" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
-                      Your Name
+                    <label htmlFor="message" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
+                      Your Message
                     </label>
-                    <input
-                      id="name"
-                      name="Name"
-                      type="text"
+                    <textarea
+                      id="message"
+                      name="Message"
+                      rows={4}
                       required
-                      placeholder="Jane Doe"
-                      className="w-full h-[52px] lg:h-[54px] px-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200"
+                      placeholder="Tell us about your project, idea, or inquiry..."
+                      className="w-full h-[125px] lg:h-[135px] min-h-[120px] p-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200 resize-y"
                     />
                   </div>
 
+                  {/* Send Message Button (54-56px tall with generous horizontal padding) */}
+                  <div className="pt-1">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full sm:w-auto h-[54px] lg:h-[56px] inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 rounded-xl font-semibold text-sm sm:text-base tracking-wide transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(56,209,255,0.3)] hover:shadow-[0_0_28px_rgba(176,107,255,0.4)] ${
+                        isSubmitting
+                          ? 'bg-zinc-800 text-zinc-400 cursor-not-allowed opacity-80'
+                          : 'bg-gradient-to-r from-[#38d1ff] via-[#5bb4ff] to-[#b06bff] hover:opacity-95 text-[#030712]'
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-zinc-400 border-t-transparent rounded-full animate-spin" />
+                          <span>Sending Message...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Message</span>
+                          <FaPaperPlane className="text-xs sm:text-sm" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </BorderGlow>
+            ) : (
+              /* Mobile: plain card — no glow listeners, no rAF, no wiper layers */
+              <div
+                className="backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.45)] rounded-2xl p-5"
+                style={{
+                  backgroundColor: '#0c111d',
+                  border: '1px solid rgba(56,209,255,0.18)',
+                }}
+              >
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 sm:space-y-4.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="name" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
+                        Your Name
+                      </label>
+                      <input
+                        id="name"
+                        name="Name"
+                        type="text"
+                        required
+                        placeholder="Jane Doe"
+                        className="w-full h-[52px] lg:h-[54px] px-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
+                        Your Email
+                      </label>
+                      <input
+                        id="email"
+                        name="Email"
+                        type="email"
+                        required
+                        placeholder="jane@example.com"
+                        className="w-full h-[52px] lg:h-[54px] px-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+
                   <div>
-                    <label htmlFor="email" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
-                      Your Email
+                    <label htmlFor="message" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
+                      Your Message
                     </label>
-                    <input
-                      id="email"
-                      name="Email"
-                      type="email"
+                    <textarea
+                      id="message"
+                      name="Message"
+                      rows={4}
                       required
-                      placeholder="jane@example.com"
-                      className="w-full h-[52px] lg:h-[54px] px-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200"
+                      placeholder="Tell us about your project, idea, or inquiry..."
+                      className="w-full h-[125px] lg:h-[135px] min-h-[120px] p-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200 resize-y"
                     />
                   </div>
-                </div>
 
-                {/* Message field spanning full width (approx 125-135px tall) */}
-                <div>
-                  <label htmlFor="message" className="block text-xs font-mono uppercase tracking-wider text-zinc-300 font-medium mb-1.5">
-                    Your Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="Message"
-                    rows={4}
-                    required
-                    placeholder="Tell us about your project, idea, or inquiry..."
-                    className="w-full h-[125px] lg:h-[135px] min-h-[120px] p-4 rounded-xl bg-[#080c16]/85 border border-white/10 text-white placeholder-zinc-500 text-sm sm:text-[15px] focus:outline-none focus:border-[#38d1ff] focus:ring-1 focus:ring-[#38d1ff]/50 transition-all duration-200 resize-y"
-                  />
-                </div>
-
-                {/* Send Message Button (54-56px tall with generous horizontal padding) */}
-                <div className="pt-1">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`w-full sm:w-auto h-[54px] lg:h-[56px] inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 rounded-xl font-semibold text-sm sm:text-base tracking-wide transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(56,209,255,0.3)] hover:shadow-[0_0_28px_rgba(176,107,255,0.4)] ${
-                      isSubmitting
-                        ? 'bg-zinc-800 text-zinc-400 cursor-not-allowed opacity-80'
-                        : 'bg-gradient-to-r from-[#38d1ff] via-[#5bb4ff] to-[#b06bff] hover:opacity-95 text-[#030712]'
-                    }`}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="w-4 h-4 border-2 border-zinc-400 border-t-transparent rounded-full animate-spin" />
-                        <span>Sending Message...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Send Message</span>
-                        <FaPaperPlane className="text-xs sm:text-sm" />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
+                  <div className="pt-1">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full sm:w-auto h-[54px] lg:h-[56px] inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 rounded-xl font-semibold text-sm sm:text-base tracking-wide transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(56,209,255,0.3)] hover:shadow-[0_0_28px_rgba(176,107,255,0.4)] ${
+                        isSubmitting
+                          ? 'bg-zinc-800 text-zinc-400 cursor-not-allowed opacity-80'
+                          : 'bg-gradient-to-r from-[#38d1ff] via-[#5bb4ff] to-[#b06bff] hover:opacity-95 text-[#030712]'
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-zinc-400 border-t-transparent rounded-full animate-spin" />
+                          <span>Sending Message...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Message</span>
+                          <FaPaperPlane className="text-xs sm:text-sm" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
           </div>
 
-          {/* Right Column — Exact Thrine 3D Model: Rendered ONLY on Desktop (>=768px), seamlessly integrated into background */}
+          {/* Right Column — Rotating headline + Thrine 3D Model: Desktop only (>=768px) */}
           <div className="hidden md:flex lg:col-span-5 items-center justify-center w-full">
-            <div className="relative w-full max-w-[340px] sm:max-w-[360px] lg:max-w-[380px] xl:max-w-[400px] flex items-center justify-center">
+            <div className="relative w-full max-w-[340px] sm:max-w-[360px] lg:max-w-[380px] xl:max-w-[400px] flex flex-col items-center gap-2">
+
+              {/* Typewriter headline — visible only on desktop */}
+              {isDesktop && (
+                <div className="w-full text-center px-1 flex flex-col items-center select-none">
+                  <p className="text-[12px] font-medium uppercase tracking-[3px] text-[#94a3b8] mb-1.5">
+                    AIDEAS IS
+                  </p>
+                  <div className="text-[20px] lg:text-[21px] xl:text-[23px] font-semibold leading-[1.3] tracking-normal">
+                    <TypewriterHeadline
+                      texts={[
+                        'Building Intelligence.',
+                        'Building the Future.',
+                        'Engineering Possibilities.',
+                        'Turning Ideas Into Impact.',
+                        'Innovating Beyond Limits.',
+                      ]}
+                      typeSpeed={50}
+                      deleteSpeed={28}
+                      pauseMs={1500}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Robot model container */}
               <div
                 className="relative w-full flex items-center justify-center bg-transparent border-0 shadow-none [&_div[aria-hidden='true']]:hidden"
                 style={{ aspectRatio: '474/676' }}
