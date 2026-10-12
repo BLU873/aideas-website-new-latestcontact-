@@ -114,6 +114,8 @@ const JPEG_IMAGES = [
   'achievements/bhagirath-karandak.jpg',
   'achievements/vois-award-ceremony.jpg',
   'achievements/vois-cheque.jpg',
+  'achievements/vois-healthcare-ceremony.jpg',
+  'achievements/vois-healthcare-cheque.jpg',
   'achievements/ibm-hacknexus.jpg',
   'achievements/hardhack-pccoe.jpg',
   'achievements/hardhack-certificate.jpg',
@@ -124,6 +126,7 @@ const JPEG_IMAGES = [
   // Misc used
   'network_bg.jpeg',
   'Avinya.png',               // used in events page
+  'neuroverse-poster.png',    // upcoming event poster
   'logo.png',
   'assets/img/logo-icon.png',
   'assets/img/favicon.png',

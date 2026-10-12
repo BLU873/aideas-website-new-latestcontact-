@@ -182,15 +182,30 @@ function DesktopNeuralCanvas({ className = "" }: NeuralBackgroundProps) {
 
     const resizeCanvas = () => {
       updateParentRect();
-      width = Math.floor(parentRect.width);
-      height = Math.floor(parentRect.height);
+      const newWidth = Math.floor(parentRect.width);
+      const newHeight = Math.floor(parentRect.height);
 
-      if (width <= 0 || height <= 0) return;
+      if (newWidth <= 0 || newHeight <= 0) return;
 
       // Cap DPR at 1.0 to preserve crisp crystalline visuals while keeping fillrate ultra-fast
       const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
+      const targetCanvasWidth = Math.round(newWidth * dpr);
+      const targetCanvasHeight = Math.round(newHeight * dpr);
+
+      // Do not re-allocate or clear canvas if dimensions haven't changed
+      if (
+        width === newWidth &&
+        height === newHeight &&
+        canvas.width === targetCanvasWidth &&
+        canvas.height === targetCanvasHeight
+      ) {
+        return;
+      }
+
+      width = newWidth;
+      height = newHeight;
+      canvas.width = targetCanvasWidth;
+      canvas.height = targetCanvasHeight;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
