@@ -5,8 +5,8 @@
   --foreground: #171717;
   --font-display: 'Orbitron', 'Space Grotesk', sans-serif;
   --bg: #000000;
-  --bg-soft: #181d27;
-  --panel: #222936;
+  --bg-soft: #0c1018;
+  --panel: #080b12;
   --border: rgba(255,255,255,0.08);
   --cyan: #22b8f0;
   --cyan-bright: #38d1ff;
@@ -273,7 +273,7 @@ nav {
   }
 
   /* Mobile menu drawer */
-  .navlinks {
+  .mobile-drawer {
     position: fixed;
     top: 68px;
     left: 0;
@@ -281,26 +281,28 @@ nav {
     background: var(--nav-mobile-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 0px solid transparent;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   }
-  .navlinks.open {
+  .mobile-drawer.open {
     max-height: 520px;
     overflow-y: auto;
+    border-bottom: 1px solid var(--border);
   }
-  .navlinks a {
+  .mobile-drawer a {
     width: 100%;
     padding: 14px 24px;
     border-bottom: 1px solid var(--border);
     font-size: 15px;
   }
-  .navlinks a::after {
+  .mobile-drawer a::after {
     display: none;
   }
 }
@@ -1700,4 +1702,37 @@ html[data-theme="light"] .footer-social a {
 html[data-theme="light"] .footer-social a:hover {
   color: #00a2d8 !important;
   border-color: #00a2d8 !important;
+}
+
+/* Smooth Timeline Card Hover-Reveal */
+.timeline-drawer-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: grid-template-rows;
+}
+
+.timeline-card:hover .timeline-drawer-grid,
+.timeline-card.is-mobile-expanded .timeline-drawer-grid {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.timeline-drawer-inner {
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s ease;
+}
+
+.timeline-card:hover .timeline-drawer-inner,
+.timeline-card.is-mobile-expanded .timeline-drawer-inner {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s,
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
 }

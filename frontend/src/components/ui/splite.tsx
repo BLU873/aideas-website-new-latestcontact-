@@ -61,8 +61,9 @@ class SplineErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySta
 
 export function SplineScene({ scene, className }: SplineSceneProps) {
   const [hasError, setHasError] = useState(false)
-  const [isInView, setIsInView] = useState(false)
   const [shouldRenderSpline, setShouldRenderSpline] = useState(false)
+  const [isInView, setIsInView] = useState(true)
+  const [isHidden, setIsHidden] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -77,7 +78,20 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
     }
 
     setShouldRenderSpline(true)
+  }, [])
 
+  useEffect(() => {
+    if (isInView) {
+      setIsHidden(false)
+    } else {
+      const timer = setTimeout(() => {
+        setIsHidden(true)
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [isInView])
+
+  useEffect(() => {
     if (!containerRef.current) return
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -128,19 +142,25 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   }
 
   return (
-    <div ref={containerRef} className="w-full h-full">
-      {isInView ? (
+    <div ref={containerRef} className="w-full h-full relative">
+      <div 
+        className={`w-full h-full transition-opacity duration-500 ${isInView ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        style={{ visibility: isHidden ? 'hidden' : 'visible' }}
+        aria-hidden={!isInView}
+      >
         <SplineErrorBoundary fallback={fallbackVisual}>
           <Spline
             scene={scene}
             className={className}
             onError={() => setHasError(true)}
+            onLoad={() => {
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new Event('spline-loaded'));
+              }
+            }}
           />
         </SplineErrorBoundary>
-      ) : (
-        fallbackVisual
-      )}
+      </div>
     </div>
   )
 }
-

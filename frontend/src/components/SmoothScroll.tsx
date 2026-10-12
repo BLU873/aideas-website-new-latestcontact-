@@ -22,7 +22,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      syncTouch: false,
+      syncTouch: false, // Must be false on mobile to prevent URL bar glitching
+      touchMultiplier: 1.8,
     });
 
     lenis.on('scroll', ScrollTrigger.update);
