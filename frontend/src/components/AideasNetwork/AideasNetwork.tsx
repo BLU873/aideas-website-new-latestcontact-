@@ -519,7 +519,7 @@ function NetworkFlowContent() {
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                 }`}
               >
-                Sports
+                Sports &amp; Fitness
               </button>
 
               <button
@@ -558,7 +558,7 @@ function NetworkFlowContent() {
               <button
                 onClick={() => jumpToStage(0.35)}
                 className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
-                  activeFocusNodeId === 'atharva_media' || activeFocusNodeId.includes('media') || activeFocusNodeId.includes('edito')
+                  activeFocusNodeId !== 'arnav_media' && (activeFocusNodeId === 'atharva_media' || activeFocusNodeId.includes('media') || activeFocusNodeId.includes('edito'))
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                 }`}

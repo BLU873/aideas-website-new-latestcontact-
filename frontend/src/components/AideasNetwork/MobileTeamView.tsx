@@ -30,7 +30,7 @@ const CATEGORIES = [
   { id: 'leadership', label: 'Leadership' },
   { id: 'faculty', label: 'Faculty' },
   { id: 'events-finance', label: 'Events & Finance' },
-  { id: 'sports', label: 'Sports' },
+  { id: 'sports-fitness', label: 'Sports & Fitness' },
   { id: 'technical', label: 'Web & Tech' },
   { id: 'marketing', label: 'Marketing' },
   { id: 'design', label: 'Design' },
@@ -78,7 +78,7 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
         ),
       },
       {
-        category: 'sports',
+        category: 'sports-fitness',
         sectionTitle: 'Sports & Fitness Team',
         members: NETWORK_DATA.heads.filter((m) => 
           m.department.toLowerCase().includes('sports') || 
@@ -105,8 +105,10 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
         category: 'media',
         sectionTitle: 'Media & Editorial Team',
         members: NETWORK_DATA.heads.filter((m) => 
-          m.department.toLowerCase().includes('media') || 
-          m.department.toLowerCase().includes('editorial')
+          m.id !== 'arnav_media' && (
+            m.department.toLowerCase().includes('media') || 
+            m.department.toLowerCase().includes('editorial')
+          )
         ),
       },
     ];
