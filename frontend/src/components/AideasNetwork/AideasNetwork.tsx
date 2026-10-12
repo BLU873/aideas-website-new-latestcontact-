@@ -512,6 +512,17 @@ function NetworkFlowContent() {
               </button>
 
               <button
+                onClick={() => jumpToStage(0.30)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId === 'arnav_media'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                }`}
+              >
+                Sports
+              </button>
+
+              <button
                 onClick={() => jumpToStage(0.75)}
                 className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId.includes('th')
