@@ -178,7 +178,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'atharva_media',
       name: 'Ganesh Rokade',
-      role: 'Sponsorship & PR Head',
+      role: 'Media Head',
       department: 'Media & Production',
       image: '/members/atharva_mediahead.webp',
       bio: 'Spearheads video production, event coverage, and multimedia content.',
