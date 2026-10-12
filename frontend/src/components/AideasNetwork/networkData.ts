@@ -99,7 +99,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'divesh_th',
       name: 'Divya Chaudhari',
-      role: 'Technical Co-Head',
+      role: 'Technical Head',
       department: 'Technical Team',
       image: '/members/aa_th.webp',
       bio: 'Co-leads technical hackathons, AI model workshops, coding sprints, and dev infrastructure.',
@@ -108,7 +108,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'pk_th',
       name: 'Saanidhi Gade',
-      role: 'Technical Co-Head',
+      role: 'Technical Head',
       department: 'Technical Team',
       image: '/members/pk_th.webp',
       bio: 'Manages student development teams and software engineering workshops.',
@@ -128,7 +128,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'kinjal_desig',
       name: 'Krish Yogesh Chobe',
-      role: 'Design Co-Head',
+      role: 'Design Head',
       department: 'Design Team',
       image: '/members/kinjal_desig.webp',
       bio: 'Co-creates UI design layouts, promotional graphics, and brand visuals for aIDEAS.',
@@ -148,7 +148,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'anvi_event',
       name: 'Tushar Katre',
-      role: 'Event Management Co-Head',
+      role: 'Event Management Head',
       department: 'Events Team',
       image: '/members/anvi_event.webp',
       bio: 'Co-coordinates event operations, schedule planning, and stage management.',
@@ -158,7 +158,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'kush_marketing',
       name: 'Aariya Vora',
-      role: 'Marketing Head',
+      role: 'Media & Marketing Head',
       department: 'Marketing Team',
       image: '/members/kush_marketing.webp',
       bio: 'Drives marketing campaigns, sponsorship outreach, and brand publicity.',
@@ -168,7 +168,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'manish_marketing',
       name: 'Aditya Krishnaswamy',
-      role: 'Marketing Co-Head',
+      role: 'Media & Marketing Head',
       department: 'Marketing Team',
       image: '/members/manish_marketing_cohead.webp',
       bio: 'Co-leads outreach strategy, brand promotion, and public relations.',
@@ -178,7 +178,7 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'atharva_media',
       name: 'Ganesh Rokade',
-      role: 'Media Head',
+      role: 'Sponsorship & PR Head',
       department: 'Media & Production',
       image: '/members/atharva_mediahead.webp',
       bio: 'Spearheads video production, event coverage, and multimedia content.',
@@ -188,17 +188,17 @@ export const NETWORK_DATA: NetworkData = {
     {
       id: 'arnav_media',
       name: 'Sarvadny Manish Pawar',
-      role: 'Media Co-Head',
-      department: 'Media & Production',
+      role: 'Sports Secretary',
+      department: 'Sports & Fitness',
       image: '/members/arnav_media.webp',
-      bio: 'Co-coordinates photography, reel production, and media archives.',
+      bio: 'Co-coordinates sports events, fitness activities, and student sports tournaments.',
       linkedin: 'https://www.linkedin.com/in/sarvadny-pawar-229265373',
       email: 'sarvadnypawar007@gmail.com',
     },
     {
       id: 'priti_edito',
       name: 'Omkar Mulage',
-      role: 'Editorial Head',
+      role: 'Documentation & Editorial Head',
       department: 'Editorial Team',
       image: '/members/priti_edito.webp',
       bio: 'Authors technical blogs, newsletter publications, and association documentation.',
