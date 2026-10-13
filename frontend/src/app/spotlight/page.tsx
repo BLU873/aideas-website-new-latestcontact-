@@ -609,11 +609,11 @@ const timelineEvents = [
     date: '24th Oct 2026',
     year: '2026',
     title: 'NEUROVERSE Ideathon 2026',
-    description: 'A 6-hour flagship ideathon with 3 tracks and up to ₹15,000 prize pool organized by aIDEAS & NDLI Club.',
+    description: 'A 6-hour flagship ideathon with 3 tracks and up to ₹15,000 prize pool organized by aIDEAS Club.',
     longDescription: (
       <div className="space-y-4">
         <p>
-          Organized by <strong>aIDEAS</strong> (AI & Data Science Association of Students) in association with the <strong>National Digital Library of India Club (NDLI)</strong> at PVG’s COET&M, Pune. <em>Ideas Today. Impact Tomorrow.</em>
+          Organized by <strong>aIDEAS</strong> (AI & Data Science Association of Students) in association at PVG’s COET&M, Pune. <em>Ideas Today. Impact Tomorrow.</em>
         </p>
         <div>
           <strong className="text-[var(--text)]">The Tracks:</strong>
@@ -1033,7 +1033,7 @@ export default function SpotlightPage() {
   const [selectedAchievement, setSelectedAchievement] = useState<(typeof achievementsData)[0] | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<(typeof timelineEvents)[0] | null>(null);
 
-  const batches = ['All', '2028', '2027', '2029'];
+  const batches = ['All', 'Batch-2027', 'Batch-2028', 'Batch-2029'];
 
   const filteredAchievements = selectedBatch === 'All'
     ? achievementsData
