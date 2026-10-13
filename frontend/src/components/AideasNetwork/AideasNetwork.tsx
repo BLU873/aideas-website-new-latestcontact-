@@ -479,7 +479,7 @@ function NetworkFlowContent() {
             {/* Category Section Shortcut Buttons */}
             <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto bg-[#020f1c]/90 backdrop-blur-md p-1.5 rounded-2xl border border-blue-500/30 shadow-xl overflow-x-auto whitespace-nowrap max-w-full [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <button
-                onClick={() => jumpToStage(0.15)}
+                onClick={() => jumpToStage(0.17)}
                 className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
                   activeFocusNodeId === 'gs' || activeFocusNodeId === 'jgs'
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
@@ -509,6 +509,17 @@ function NetworkFlowContent() {
                 }`}
               >
                 Events &amp; Finance
+              </button>
+
+              <button
+                onClick={() => jumpToStage(0.30)}
+                className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
+                  activeFocusNodeId === 'arnav_media'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                }`}
+              >
+                Sports &amp; Fitness
               </button>
 
               <button
@@ -545,9 +556,9 @@ function NetworkFlowContent() {
               </button>
 
               <button
-                onClick={() => jumpToStage(0.30)}
+                onClick={() => jumpToStage(0.35)}
                 className={`px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all shrink-0 ${
-                  activeFocusNodeId.includes('media') || activeFocusNodeId.includes('edito')
+                  activeFocusNodeId !== 'arnav_media' && (activeFocusNodeId === 'atharva_media' || activeFocusNodeId.includes('media') || activeFocusNodeId.includes('edito'))
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/50'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                 }`}

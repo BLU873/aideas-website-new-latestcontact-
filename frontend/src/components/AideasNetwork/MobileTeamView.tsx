@@ -30,6 +30,7 @@ const CATEGORIES = [
   { id: 'leadership', label: 'Leadership' },
   { id: 'faculty', label: 'Faculty' },
   { id: 'events-finance', label: 'Events & Finance' },
+  { id: 'sports-fitness', label: 'Sports & Fitness' },
   { id: 'technical', label: 'Web & Tech' },
   { id: 'marketing', label: 'Marketing' },
   { id: 'design', label: 'Design' },
@@ -55,7 +56,12 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
       {
         category: 'leadership',
         sectionTitle: 'Executive Board',
-        members: NETWORK_DATA.leadership.filter((m) => m.role.includes('Secretary')),
+        members: selectedCategory === 'leadership'
+          ? [
+              ...NETWORK_DATA.leadership.filter((m) => m.role.includes('Secretary')),
+              ...NETWORK_DATA.heads.filter((m) => m.role.toLowerCase().includes('secretary')),
+            ]
+          : NETWORK_DATA.leadership.filter((m) => m.role.includes('Secretary')),
       },
       {
         category: 'faculty',
@@ -69,6 +75,15 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
           m.department.toLowerCase().includes('events') || 
           m.department.toLowerCase().includes('finance') ||
           m.role.toLowerCase().includes('treasurer')
+        ),
+      },
+      {
+        category: 'sports-fitness',
+        sectionTitle: 'Sports & Fitness Team',
+        members: NETWORK_DATA.heads.filter((m) => 
+          m.department.toLowerCase().includes('sports') || 
+          m.department.toLowerCase().includes('fitness') ||
+          m.role.toLowerCase().includes('sports')
         ),
       },
       {
@@ -90,8 +105,10 @@ export default function MobileTeamView({ onSelectMember }: MobileTeamViewProps) 
         category: 'media',
         sectionTitle: 'Media & Editorial Team',
         members: NETWORK_DATA.heads.filter((m) => 
-          m.department.toLowerCase().includes('media') || 
-          m.department.toLowerCase().includes('editorial')
+          m.id !== 'arnav_media' && (
+            m.department.toLowerCase().includes('media') || 
+            m.department.toLowerCase().includes('editorial')
+          )
         ),
       },
     ];

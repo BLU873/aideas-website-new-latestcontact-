@@ -17,8 +17,8 @@ const CONNECTIVITY_MAP: Record<string, Set<string>> = {
   hod: new Set(['aideas', 'coordinator', 'coordinator2']),
   coordinator: new Set(['hod', 'gs']),
   coordinator2: new Set(['hod', 'jgs']),
-  gs: new Set(['coordinator', 'nishi_treasurer', 'arnav_media', 'atharva_media', 'manish_marketing', 'sanket_desig', 'kinjal_desig']),
-  jgs: new Set(['coordinator2', 'pranshu_em', 'anvi_event', 'kush_marketing', 'priti_edito', 'aa_th', 'divesh_th', 'pk_th']),
+  gs: new Set(['coordinator', 'jgs', 'nishi_treasurer', 'arnav_media', 'atharva_media', 'manish_marketing', 'sanket_desig', 'kinjal_desig']),
+  jgs: new Set(['coordinator2', 'gs', 'pranshu_em', 'anvi_event', 'kush_marketing', 'priti_edito', 'aa_th', 'divesh_th', 'pk_th']),
   nishi_treasurer: new Set(['gs']),
   arnav_media: new Set(['gs']),
   atharva_media: new Set(['gs']),
@@ -48,15 +48,27 @@ function MemberNodeComponent({ data }: NodeProps) {
 
   const targetFocusId = hoveredNodeId || (activeFocusNodeId && !isFinalPhase ? activeFocusNodeId : null);
 
-  const isActiveFocus = member.id === activeFocusNodeId && !isFinalPhase;
+  const isLeadershipMode =
+    (activeFocusNodeId === 'gs' || activeFocusNodeId === 'jgs') && !isFinalPhase;
+  const isLeadershipNode = member.id === 'gs' || member.id === 'jgs';
+
+  // In leadership mode, highlight both GS and JGS positions together as executive equals
+  const isActiveFocus =
+    ((member.id === activeFocusNodeId) || (isLeadershipMode && isLeadershipNode)) &&
+    !isFinalPhase;
   const isHovered = member.id === hoveredNodeId;
 
   let isDimmed = false;
   if (targetFocusId) {
-    const isConnected =
-      member.id === targetFocusId ||
-      Boolean(CONNECTIVITY_MAP[targetFocusId]?.has(member.id));
-    isDimmed = !isConnected;
+    if (isLeadershipMode && !hoveredNodeId) {
+      // In leadership section, highlight GS & JGS and dim other nodes so leaders stand out
+      isDimmed = !isLeadershipNode;
+    } else {
+      const isConnected =
+        member.id === targetFocusId ||
+        Boolean(CONNECTIVITY_MAP[targetFocusId]?.has(member.id));
+      isDimmed = !isConnected;
+    }
   }
 
   const isMainLeader =
