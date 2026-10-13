@@ -16,6 +16,16 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       smoothWheel: true,
       syncTouch: false, // Must be false on mobile to prevent URL bar glitching
       touchMultiplier: 1.8,
+      allowNestedScroll: true,
+      prevent: (node) => {
+        return (
+          node.hasAttribute('data-lenis-prevent') ||
+          node.hasAttribute('data-lenis-prevent-wheel') ||
+          node.classList?.contains('overflow-y-auto') ||
+          Boolean(node.closest?.('[data-lenis-prevent]')) ||
+          Boolean(node.closest?.('.overflow-y-auto'))
+        );
+      },
     });
 
     lenis.on('scroll', ScrollTrigger.update);

@@ -165,16 +165,6 @@ const achievementsData = [
   },
   {
     id: 2,
-    students: ['Padmaraj Pawar'],
-    class: 'SE',
-    year: '2025-26',
-    batch: '2028 (SE)',
-    title: 'Bhagirath Karandak Award',
-    details: 'Team member (Actor) in award-winning performance at the prestigious Purushottam Karandak Competition.',
-    badge: 'Cultural'
-  },
-  {
-    id: 3,
     students: ['Soham Mule', 'Aditya Ajay Tilekar', 'Komal'],
     class: 'SE',
     year: '2025-26',
@@ -184,7 +174,27 @@ const achievementsData = [
     badge: 'Hackathon Winner'
   },
   {
+    id: 3,
+    students: ['Divya Chaudhari', 'Kshitija Ghan', 'Tanishqa Shetkar'],
+    class: 'SE',
+    year: '2025-26',
+    batch: '2028 (SE)',
+    title: 'Winners - VOIS INNOVATION MARATHON 2.0',
+    details: 'Developed an intelligent multi-agent healthcare system where each specialized AI agent assists in different aspects of the patient healthcare journey.',
+    badge: 'Hackathon Winner'
+  },
+  {
     id: 4,
+    students: ['Padmaraj Pawar'],
+    class: 'SE',
+    year: '2025-26',
+    batch: '2028 (SE)',
+    title: 'Bhagirath Karandak Award',
+    details: 'Team member (Actor) in award-winning performance at the prestigious Purushottam Karandak Competition.',
+    badge: 'Cultural'
+  },
+  {
+    id: 5,
     students: ['Soham Mule', 'Aditya Ajay Tilekar', 'Komal'],
     class: 'SE',
     year: '2025-26',
@@ -194,7 +204,7 @@ const achievementsData = [
     badge: 'Hackathon Winner'
   },
   {
-    id: 5,
+    id: 6,
     students: ['Saanidhi Gade'],
     class: 'SE',
     year: '2025-26',
@@ -396,6 +406,7 @@ export default function SpotlightPage() {
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BorderGlow from '@/components/ui/BorderGlow';
+import NeuralBackground from '@/components/ui/NeuralBackground';
 
 // Achievements Data Structure
 const achievementsData = [
@@ -417,20 +428,6 @@ const achievementsData = [
   },
   {
     id: 2,
-    students: ['Padmaraj Pawar'],
-    class: 'SE',
-    year: '2025-26',
-    batch: '2028',
-    date: 'Oct 2025',
-    title: 'Bhagirath Karandak Award',
-    details: 'Team member (Actor) in award-winning performance at the prestigious Purushottam Karandak Competition.',
-    badge: 'Cultural',
-    images: [
-      '/achievements/bhagirath-karandak.jpg',
-    ]
-  },
-  {
-    id: 3,
     students: ['Soham Mule', 'Aditya Ajay Tilekar', 'Komal'],
     class: 'SE',
     year: '2025-26',
@@ -445,7 +442,36 @@ const achievementsData = [
     ]
   },
   {
+    id: 3,
+    students: ['Divya Chaudhari', 'Kshitija Ghan', 'Tanishqa Shetkar'],
+    class: 'SE',
+    year: '2025-26',
+    batch: '2028',
+    date: 'Nov 2025',
+    title: 'Winners - VOIS INNOVATION MARATHON 2.0',
+    details: 'Developed an intelligent multi-agent healthcare system where each specialized AI agent assists in different aspects of the patient healthcare journey.',
+    badge: 'Hackathon Winner',
+    images: [
+      '/achievements/vois-healthcare-ceremony.jpg',
+      '/achievements/vois-healthcare-cheque.jpg',
+    ]
+  },
+  {
     id: 4,
+    students: ['Padmaraj Pawar'],
+    class: 'SE',
+    year: '2025-26',
+    batch: '2028',
+    date: 'Oct 2025',
+    title: 'Bhagirath Karandak Award',
+    details: 'Team member (Actor) in award-winning performance at the prestigious Purushottam Karandak Competition.',
+    badge: 'Cultural',
+    images: [
+      '/achievements/bhagirath-karandak.jpg',
+    ]
+  },
+  {
+    id: 5,
     students: ['Soham Mule', 'Aditya Ajay Tilekar', 'Komal'],
     class: 'SE',
     year: '2025-26',
@@ -459,7 +485,7 @@ const achievementsData = [
     ]
   },
   {
-    id: 5,
+    id: 6,
     students: ['Saanidhi Gade'],
     class: 'SE',
     year: '2025-26',
@@ -583,37 +609,54 @@ const timelineEvents = [
     date: '24th Oct 2026',
     year: '2026',
     title: 'NEUROVERSE Ideathon 2026',
-    description: 'A one-day student ideathon focused on practical ideas built around AI and data.',
+    description: 'A 6-hour flagship ideathon with 3 tracks and up to ₹15,000 prize pool organized by aIDEAS Club.',
     longDescription: (
       <div className="space-y-4">
-        <p>Teams from colleges across Pune will develop, refine and present solutions with mentoring, evaluation and prizes as part of a focused innovation experience.</p>
+        <p>
+          Organized by <strong>aIDEAS</strong> (AI & Data Science Association of Students) in association at PVG’s COET&M, Pune. <em>Ideas Today. Impact Tomorrow.</em>
+        </p>
         <div>
-          <strong className="text-[var(--text)]">Themes:</strong>
+          <strong className="text-[var(--text)]">The Tracks:</strong>
           <ul className="list-disc pl-5 mt-1 space-y-1">
-            <li>01 INTELLIGENCE & INNOVATION IN HEALTHCARE</li>
-            <li>02 SMART CITIES & SUSTAINABLE DEVELOPMENT</li>
-            <li>03 OPEN INNOVATION</li>
+            <li><strong>01</strong> Intelligence & Innovation in Cognitive Healthcare</li>
+            <li><strong>02</strong> Smart Cities & Sustainable Infrastructure</li>
+            <li><strong>03</strong> Open Innovation</li>
           </ul>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
           <div className="bg-[var(--bg-soft)] p-3 rounded-xl border border-[var(--border)]">
-            <span className="block text-xs font-semibold text-[var(--cyan-bright)] uppercase tracking-wider mb-1">Time & Venue</span>
-            <span className="text-[var(--text)] text-sm">10:00 AM - 5:00 PM<br/>PVG’s COET&M, Pune</span>
+            <span className="block text-xs font-semibold text-[var(--cyan-bright)] uppercase tracking-wider mb-1">Date & Time</span>
+            <span className="text-[var(--text)] text-sm">24 Oct 2026 (Saturday)<br/>10:00 AM – 05:00 PM (6 Hours)</span>
           </div>
           <div className="bg-[var(--bg-soft)] p-3 rounded-xl border border-[var(--border)]">
-            <span className="block text-xs font-semibold text-[var(--purple-bright)] uppercase tracking-wider mb-1">Participation</span>
-            <span className="text-[var(--text)] text-sm">50+ teams (3-4 members)<br/>Open to all colleges</span>
+            <span className="block text-xs font-semibold text-[var(--purple-bright)] uppercase tracking-wider mb-1">Team & Venue</span>
+            <span className="text-[var(--text)] text-sm">Team Size: 1–4 Members<br/>PVG College, Pune</span>
           </div>
         </div>
-        <div className="p-3 rounded-xl border mt-4" style={{ background: 'var(--panel-grad)', borderColor: 'var(--cyan-bright)' }}>
-          <span className="block text-xs font-bold text-[var(--text)] uppercase tracking-wider mb-1 flex items-center gap-2">
-            🏆 Prize Pool
-          </span>
-          <span className="text-[var(--cyan-bright)] font-semibold">Rs. 15,000+ in cash prizes, plus goodies</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+          <div className="bg-[var(--bg-soft)] p-3 rounded-xl border border-[var(--border)]">
+            <span className="block text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">Important Dates</span>
+            <span className="text-[var(--text)] text-sm">Deadline: <strong>16 Oct 2026</strong><br/>Round 1: PPT Submission & Shortlisting</span>
+          </div>
+          <div className="p-3 rounded-xl border" style={{ background: 'var(--panel-grad)', borderColor: 'var(--cyan-bright)' }}>
+            <span className="block text-xs font-bold text-[var(--text)] uppercase tracking-wider mb-1 flex items-center gap-2">
+              🏆 Prize Pool
+            </span>
+            <span className="text-[var(--cyan-bright)] font-semibold text-base">Up to ₹15,000 Prize Pool</span>
+          </div>
+        </div>
+        <div className="pt-2 border-t border-[var(--border)]">
+          <span className="block text-xs font-semibold text-[var(--text-faint)] uppercase tracking-wider mb-1.5">For Any Queries Contact:</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-[var(--text-dim)]">
+            <div>Soham Mule: <span className="text-[var(--text)] font-mono">+91 9359396933</span></div>
+            <div>Aditya Tilekar: <span className="text-[var(--text)] font-mono">+91 9322208557</span></div>
+            <div>Saanidhi Gade: <span className="text-[var(--text)] font-mono">+91 7249635939</span></div>
+            <div>Divya Chaudhari: <span className="text-[var(--text)] font-mono">+91 9022728041</span></div>
+          </div>
         </div>
       </div>
     ),
-    photos: [],
+    photos: ['/neuroverse-poster.png'],
     status: 'Upcoming'
   },
   {
@@ -648,6 +691,23 @@ const timelineEvents = [
 type TimelineEvent = (typeof timelineEvents)[0];
 
 function EventModal({ event, onClose }: { event: TimelineEvent; onClose: () => void }) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (modalRef.current) {
+      modalRef.current.scrollTop = 0;
+    }
+  }, [event]);
+
+  // Lock body scroll and prevent background page scroll while modal is open
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -655,42 +715,53 @@ function EventModal({ event, onClose }: { event: TimelineEvent; onClose: () => v
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[500] flex items-center justify-center bg-black/85 backdrop-blur-sm px-4 py-6 overflow-y-auto"
+        className="fixed inset-0 z-[500] flex items-center justify-center bg-black/85 backdrop-blur-sm px-4 py-6"
         onClick={onClose}
+        data-lenis-prevent="true"
       >
         <motion.div
+          ref={modalRef}
           initial={{ opacity: 0, scale: 0.93, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.93, y: 24 }}
           transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-          className="relative max-w-lg sm:max-w-xl w-full rounded-3xl overflow-hidden shadow-2xl my-auto max-h-[90vh] flex flex-col"
-          style={{ background: '#080b12', border: '1px solid var(--border)' }}
+          className="relative max-w-lg sm:max-w-xl w-full rounded-3xl overflow-y-auto shadow-2xl max-h-[85vh]"
+          style={{
+            background: '#080b12',
+            border: '1px solid var(--border)',
+            overscrollBehavior: 'contain',
+            WebkitOverflowScrolling: 'touch',
+          }}
           onClick={e => e.stopPropagation()}
+          data-lenis-prevent="true"
+          data-lenis-prevent-wheel="true"
+          data-lenis-prevent-touch="true"
         >
-          {/* Close */}
+          {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-black/60 hover:bg-black/80 border border-white/20 text-white transition-all text-sm backdrop-blur-md"
+            className="absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-black/75 hover:bg-black/95 border border-white/20 text-white transition-all text-sm backdrop-blur-md shadow-lg"
+            aria-label="Close modal"
           >
             ✕
           </button>
 
-          {/* Photo — object-contain so image is NEVER cut vertically */}
+          {/* Photo */}
           {event.photos && event.photos.length > 0 && (
             <div
-              className="w-full max-h-[380px] sm:max-h-[440px] overflow-hidden relative border-b flex items-center justify-center shrink-0"
-              style={{ borderColor: 'var(--border)', background: '#04060a' }}
+              className="w-full relative border-b flex items-center justify-center bg-[#04060a]"
+              style={{ borderColor: 'var(--border)' }}
             >
               <img
                 src={event.photos[0]}
                 alt={event.title}
-                className="w-full h-auto max-h-[380px] sm:max-h-[440px] object-contain"
+                className="w-full h-auto max-h-[500px] object-contain block"
               />
             </div>
           )}
 
           {/* Content with extra details */}
-          <div className="p-6 overflow-y-auto">
+          <div className="p-6 sm:p-7">
             {/* Title + badge */}
             <div className="flex items-start justify-between gap-3 mb-2">
               <h2 className="text-xl font-extrabold text-[var(--text)] leading-snug" style={{ fontFamily: 'var(--font-display)' }}>{event.title}</h2>
@@ -721,6 +792,14 @@ function AchievementModal({
 }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -730,6 +809,7 @@ function AchievementModal({
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[500] flex items-center justify-center bg-black/80 backdrop-blur-sm px-4"
         onClick={onClose}
+        data-lenis-prevent="true"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.92, y: 30 }}
@@ -737,8 +817,16 @@ function AchievementModal({
           exit={{ opacity: 0, scale: 0.92, y: 30 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           className="relative rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-          style={{ background: 'var(--panel)', border: '1px solid var(--border)' }}
+          style={{
+            background: 'var(--panel)',
+            border: '1px solid var(--border)',
+            overscrollBehavior: 'contain',
+            WebkitOverflowScrolling: 'touch',
+          }}
           onClick={(e) => e.stopPropagation()}
+          data-lenis-prevent="true"
+          data-lenis-prevent-wheel="true"
+          data-lenis-prevent-touch="true"
         >
           {/* Close button */}
           <button
@@ -785,7 +873,7 @@ function AchievementModal({
                 Academic Year {item.year}
               </span>
               <span className="text-xs font-bold px-2.5 py-0.5 rounded border" style={{ background: 'rgba(56,209,255,0.15)', color: 'var(--cyan-bright)', borderColor: 'rgba(56,209,255,0.4)' }}>
-                {item.batch}
+                {item.class ? `${item.class} • ` : ''}Batch {item.batch}
               </span>
               <span className="text-xs font-bold px-2.5 py-0.5 rounded border ml-auto" style={{ background: 'rgba(176,107,255,0.15)', color: 'var(--purple-bright)', borderColor: 'rgba(176,107,255,0.4)' }}>
                 {item.badge}
@@ -851,24 +939,20 @@ function TimelineCard({ event, index, isEven, onSelect }: TimelineCardProps) {
     const el = cardRef.current;
     if (!el) return;
 
-    const isMobile = () => window.innerWidth < 768;
-    const initialTransform = isMobile()
-      ? 'translateY(40px)'
-      : isEven ? 'translateX(-48px)' : 'translateX(48px)';
-    el.style.transform = initialTransform;
+    // Mobile: Native instant display with zero layout shifts or scroll jumping
+    if (window.innerWidth < 768) {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      return;
+    }
+
+    el.style.transform = isEven ? 'translateX(-48px)' : 'translateX(48px)';
     el.style.opacity = '0';
 
     const obs = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) {
         el.style.opacity = '1';
-        el.style.transform = isMobile() ? 'translateY(0)' : 'translateX(0)';
-        if (isMobile()) {
-          el.classList.add('is-mobile-expanded');
-        }
-      } else {
-        if (isMobile()) {
-          el.classList.remove('is-mobile-expanded');
-        }
+        el.style.transform = 'translateX(0)';
       }
     }, { threshold: 0.12, rootMargin: '-10% 0px -10% 0px' });
 
@@ -927,7 +1011,7 @@ function TimelineCard({ event, index, isEven, onSelect }: TimelineCardProps) {
               <img
                 src={event.photos[0]}
                 alt={event.title}
-                className="w-full h-auto max-h-[340px] sm:max-h-[380px] object-contain transition-transform duration-1000 ease-out group-hover:scale-[1.02]"
+                className="w-full h-auto max-h-[260px] sm:max-h-[380px] object-contain transition-transform duration-1000 ease-out group-hover:scale-[1.02]"
               />
             </div>
           )}
@@ -949,14 +1033,25 @@ export default function SpotlightPage() {
   const [selectedAchievement, setSelectedAchievement] = useState<(typeof achievementsData)[0] | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<(typeof timelineEvents)[0] | null>(null);
 
-  const batches = ['All', '2028', '2027', '2029'];
+  const batches = ['All', 'Batch-2027', 'Batch-2028', 'Batch-2029'];
 
   const filteredAchievements = selectedBatch === 'All'
     ? achievementsData
     : achievementsData.filter(item => item.batch === selectedBatch || item.batch.startsWith(selectedBatch));
 
   return (
-    <div className="relative min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden ambient-panel">
+    <div className="relative min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden spotlight-page bg-black" style={{ backgroundColor: '#000000' }}>
+      {/* Pure black background with living neural network animation (fixed to viewport so card hover expansions never trigger canvas resize/reset) */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-black" style={{ backgroundColor: '#000000' }}>
+        <div
+          className="pointer-events-none absolute inset-0 z-0 bg-black"
+          style={{ background: '#000000' }}
+          aria-hidden="true"
+        />
+
+        {/* Living neural network background canvas (Desktop >=768px with fine pointer only, completely unmounted on mobile) */}
+        <NeuralBackground />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Title Header */}
@@ -1039,7 +1134,7 @@ export default function SpotlightPage() {
                   const isEven = index % 2 === 0;
 
                   return (
-                    <div key={index} className="relative flex flex-col md:flex-row items-start md:items-center">
+                    <div key={index} className="timeline-event-wrapper relative flex flex-col md:flex-row items-start md:items-center">
                       {/* Central Glowing Orb Node */}
                       <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center" style={{ border: '2px solid var(--cyan-bright)', background: 'var(--bg)', boxShadow: '0 0 16px rgba(56,209,255,0.6)' }}>
                         <div className="w-3 h-3 rounded-full animate-pulse" style={{ background: 'var(--cyan-bright)' }} />
