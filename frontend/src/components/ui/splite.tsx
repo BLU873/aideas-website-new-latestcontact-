@@ -61,18 +61,17 @@ class SplineErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySta
 
 export function SplineScene({ scene, className }: SplineSceneProps) {
   const [hasError, setHasError] = useState(false)
-  const [shouldRenderSpline, setShouldRenderSpline] = useState(false)
+  const [shouldRenderSpline, setShouldRenderSpline] = useState(true)
   const [isInView, setIsInView] = useState(true)
   const [isHidden, setIsHidden] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Check hardware & motion preference
-    const finePointer = window.matchMedia('(pointer: fine)').matches
+    // Check motion preference
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // On touch devices or reduced motion preference, keep clean fallback placeholder
-    if (!finePointer || reducedMotion) {
+    // Only fallback if user has explicit reduced-motion preference
+    if (reducedMotion) {
       setShouldRenderSpline(false)
       return
     }
