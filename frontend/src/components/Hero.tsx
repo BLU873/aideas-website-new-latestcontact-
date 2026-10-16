@@ -112,6 +112,7 @@ export function Hero() {
         <div className="hero-copy relative z-[4] flex flex-col justify-center w-full max-w-full lg:max-w-[500px]">
           {/* Scoped style for hero accent refinement, scale & layout */}
           <style>{`
+            @import url('https://fonts.googleapis.com/css2?family=Isometra&display=swap');
             .empower-line .type-target {
               color: #38bdf8 !important;
             }
@@ -231,11 +232,11 @@ export function Hero() {
                   zIndex: 0,
                 }}
               />
-              {/* aIDEAS: metallic silver/white dominant, cyan+violet as faint reflected-light accents only */}
+              {/* aIDEAS: Isometra typeface — metallic silver/white dominant, cyan+violet as faint reflected-light accents only */}
               <span
                 className="hero-wordmark-text block relative"
                 style={{
-                  fontFamily: 'var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
+                  fontFamily: '"Isometra", var(--font-inter, Inter, "Geist", system-ui, sans-serif)',
                   fontSize: 'clamp(50px, 6.4vw, 91px)',
                   fontWeight: 400,
                   lineHeight: '0.94',

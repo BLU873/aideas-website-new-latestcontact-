@@ -426,81 +426,58 @@ export default function ScrollStorySection() {
     [drawFrameToCanvas, processQueue]
   );
 
-  // Viewport proximity tracking and deferred initial frame preloading
+  // Initial Load: Frame 1 immediately on mount
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container || typeof IntersectionObserver === 'undefined') return;
+    isDestroyedRef.current = false;
+    const initialImg = new Image();
+    initialImg.src = getFrameUrl(1);
 
-    let hasStartedLoading = false;
-
-    const startLoadingFrames = () => {
-      if (hasStartedLoading || isDestroyedRef.current) return;
-      hasStartedLoading = true;
-
-      const initialImg = new Image();
-      initialImg.src = getFrameUrl(1);
-
-      const onInitialLoad = () => {
-        if (isDestroyedRef.current) return;
-        cacheRef.current.set(1, initialImg);
-        requestAnimationFrame(() => {
-          drawFrameToCanvas(initialImg, 1);
-        });
-        // Preload subsequent quantized frames
-        for (let f = 4; f <= 16; f += FRAME_STEP) {
-          queueRef.current.push(f);
-        }
-        processQueue();
-      };
-
-      // Preload authentic aiDEAS logo for watermark masking
-      const brandLogo = new Image();
-      brandLogo.src = '/assets/img/logo-icon.png';
-      const onBrandLoad = () => {
-        brandLogoRef.current = brandLogo;
-        const currentDrawn = lastDrawnFrameRef.current;
-        const currentImg = cacheRef.current.get(currentDrawn) || cacheRef.current.get(1);
-        if (currentImg) {
-          drawFrameToCanvas(currentImg, currentDrawn);
-        }
-      };
-      brandLogo.onload = onBrandLoad;
-      if (brandLogo.complete && brandLogo.naturalWidth > 0) {
-        brandLogoRef.current = brandLogo;
-      } else if (typeof brandLogo.decode === 'function') {
-        brandLogo.decode().then(onBrandLoad).catch(onBrandLoad);
+    const onInitialLoad = () => {
+      if (isDestroyedRef.current) return;
+      cacheRef.current.set(1, initialImg);
+      requestAnimationFrame(() => {
+        drawFrameToCanvas(initialImg, 1);
+      });
+      // Preload subsequent quantized frames
+      for (let f = 4; f <= 16; f += FRAME_STEP) {
+        queueRef.current.push(f);
       }
-
-      initialImg.onload = onInitialLoad;
-      initialImg.onerror = (e) => {
-        console.error('[ScrollStory] Failed to load frame 001 from URL:', initialImg.src, e);
-        setLoadError(`Failed to load frame 001 from: ${initialImg.src}`);
-      };
-
-      if (typeof initialImg.decode === 'function') {
-        initialImg.decode().then(onInitialLoad).catch(onInitialLoad);
-      }
+      processQueue();
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        isSectionNearRef.current = entry.isIntersecting;
-        if (entry.isIntersecting) {
-          startLoadingFrames();
-        }
-      },
-      { rootMargin: '300px 0px 300px 0px' }
-    );
+    // Preload authentic aiDEAS logo for watermark masking
+    const brandLogo = new Image();
+    brandLogo.src = '/assets/img/logo-icon.png';
+    const onBrandLoad = () => {
+      brandLogoRef.current = brandLogo;
+      const currentDrawn = lastDrawnFrameRef.current;
+      const currentImg = cacheRef.current.get(currentDrawn) || cacheRef.current.get(1);
+      if (currentImg) {
+        drawFrameToCanvas(currentImg, currentDrawn);
+      }
+    };
+    brandLogo.onload = onBrandLoad;
+    if (brandLogo.complete && brandLogo.naturalWidth > 0) {
+      brandLogoRef.current = brandLogo;
+    } else if (typeof brandLogo.decode === 'function') {
+      brandLogo.decode().then(onBrandLoad).catch(onBrandLoad);
+    }
 
-    observer.observe(container);
+    initialImg.onload = onInitialLoad;
+    initialImg.onerror = (e) => {
+      console.error('[ScrollStory] Failed to load frame 001 from URL:', initialImg.src, e);
+      setLoadError(`Failed to load frame 001 from: ${initialImg.src}`);
+    };
+
+    if (typeof initialImg.decode === 'function') {
+      initialImg.decode().then(onInitialLoad).catch(onInitialLoad);
+    }
 
     const currentCache = cacheRef.current;
     const currentInFlight = inFlightRef.current;
 
     return () => {
       isDestroyedRef.current = true;
-      observer.disconnect();
       currentCache.forEach((img) => {
         img.onload = null;
         img.onerror = null;
@@ -511,6 +488,26 @@ export default function ScrollStorySection() {
       queueRef.current = [];
     };
   }, [drawFrameToCanvas, processQueue]);
+
+  // Viewport proximity tracking with IntersectionObserver
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        isSectionNearRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          processQueue();
+        }
+      },
+      { rootMargin: '350px 0px 350px 0px' }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [processQueue]);
 
   // ResizeObserver to ensure canvas always redraws cleanly when layout settles
   useEffect(() => {
@@ -586,8 +583,8 @@ export default function ScrollStorySection() {
         const t = (scrollProgress - startProgress) / (peakStart - startProgress);
         return {
           ...beat,
-          opacity: t,
-          translateY: (1 - t) * 24,
+          opacity: startProgress === 0 ? Math.max(0.85, t) : t,
+          translateY: startProgress === 0 ? (1 - Math.max(0.85, t)) * 24 : (1 - t) * 24,
           isVisible: true,
         };
       }
