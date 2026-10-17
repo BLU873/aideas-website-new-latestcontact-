@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import TwineOrbit from '@/components/ui/TwineOrbit';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -96,8 +97,28 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Controls: Mobile Menu Burger */}
-        <div className="flex items-center gap-4">
+        {/* Controls: TwineOrbit Helix Accent & Mobile Menu Burger */}
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <div className="w-[34px] h-[34px] md:w-[42px] md:h-[42px] flex items-center justify-center shrink-0">
+            <TwineOrbit
+              size={36}
+              speed={68}
+              color="#38d1ff"
+              accent="#b06bff"
+              advanced={{
+                slotMs: 4200,
+                backMid: "#7c3aed",
+                midColor: "#1d4ed8",
+                frontMid: "#22b8f0",
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                minWidth: 'unset',
+                minHeight: 'unset',
+              }}
+            />
+          </div>
 
           <button
             className={`burger md:hidden ${isOpen ? 'open' : ''}`}
