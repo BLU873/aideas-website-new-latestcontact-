@@ -11,6 +11,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isScrolledRef = useRef(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,9 +21,22 @@ export default function Navbar() {
         setIsScrolled(scrolled);
       }
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Ensure video plays when expanded state mounts
+  useEffect(() => {
+    if (!isScrolled && videoRef.current) {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Gracefully handle any browser autoplay restrictions
+        });
+      }
+    }
+  }, [isScrolled]);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -44,7 +58,35 @@ export default function Navbar() {
 
   return (
     <header className={isScrolled && !isOpen ? 'header-floating' : ''} suppressHydrationWarning>
-      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+      {/* Large Far-Left Festive Mandala Ornament (expanded state only) */}
+      {!isScrolled && (
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden select-none z-0 hidden md:block"
+          aria-hidden="true"
+        >
+          <video
+            ref={videoRef}
+            src="/videos/mandala-navbar.webm"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute top-1/2 -translate-y-1/2 object-contain pointer-events-none select-none shrink-0 max-w-none"
+            style={{
+              left: '-160px',
+              width: '320px',
+              height: '180px',
+            }}
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
+      )}
+
+      <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         {/* Brand Logo & Name */}
         <Link
           href="/"
